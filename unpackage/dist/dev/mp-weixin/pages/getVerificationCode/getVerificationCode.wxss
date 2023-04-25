@@ -1,0 +1,36 @@
+.page-getVerificationCode {
+  background-color: #fff;
+  display: flex;
+  flex-direction: column;
+  padding-top: 66rpx;
+}
+.page-getVerificationCode .title {
+  width: 626rpx;
+  padding: 0 30rpx;
+  align-self: center;
+  margin-bottom: 90rpx;
+}
+.page-getVerificationCode .title .title-content {
+  font-size: 48rpx;
+  font-weight: 600;
+  color: #262626;
+}
+.page-getVerificationCode .title .title-tip {
+  font-size: 24rpx;
+  font-weight: 400;
+  color: #828698;
+}
+.page-getVerificationCode .form-phone-verification {
+  display: flex;
+  flex-direction: column;
+  align-self: center;
+  width: 656rpx;
+}
+.page-getVerificationCode .form-phone-verification .get-vericode-btn {
+  color: #00D893;
+  font-size: 24rpx;
+}
+.page-getVerificationCode .form-phone-verification .login-btn {
+  margin-top: 64rpx;
+}
+

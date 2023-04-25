@@ -1,0 +1,160 @@
+.page-recharge {
+  background-color: #F2F4F7;
+  min-height: 100vh;
+  box-sizing: border-box;
+}
+.page-recharge .accouont-card {
+  position: relative;
+  border-radius: 40rpx;
+  overflow: hidden;
+  margin: 40rpx auto;
+  width: 672rpx;
+  height: 368rpx;
+}
+.page-recharge .accouont-card .bgi-box {
+  width: 100%;
+  height: 100%;
+  background-color: aqua;
+}
+.page-recharge .accouont-card .card-content {
+  position: absolute;
+  top: 0;
+  left: 0;
+  box-sizing: border-box;
+  padding: 38rpx 0 38rpx 60rpx;
+  color: #FFFFFF;
+}
+.page-recharge .current-plan-box {
+  margin: 0 auto;
+  width: 672rpx;
+  height: 108rpx;
+  background-color: #fff;
+  border-radius: 54rpx;
+  display: flex;
+  justify-content: space-evenly;
+  align-items: center;
+}
+.page-recharge .current-plan-box .plan-up {
+  width: 196rpx;
+  height: 50rpx;
+  background-color: aquamarine;
+}
+.page-recharge .custom-refill {
+  width: 666rpx;
+  margin: 0 auto;
+  margin-top: 72rpx;
+}
+.page-recharge .custom-refill .refill-num-list {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.page-recharge .custom-refill .refill-num-list .num-box {
+  display: flex;
+  justify-content: center;
+  align-items: flex-end;
+  padding-bottom: 38rpx;
+  width: 205rpx;
+  height: 128rpx;
+  background-color: #fff;
+  box-shadow: 4rpx 4rpx 48rpx 0rpx rgba(0, 0, 0, 0.09);
+  border-radius: 28rpx;
+  font-size: 28rpx;
+  color: #828698;
+}
+.page-recharge .custom-refill .custom-refill-input-box {
+  position: relative;
+  height: 160rpx;
+  display: flex;
+  align-items: flex-end;
+  background-color: #fff;
+  border: 2rpx solid #828698;
+  border-radius: 28rpx;
+}
+.page-recharge .custom-refill .custom-refill-input-box .custom-refill-input {
+  width: 666rpx;
+  height: 128rpx;
+  color: #54CFE9;
+  caret-color: #54CFE9;
+  font-size: 80rpx;
+  padding-left: 34rpx;
+}
+.page-recharge .custom-refill .custom-refill-input-box .refill-inp-tips {
+  position: absolute;
+  top: 22rpx;
+  left: 34rpx;
+  font-size: 24rpx;
+  color: #828698;
+}
+.page-recharge .bottom-pay-box {
+  position: fixed;
+  display: flex;
+  z-index: 200;
+  justify-content: space-between;
+  align-items: center;
+  padding: 36rpx;
+  bottom: 0;
+  box-sizing: border-box;
+  width: 100vw;
+  height: 160rpx;
+  background-color: #FFFFFF;
+}
+.page-recharge .bottom-pay-box .left-price-detail .price {
+  display: flex;
+  align-items: center;
+  font-size: 36rpx;
+  color: #262626;
+}
+.page-recharge .bottom-pay-box .left-price-detail .price .price-num {
+  margin-left: 30rpx;
+  font-size: 48rpx;
+  color: #00B8DF;
+}
+.page-recharge .bottom-pay-box .left-price-detail .price-detail {
+  font-size: 24rpx;
+  color: #828698;
+}
+.page-recharge .bottom-pay-box .transaction-btn {
+  width: 240rpx;
+  height: 96rpx;
+}
+.page-recharge .model-price-detail {
+  position: absolute;
+  bottom: 158rpx;
+  box-sizing: border-box;
+  left: 0;
+  width: 100vw;
+  height: 576rpx;
+  padding: 50rpx;
+  background-color: #F2F4F7;
+}
+.page-recharge .model-price-detail .title {
+  font-size: 36rpx;
+  color: #262626;
+  margin-bottom: 48rpx;
+}
+.page-recharge .model-price-detail .bill-list .bill-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 650rpx;
+  height: 128rpx;
+}
+.page-recharge .model-price-detail .bill-list .bill-item .bill-left-desc .bill-type {
+  font-size: 24rpx;
+  color: #828698;
+}
+.page-recharge .model-price-detail .bill-list .bill-item .bill-left-desc .bill-name {
+  font-size: 32rpx;
+  color: #5E5E5E;
+}
+.page-recharge .model-price-detail .bill-list .bill-item .bill-right-num {
+  font-size: 36rpx;
+  color: #262626;
+}
+.page-recharge .model-price-detail .close {
+  position: absolute;
+  top: 50rpx;
+  right: 50rpx;
+}
+

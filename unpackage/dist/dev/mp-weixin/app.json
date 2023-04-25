@@ -1,0 +1,39 @@
+{
+  "pages": [
+    "pages/home/home",
+    "pages/login/login",
+    "pages/getVerificationCode/getVerificationCode",
+    "pages/writeUserInfo/writeUserInfo",
+    "pages/planMenu/planMenu",
+    "pages/recharge/recharge",
+    "pages/mine/mine",
+    "pages/service/service",
+    "pages/rechargeRecord/rechargeRecord",
+    "pages/devManage/devManage",
+    "pages/accountSafe/accountSafe"
+  ],
+  "subPackages": [],
+  "window": {
+    "navigationBarTextStyle": "black",
+    "navigationBarTitleText": "鲜水管家",
+    "navigationBarBackgroundColor": "#F8F8F8",
+    "backgroundColor": "#F8F8F8"
+  },
+  "usingComponents": {
+    "van-button": "/wxcomponents/@vant/button/index",
+    "van-field": "/wxcomponents/@vant/field",
+    "van-checkbox": "/wxcomponents/@vant/checkbox",
+    "van-divider": "/wxcomponents/@vant/divider",
+    "van-cell": "/wxcomponents/@vant/cell/index",
+    "van-cell-group": "/wxcomponents/@vant/cell-group/index",
+    "van-grid": "/wxcomponents/@vant/grid/index",
+    "van-grid-item": "/wxcomponents/@vant/grid-item/index",
+    "van-overlay": "/wxcomponents/@vant/overlay/index",
+    "van-area": "/wxcomponents/@vant/area/index",
+    "van-popup": "/wxcomponents/@vant/popup/index",
+    "van-image": "/wxcomponents/@vant/image/index",
+    "van-icon": "/wxcomponents/@vant/icon/index",
+    "van-dialog": "/wxcomponents/@vant/dialog/index",
+    "van-picker": "/wxcomponents/@vant/picker/index"
+  }
+}
