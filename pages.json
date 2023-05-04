@@ -68,7 +68,6 @@
 				"navigationStyle": "custom",
 				"enablePullDownRefresh": false
 			}
-
 		},
 		{
 			"path": "pages/devManage/devManage",
@@ -84,6 +83,13 @@
 				"navigationStyle": "custom",
 				"enablePullDownRefresh": false
 			}
+		}, {
+			"path": "pages/upPlan/upPlan",
+			"style": {
+				"navigationStyle": "custom",
+				"enablePullDownRefresh": false
+			}
+
 		}
 	],
 	"globalStyle": {

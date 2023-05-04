@@ -78,7 +78,7 @@
 		},
 		onLoad(option) {
 			this.wechat_openid = option.wechat_openid
-			
+			this.userInfo.phoneNum = uni.getStorageSync('phone')
 			const ptHeight = uni.getStorageSync('navHeight')
 			if (ptHeight) {
 				this.ptHeight = ptHeight
@@ -123,6 +123,7 @@
 				if (statusCode === 201) {
 					// 注册成功
 					uni.setStorageSync('token', data.token)
+					uni.setStorageSync("isLogin", true)
 					uni.redirectTo({
 						url: '/pages/planMenu/planMenu'
 					})

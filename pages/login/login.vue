@@ -28,11 +28,22 @@
 			}
 		},
 		methods: {
-			getPhoneNumber(e) {
+			async getPhoneNumber(e) {
 				if (e.detail.code) {
-					uni.navigateTo({
-						url: "/pages/getVerificationCode/getVerificationCode"
-					})
+					// 获取到用户手机号和国家码
+					const { statusCode, data } = await this.$http('consumer/profile/phone', 'GET', {code: e.detail.code})
+					if(statusCode === 200) {
+						uni.setStorageSync('phone', data.phone)
+						uni.setStorageSync('country_code', data.country_code)
+						uni.navigateTo({
+							url: "/pages/getVerificationCode/getVerificationCode"
+						})
+					} else {
+						uni.showToast({
+							title: '网络错误',
+							icon: 'error'
+						})
+					}
 				}
 				console.log(e)
 			},

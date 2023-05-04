@@ -1,6 +1,8 @@
+import {
+	baseURL
+} from '@/config/index.js'
 // 请求封装
 export const request = (url, method = 'GET', data = {}) => {
-	let baseURL = 'https://iheshui.civilizationdata.com'
 	url = baseURL + url
 	let timeout = 60000
 	const header = {
@@ -12,12 +14,15 @@ export const request = (url, method = 'GET', data = {}) => {
 		header['Content-Type'] = 'multipart/form-data'
 	}
 	return new Promise((resolve, reject) => {
-		
+
 		uni.request({
 			url,
 			method,
 			data,
-			header: {...header, 'Authorization': 'Token ' + uni.getStorageSync("token")},
+			header: {
+				...header,
+				'Authorization': 'Token ' + uni.getStorageSync("token")
+			},
 			timeout,
 			success(res) {
 				resolve(res)

@@ -15,7 +15,10 @@
 		</navbar>
 		<view class="water-banner">
 			<view class="water-bg">
-
+				<view class="top-bg-box" :style="{bottom: dynamicBottom+'rpx'}">
+					<van-image class="top-bg" :src="imgBaseURl+'12_waterTop.png'" width="100vw" height="248rpx"></van-image>
+				</view>
+				<van-image class="bottom-bg" :src="imgBaseURl+'13_waterBottom.png'" width="100vw" height="924rpx"></van-image>
 			</view>
 			<view class="water-inner pt400">
 				<view class="residue-water">
@@ -31,12 +34,14 @@
 						可用水量
 					</view>
 				</view>
-				<view class="df aic mt200">
-					<view class="">
-						我家的净水器
+				<picker mode="selector" :range="myDevList" :value="curCheckedDevIdx" range-key="devName" @change="handleChangeCurDev">
+					<view class="df aic mt200">
+						<view class="my-dev-text">
+							{{myDevList[curCheckedDevIdx].devName}}
+						</view>
+						<van-icon name="/static/icon/08_del_white.png" size="32rpx"></van-icon>
 					</view>
-					<van-icon name="/static/icon/08_del_white.png" size="32rpx"></van-icon>
-				</view>
+				</picker>
 			</view>
 		</view>
 		<view class="user-water-info">
@@ -69,7 +74,7 @@
 			<van-button @click="handleClickTab(3)" type="primary" round>充值</van-button>
 		</view>
 		<!-- 掉线提醒model -->
-		<van-overlay class="offline-overlay" :show="isOffline">
+		<van-overlay class="offline-overlay" :show="isOffline" z-index="100">
 			<view class="wrapper">
 				<view class="inner-box mb30">
 					<view class="icon">
@@ -89,6 +94,9 @@
 </template>
 
 <script>
+	import {
+		imgBaseURl
+	} from '@/config/index.js'
 	import navbar from '@/components/navbar/navbar.vue';
 	export default {
 		components: {
@@ -96,8 +104,18 @@
 		},
 		data() {
 			return {
+				imgBaseURl,
 				isOffline: true,
-				ptHeight: 60
+				ptHeight: 60,
+				dynamicBottom: 876,
+				curCheckedDevIdx: 0,
+				myDevList: [{
+					devName: '净水器1号'
+				},{
+					devName: '净水器2号'
+				},{
+					devName: '净水器3号'
+				}]
 			};
 		},
 		onLoad() {
@@ -108,6 +126,8 @@
 			}
 			
 			// 获取用户信息
+			this.dynamicBottom = this.dynamicBottom/2
+			
 			
 		},
 		onShow() {
@@ -136,6 +156,9 @@
 				} else {
 
 				}
+			},
+			handleChangeCurDev(e) {
+				this.curCheckedDevIdx = e.detail.value
 			}
 		}
 	}
@@ -153,12 +176,35 @@
 			position: relative;
 
 			.water-bg {
+				overflow: hidden;
+				position: relative;
 				height: 100%;
 				background-color: #00D1FF;
+				.top-bg-box {
+					background-color: #fff;
+					width: 100vw;
+					height: 150vh;
+					z-index: 20;
+					position: absolute;
+					left: 0;
+					bottom: 876rpx;
+					.top-bg {
+						position: absolute;
+						left: 0;
+						bottom: -212rpx;
+					}
+				}
+				.bottom-bg {
+					z-index: 19;
+					position: absolute;
+					left: 0;
+					bottom: 0;
+				}
 			}
 
 			.water-inner {
 				position: absolute;
+				z-index: 50;
 				display: flex;
 				flex-direction: column;
 				align-items: center;
@@ -171,6 +217,9 @@
 				color: #fff;
 
 				.residue-water {
+					text-shadow: 4px 4px 12px rgba(0, 209, 255, 0.81);
+				}
+				.my-dev-text {
 					text-shadow: 4px 4px 12px rgba(0, 209, 255, 0.81);
 				}
 			}

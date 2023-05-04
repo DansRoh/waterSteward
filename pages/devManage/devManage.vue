@@ -88,6 +88,7 @@
 	.page-devManage {
 		min-height: 100vh;
 		background-color: #F2F4F7;
+		box-sizing: border-box;
 		padding: 50rpx 40rpx;
 		.dev-card {
 			width: 666rpx;

@@ -1,6 +1,6 @@
 <template>
 	<scroll-view scroll-into-view="target-deal" class="page-planMenu" :style="{paddingTop: ptHeight+'px'}">
-		<navbar needBack title="套餐办理"></navbar>
+		<navbar needBack title="套餐升级"></navbar>
 		<view class="page-title">
 			套餐选择
 		</view>
@@ -85,57 +85,58 @@
 					<van-checkbox :value="isCheckAgreement" @change="onChangeAgreement">我同意鲜水管家*****开通协议</van-checkbox>
 				</view>
 			</view>
-		</view>
-		<view class="bottom-pay-box">
-			<view class="left-price-detail">
-				<view class="price">
-					实付
-					<view class="price-num">
-						¥ {{ Number(planMenuData[curPlanIdx].price)+ (isHaveFirst ? 350 : 0) }}
+			<view class="bottom-pay-box">
+				<view class="left-price-detail">
+					<view class="price">
+						实付
+						<view class="price-num">
+							¥ {{ Number(planMenuData[curPlanIdx].price)+ (isHaveFirst ? 350 : 0) }}
+						</view>
+					</view>
+					<view @click="handleShowPriceDetail" class="price-detail df aic">
+						明细
+						<van-icon v-if="!isPriceDetailShow" name="/static/icon/21_del02.png" size="34rpx"></van-icon>
+						<van-icon v-else name="/static/icon/22_del03.png" size="34rpx"></van-icon>
 					</view>
 				</view>
-				<view @click="handleShowPriceDetail" class="price-detail df aic">
-					明细
-					<van-icon v-if="!isPriceDetailShow" name="/static/icon/21_del02.png" size="34rpx"></van-icon>
-					<van-icon v-else name="/static/icon/22_del03.png" size="34rpx"></van-icon>
-				</view>
+				<van-button @click="handleClickTransact" class="transaction-btn" type="primary" color="#00D893" block
+					round>立即办理</van-button>
 			</view>
-			<van-button @click="handleClickTransact" class="transaction-btn" type="primary" color="#00D893" block
-				round>立即办理</van-button>
+			<!-- 支付明细model -->
+			<van-overlay :show="isPriceDetailShow" @click="()=>{isPriceDetailShow = false}">
+				<view v-if="isPriceDetailShow" class="model-price-detail">
+					<view class="title">
+						支付明细
+					</view>
+					<view class="bill-list">
+						<view v-if="isHaveFirst" class="bill-item">
+							<view class="bill-left-desc">
+								<view class="bill-type">商品</view>
+								<view class="bill-name">首充金额</view>
+							</view>
+							<view class="bill-right-num">¥360</view>
+						</view>
+						<view class="bill-item">
+							<view class="bill-left-desc">
+								<view class="bill-type">商品</view>
+								<view class="bill-name">{{ planMenuData[curPlanIdx].title }}</view>
+							</view>
+							<view class="bill-right-num">¥{{ planMenuData[curPlanIdx].price }}</view>
+						</view>
+						<view v-if="isHaveFirst" class="bill-item">
+							<view class="bill-left-desc">
+								<view class="bill-type">优惠</view>
+								<view class="bill-name">首充每月返</view>
+							</view>
+							<view class="bill-right-num">-¥10</view>
+						</view>
+					</view>
+					<view @click="()=>{isPriceDetailShow = false}" class="close">
+						<van-icon name="/static/icon/06_close.png" size="54rpx"></van-icon>
+					</view>
+				</view>
+			</van-overlay>
 		</view>
-		<van-overlay :show="isPriceDetailShow" z-index="300">
-			<view v-if="isPriceDetailShow" class="model-price-detail">
-				<view class="title">
-					支付明细
-				</view>
-				<view class="bill-list">
-					<view v-if="isHaveFirst" class="bill-item">
-						<view class="bill-left-desc">
-							<view class="bill-type">商品</view>
-							<view class="bill-name">首充金额</view>
-						</view>
-						<view class="bill-right-num">¥360</view>
-					</view>
-					<view class="bill-item">
-						<view class="bill-left-desc">
-							<view class="bill-type">商品</view>
-							<view class="bill-name">{{ planMenuData[curPlanIdx].title }}</view>
-						</view>
-						<view class="bill-right-num">¥{{ planMenuData[curPlanIdx].price }}</view>
-					</view>
-					<view v-if="isHaveFirst" class="bill-item">
-						<view class="bill-left-desc">
-							<view class="bill-type">优惠</view>
-							<view class="bill-name">首充每月返</view>
-						</view>
-						<view class="bill-right-num">-¥10</view>
-					</view>
-				</view>
-				<view @click="()=>{isPriceDetailShow = false}" class="close">
-					<van-icon name="/static/icon/06_close.png" size="54rpx"></van-icon>
-				</view>
-			</view>
-		</van-overlay>
 	</scroll-view>
 </template>
 
@@ -457,95 +458,104 @@
 				}
 			}
 
+			.bottom-pay-box {
+				position: fixed;
+				z-index: 200;
+				display: flex;
+				justify-content: space-between;
+				align-items: center;
+				padding: 36rpx;
+				padding-bottom: 60rpx;
+				bottom: 0;
+				box-sizing: border-box;
+				width: 100vw;
+				height: 160rpx;
+				background-color: #FFFFFF;
 
-		}
-
-		.bottom-pay-box {
-			position: fixed;
-			z-index: 888;
-			display: flex;
-			justify-content: space-between;
-			align-items: center;
-			padding: 36rpx;
-			padding-bottom: 60rpx;
-			bottom: 0;
-			box-sizing: border-box;
-			width: 100vw;
-			height: 160rpx;
-			background-color: #FFFFFF;
-
-			.left-price-detail {
-				.price {
-					display: flex;
-					align-items: center;
-					font-size: 36rpx;
-					color: #262626;
-
-					.price-num {
-						margin-left: 30rpx;
-						font-size: 48rpx;
-						color: #00B8DF;
-					}
-				}
-
-				.price-detail {
-					font-size: 24rpx;
-					color: #828698;
-				}
-			}
-
-			.transaction-btn {
-				width: 240rpx;
-				height: 96rpx;
-			}
-		}
-		
-		.model-price-detail {
-			position: absolute;
-			box-sizing: border-box;
-			bottom: 158rpx;
-			left: 0;
-			width: 100vw;
-			padding: 50rpx;
-			background-color: #F2F4F7;
-
-			.title {
-				font-size: 36rpx;
-				color: #262626;
-				margin-bottom: 48rpx;
-			}
-
-			.bill-list {
-				.bill-item {
-					display: flex;
-					justify-content: space-between;
-					align-items: center;
-					width: 650rpx;
-					height: 128rpx;
-
-					.bill-left-desc {
-						.bill-type {
-							font-size: 24rpx;
-							color: #828698;
-						}
-
-						.bill-name {
-							font-size: 32rpx;
-							color: #5E5E5E;
-						}
-					}
-
-					.bill-right-num {
+				.left-price-detail {
+					.price {
+						display: flex;
+						align-items: center;
 						font-size: 36rpx;
 						color: #262626;
+
+						.price-num {
+							margin-left: 30rpx;
+							font-size: 48rpx;
+							color: #00B8DF;
+						}
+					}
+
+					.price-detail {
+						font-size: 24rpx;
+						color: #828698;
 					}
 				}
+
+				.transaction-btn {
+					width: 240rpx;
+					height: 96rpx;
+				}
+
+				.model-price-bg {
+					position: fixed;
+					bottom: 158rpx;
+					left: 0;
+					width: 100vw;
+					height: 100vh;
+					background-color: rgba(0, 0, 0, 0.6);
+				}
+
+
 			}
 
-			.close {
+			.model-price-detail {
 				position: absolute;
-				top: 50rpx;
-				right: 50rpx;
+				box-sizing: border-box;
+				bottom: 158rpx;
+				left: 0;
+				width: 100vw;
+				padding: 50rpx;
+				background-color: #F2F4F7;
+
+				.title {
+					font-size: 36rpx;
+					color: #262626;
+					margin-bottom: 48rpx;
+				}
+
+				.bill-list {
+					.bill-item {
+						display: flex;
+						justify-content: space-between;
+						align-items: center;
+						width: 650rpx;
+						height: 128rpx;
+
+						.bill-left-desc {
+							.bill-type {
+								font-size: 24rpx;
+								color: #828698;
+							}
+
+							.bill-name {
+								font-size: 32rpx;
+								color: #5E5E5E;
+							}
+						}
+
+						.bill-right-num {
+							font-size: 36rpx;
+							color: #262626;
+						}
+					}
+				}
+
+				.close {
+					position: absolute;
+					top: 50rpx;
+					right: 50rpx;
+				}
 			}
 		}
 	}

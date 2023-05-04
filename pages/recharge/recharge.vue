@@ -2,8 +2,7 @@
 	<view class="page-recharge" :style="{paddingTop: ptHeight+'px'}">
 		<navbar :needBack="true" title="充值"></navbar>
 		<view class="accouont-card">
-			<view class="bgi-box">
-			</view>
+			<van-image width="100%" height="100%" class="bgi-box" :src="imgBaseURl+'07_cardBg.png'"></van-image>
 			<view class="card-content">
 				<view class="card-title">
 					<view class="fs24">
@@ -55,9 +54,8 @@
 				</view>
 				套餐
 			</view>
-			<view class="plan-up">
-				套餐升级
-			</view>
+			<van-image @click="jumpToPlusPlan" style="margin-bottom: -8rpx;" :src="imgBaseURl+'09_planUp.png'" width="196rpx"
+				height="50rpx"></van-image>
 		</view>
 
 		<view class="custom-refill">
@@ -65,27 +63,17 @@
 				自定义充值
 			</view>
 			<view class="refill-num-list">
-				<view class="num-box">
+				<view v-for="(item, index) in rechargeNumCheckList" :key="item" @click="handleCheckRgNum(index)" class="num-box"
+					:class="curRgNumIdx === index ? 'activate-num-box': ''">
 					<view class="fs64 c262626">
-						20
-					</view>
-					元
-				</view>
-				<view class="num-box">
-					<view class="fs64 mt5 c262626">
-						50
-					</view>
-					元
-				</view>
-				<view class="num-box">
-					<view class="fs64 c262626">
-						100
+						{{item}}
 					</view>
 					元
 				</view>
 			</view>
 			<view class="custom-refill-input-box mt34">
-				<input class="custom-refill-input" type="text">
+				<input :value="customRgNum" @input="handleChangeCustomRgNum" @focus="() => {curRgNumIdx = -1;rechargeSum=customRgNum}"
+					class="custom-refill-input" type="number">
 				<view class="refill-inp-tips">
 					输入充值金额 (元)
 				</view>
@@ -97,38 +85,35 @@
 				<view class="price">
 					实付
 					<view class="price-num">
-						¥369
+						¥
+						{{rechargeSum || 0}}
 					</view>
 				</view>
-				<view @click="handleShowPriceDetail" class="price-detail">
-					明细 v
+				<view @click="handleShowPriceDetail" class="price-detail df aic">
+					明细
+					<van-icon v-if="!isPriceDetailShow" name="/static/icon/21_del02.png" size="34rpx"></van-icon>
+					<van-icon v-else name="/static/icon/22_del03.png" size="34rpx"></van-icon>
 				</view>
 			</view>
-			<van-button @click="handleClickTransact" class="transaction-btn" type="primary" color="#00D893" block
-				round>立即充值</van-button>
+			<van-button :disabled="!rechargeSum" @click="handleClickTransact" class="transaction-btn" type="primary"
+				color="#00D893" block round>立即充值</van-button>
 		</view>
-		<van-overlay :show="isPriceDetailShow" @click="()=>{isPriceDetailShow = false}">
+		<van-overlay :show="isPriceDetailShow" z-index="300">
 			<view v-if="isPriceDetailShow" class="model-price-detail">
 				<view class="title">
 					支付明细
 				</view>
 				<view class="bill-list">
-					<view v-for="item in priceDetailData" :key="item.id" class="bill-item">
+					<view class="bill-item">
 						<view class="bill-left-desc">
-							<view class="bill-type">
-								{{item.billType === 1 ? "商品" : "优惠"}}
-							</view>
-							<view class="bill-name">
-								{{item.billName}}
-							</view>
+							<view class="bill-type">商品</view>
+							<view class="bill-name">充值金额</view>
 						</view>
-						<view class="bill-right-num">
-							{{item.billType === 2 ? "-" : ""}}¥{{item.priceNum}}
-						</view>
+						<view class="bill-right-num">¥{{rechargeSum}}</view>
 					</view>
 				</view>
 				<view @click="()=>{isPriceDetailShow = false}" class="close">
-					x
+					<van-icon name="/static/icon/06_close.png" size="54rpx"></van-icon>
 				</view>
 			</view>
 		</van-overlay>
@@ -136,6 +121,9 @@
 </template>
 
 <script>
+	import {
+		imgBaseURl
+	} from '@/config/index.js'
 	import navbar from '@/components/navbar/navbar.vue'
 	export default {
 		components: {
@@ -144,26 +132,12 @@
 		data() {
 			return {
 				ptHeight: 60,
+				imgBaseURl,
 				isPriceDetailShow: false,
-				priceDetailData: [{
-						id: 1,
-						billType: 1,
-						billName: "首充金额",
-						priceNum: 360,
-					},
-					{
-						id: 2,
-						billType: 1,
-						billName: "首充金额",
-						priceNum: 29,
-					},
-					{
-						id: 3,
-						billType: 2,
-						billName: "首充每月返",
-						priceNum: 10,
-					}
-				], // 账单支付明细
+				rechargeSum: 20,
+				rechargeNumCheckList: [20, 50, 100],
+				curRgNumIdx: 0,
+				customRgNum: '',
 			};
 		},
 		onLoad() {
@@ -171,10 +145,38 @@
 			if (ptHeight) {
 				this.ptHeight = ptHeight
 			}
+
 		},
 		methods: {
 			handleShowPriceDetail() {
 				this.isPriceDetailShow = !this.isPriceDetailShow
+			},
+			jumpToPlusPlan() {
+				uni.navigateTo({
+					url: '/pages/upPlan/upPlan'
+				})
+			},
+			handleCheckRgNum(index) {
+				this.customRgNum = ''
+				this.curRgNumIdx = index
+				this.rechargeSum = this.rechargeNumCheckList[index]
+			},
+			handleChangeCustomRgNum({
+				detail
+			}) {
+				const {
+					value
+				} = detail
+				this.curRgNumIdx = -1
+				this.customRgNum = value
+				if (!value) {
+					this.rechargeSum = 0
+					return
+				}
+				this.rechargeSum = this.customRgNum
+			},
+			handleClickTransact() {
+				console.log('chongzhi', this.rechargeSum);
 			}
 		}
 	}
@@ -193,12 +195,6 @@
 			margin: 40rpx auto;
 			width: 672rpx;
 			height: 368rpx;
-
-			.bgi-box {
-				width: 100%;
-				height: 100%;
-				background-color: aqua;
-			}
 
 			.card-content {
 				position: absolute;
@@ -243,14 +239,19 @@
 					display: flex;
 					justify-content: center;
 					align-items: flex-end;
+					box-sizing: border-box;
 					padding-bottom: 38rpx;
 					width: 205rpx;
-					height: 128rpx;
+					height: 166rpx;
 					background-color: #fff;
 					box-shadow: 4rpx 4rpx 48rpx 0rpx rgba(0, 0, 0, 0.09);
 					border-radius: 28rpx;
 					font-size: 28rpx;
 					color: #828698;
+				}
+
+				.activate-num-box {
+					border: 4rpx solid #54CFE9;
 				}
 			}
 
@@ -285,7 +286,7 @@
 		.bottom-pay-box {
 			position: fixed;
 			display: flex;
-			z-index: 200;
+			z-index: 888;
 			justify-content: space-between;
 			align-items: center;
 			padding: 36rpx;
@@ -320,13 +321,13 @@
 				height: 96rpx;
 			}
 		}
+
 		.model-price-detail {
 			position: absolute;
 			bottom: 158rpx;
 			box-sizing: border-box;
 			left: 0;
 			width: 100vw;
-			height: 576rpx;
 			padding: 50rpx;
 			background-color: #F2F4F7;
 
