@@ -31,7 +31,7 @@
 			async getPhoneNumber(e) {
 				if (e.detail.code) {
 					// 获取到用户手机号和国家码
-					const { statusCode, data } = await this.$http('consumer/profile/phone', 'GET', {code: e.detail.code})
+					const { statusCode, data } = await this.$http('/consumer/profile/phone', 'GET', {code: e.detail.code})
 					if(statusCode === 200) {
 						uni.setStorageSync('phone', data.phone)
 						uni.setStorageSync('country_code', data.country_code)
