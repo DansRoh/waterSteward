@@ -47,7 +47,6 @@
 					data,
 					statusCode
 				} = await this.$http('/consumer/session/sms', "PUT", params)
-				console.log('res', data, statusCode)
 				if (statusCode === 201) {
 					// 登录成功
 					uni.setStorageSync('isLogin', true)

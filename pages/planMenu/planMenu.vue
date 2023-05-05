@@ -1,6 +1,5 @@
 <template>
-	<scroll-view scroll-into-view="target-deal" class="page-planMenu" :style="{paddingTop: ptHeight+'px'}">
-		<navbar needBack title="套餐办理"></navbar>
+	<scroll-view scroll-into-view="target-deal" class="page-planMenu">
 		<view class="page-title">
 			套餐选择
 		</view>
@@ -11,7 +10,7 @@
 			</view>
 			<view class="plan-menu">
 				<view @click="handleClickPlanItem(idx)" class="plan-item-box" :class="curPlanIdx===idx ? 'activate-plan' : ''"
-					v-for="(item,idx) in planMenuData" :key="item.planType">
+					v-for="(item,idx) in planMenuData" :key="item.id">
 					<view class="item-left">
 						<view class="icon">
 							¥
@@ -23,11 +22,9 @@
 							/月
 						</view>
 					</view>
-					<view v-if="item.planType === 'D'" class="item-right">
+					<view v-if="item.type === 4" class="item-right">
 						<view class="plan-name">
-							每日鲜 <view class="plan-type">
-								D
-							</view> 套餐（大家庭）
+							{{item.title}}
 						</view>
 						<view class="plan-tips">
 							<view class="stress-box">
@@ -37,9 +34,7 @@
 					</view>
 					<view v-else class="item-right">
 						<view class="plan-name">
-							每日鲜 <view class="plan-type">
-								{{item.planType}}
-							</view> 套餐（{{item.numOfPeople}}人）
+							{{item.title}}
 						</view>
 						<view class="plan-tips">
 							共<view class="stress-box">
@@ -91,7 +86,7 @@
 				<view class="price">
 					实付
 					<view class="price-num">
-						¥ {{ Number(planMenuData[curPlanIdx].price)+ (isHaveFirst ? 350 : 0) }}
+						¥ {{(isHaveFirst ? 350 : 0) + Number(planMenuData[curPlanIdx] && planMenuData[curPlanIdx].price)}}
 					</view>
 				</view>
 				<view @click="handleShowPriceDetail" class="price-detail df aic">
@@ -141,46 +136,17 @@
 
 <script>
 	import navbar from "@/components/navbar/navbar.vue"
+	import {
+		requestPaymentFun,
+		rollTarget
+	} from "@/utils/tool.js"
 	export default {
 		components: {
 			navbar
 		},
 		data() {
 			return {
-				ptHeight: 60,
-				planMenuData: [{
-						price: '29',
-						title: '每日鲜A套餐',
-						planType: "A",
-						numOfPeople: "1-2",
-						amount: 60,
-						numOfBucket: "12桶"
-					},
-					{
-						price: '39',
-						planType: "B",
-						title: '每日鲜B套餐',
-						numOfPeople: "3",
-						amount: 90,
-						numOfBucket: "18桶"
-					},
-					{
-						price: '49',
-						planType: "C",
-						title: '每日鲜C套餐',
-						numOfPeople: "4-5",
-						amount: 120,
-						numOfBucket: "24桶"
-					},
-					{
-						price: '69',
-						planType: "D",
-						title: '每日鲜D套餐',
-						numOfPeople: "*",
-						amount: "",
-						numOfBucket: ""
-					}
-				],
+				planMenuData: [],
 				priceDetailData: [{
 						id: 1,
 						billType: 1,
@@ -211,8 +177,7 @@
 			if (ptHeight) {
 				this.ptHeight = ptHeight
 			}
-
-			this.getPlanMenuData()
+			this.getPlanMenuData();
 		},
 		methods: {
 			onChangeAgreement(e) {
@@ -222,54 +187,80 @@
 				this.curPlanIdx = index
 			},
 			// 获取套餐数据
-			async getPlanMenuData() {
-				const {
+			getPlanMenuData() {
+				this.$http('/consumer/plans', 'GET').then(({
 					statusCode,
 					data
-				} = await this.$http('/consumer/plans', 'GET')
-				if (statusCode === 200) {
-					console.log('data', data);
-				} else {
-					uni.showToast({
-						title: '网络错误',
-						icon: "error"
-					})
-				}
+				}) => {
+					if (statusCode === 200) {
+						console.log('data', data);
+						const {
+							records,
+							first_time
+						} = data
+						this.planMenuData = records
+						this.isHaveFirst = first_time
+					} else {
+						uni.showToast({
+							title: '网络错误',
+							icon: "error"
+						})
+					}
+				})
 			},
-			handleClickTransact() {
+			async handleClickTransact() {
+				const that = this
 				if (!this.isCheckAgreement) {
 					uni.showToast({
 						title: '请勾选用户协议',
 						icon: "error"
 					})
 					// 页面高度跳转至用户协议
-					const query = uni.createSelectorQuery().in(this)
-					query.select('#target-deal').boundingClientRect((rect) => {
-						if (!rect) return
-						const screenHeight = uni.getSystemInfoSync().windowHeight
-						if (rect.top < 0 || rect.top > screenHeight - 110) {
-							uni.pageScrollTo({
-								scrollTop: rect.top,
-								duration: 300
-							})
-						}
-					}).exec()
+					rollTarget('#target-deal', this)
 				} else {
 					// 微信支付
+					uni.login({
+						provider: 'weixin',
+						async success(loginRes) {
+							const params = {
+								plan_id: that.planMenuData[that.curPlanIdx].id,
+								code: loginRes.code,
+								type: "Installation"
+							}
+							const res = await that.$http('/consumer/orders', 'POST', params)
+							const {
+								nonceStr,
+								package: prepayId,
+								paySign,
+								signType,
+								timeStamp
+							} = res.data.payment
+							// 调用微信支付api
+							try {
+								const payRes = await requestPaymentFun(prepayId, nonceStr, timeStamp, signType, paySign)
+								console.log('payRes', payRes);
+								uni.navigateTo({
+									url: '/pages/home/home'
+								})
+							} catch (e) {
+								//TODO handle the exception
+								console.log('e', e);
+								uni.showToast({
+									title: '充值失败',
+									icon: "error"
+								})
+							}
 
-					uni.redirectTo({
-						url: '/pages/home/home'
+						},
+						fail(err) {
+							console.log('loginErr', err);
+						}
 					})
 				}
-
-
-				// uni.navigateTo({
-				// 	url: "/pages/recharge/recharge"
-				// })
 			},
 			handleShowPriceDetail() {
 				this.isPriceDetailShow = !this.isPriceDetailShow
-			}
+			},
 		},
 	}
 </script>
@@ -499,7 +490,7 @@
 				height: 96rpx;
 			}
 		}
-		
+
 		.model-price-detail {
 			position: absolute;
 			box-sizing: border-box;

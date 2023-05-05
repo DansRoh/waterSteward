@@ -124,6 +124,7 @@
 	import {
 		imgBaseURl
 	} from '@/config/index.js'
+	import { requestPaymentFun } from '@/utils/tool.js'
 	import navbar from '@/components/navbar/navbar.vue'
 	export default {
 		components: {
@@ -176,7 +177,34 @@
 				this.rechargeSum = this.customRgNum
 			},
 			handleClickTransact() {
-				console.log('chongzhi', this.rechargeSum);
+				if(isNaN(this.rechargeSum) || this.rechargeSum < 0) {
+					uni.showToast({
+						title:'请输入正确的金额',
+						icon:'error'
+					})
+					return
+				}
+				uni.login({
+					provider:'weixin',
+					async success({code}) {
+						const params = {
+							total: this.rechargeSum,
+							code,
+							device_id: '',
+							type: 'Recharge'
+						}
+						
+						// requestPaymentFun()
+					},
+					fail(e) {
+						console.log(e);
+						uni.showToast({
+							title:'网络错误',
+							icon:'error'
+						})
+					}
+				})
+				
 			}
 		}
 	}

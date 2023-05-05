@@ -34,7 +34,7 @@
 		{
 			"path": "pages/planMenu/planMenu",
 			"style": {
-				"navigationStyle": "custom",
+				"navigationBarTitleText": "套餐办理",
 				"enablePullDownRefresh": false
 			}
 		},
