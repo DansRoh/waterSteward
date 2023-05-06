@@ -9,7 +9,7 @@
 					</view>
 				</view>
 				<view class="user-name">
-					维达Vinda
+					{{name}}
 				</view>
 			</view>
 			<view class="mine-card-content">
@@ -152,7 +152,6 @@
 				background-color: #17DA9C;
 
 				.user-photo {
-					background-color: pink;
 					position: absolute;
 					bottom: -92rpx;
 					left: 50%;
@@ -164,8 +163,8 @@
 					border-radius: 50%;
 
 					.photo-img-class {
-						width: 184rpx;
-						height: 184rpx;
+						width: 200rpx;
+						height: 200rpx;
 						border-radius: 50%;
 						overflow: hidden;
 						position: absolute;
