@@ -35,3 +35,9 @@ export const rollTarget = (targetName, that) => {
 		}
 	}).exec()
 }
+
+// 手机号校验
+export function isValidPhoneNumber(phoneNumber) {
+	const regex = /^1[3-9]\d{9}$/;
+	return regex.test(phoneNumber);
+}

@@ -55,34 +55,11 @@
 				</view>
 			</view>
 			<view class="plan-required-box">
-				<template v-if="isHaveFirst">
-					<view class="first-recharge-tips">
-						首充金额
-					</view>
-					<view class="plan-item-box">
-						<view class="item-left">
-							<view class="icon">
-								¥
-							</view>
-							<view class="price">
-								360
-							</view>
-						</view>
-						<view class="item-right">
-							<view class="plan-name">
-								首充￥360，全额逐月返！
-							</view>
-							<view class="plan-tips">
-								36个月每月反10元。
-							</view>
-						</view>
-						<view class="plan-item-activate-icon">
-							<van-image src="/static/icon/38_required.png" width="116rpx" height="98rpx"></van-image>
-						</view>
-					</view>
-				</template>
-				<view id="target-deal" class="agreement">
-					<van-checkbox :value="isCheckAgreement" @change="onChangeAgreement">我同意鲜水管家*****开通协议</van-checkbox>
+				<view id="target-deal" class="agreement df">
+					<van-checkbox :value="isCheckAgreement" @change="onChangeAgreement">
+						我同意鲜水管家*****
+					</van-checkbox>
+					<view @click="jumpToProtocol">开通协议</view>
 				</view>
 			</view>
 			<view class="bottom-pay-box">
@@ -141,6 +118,10 @@
 </template>
 
 <script>
+	import {
+		requestPaymentFun,
+		rollTarget
+	} from "@/utils/tool.js"
 	import navbar from "@/components/navbar/navbar.vue"
 	export default {
 		components: {
@@ -238,38 +219,66 @@
 				}
 			},
 			handleClickTransact() {
+				const that = this
 				if (!this.isCheckAgreement) {
 					uni.showToast({
 						title: '请勾选用户协议',
 						icon: "error"
 					})
 					// 页面高度跳转至用户协议
-					const query = uni.createSelectorQuery().in(this)
-					query.select('#target-deal').boundingClientRect((rect) => {
-						if (!rect) return
-						const screenHeight = uni.getSystemInfoSync().windowHeight
-						if (rect.top < 0 || rect.top > screenHeight - 110) {
-							uni.pageScrollTo({
-								scrollTop: rect.top,
-								duration: 300
-							})
-						}
-					}).exec()
+					rollTarget('#target-deal', this)
 				} else {
 					// 微信支付
+					uni.login({
+						provider: 'weixin',
+						async success(loginRes) {
+							const params = {
+								device_id: 11111,
+								plan_id: that.planMenuData[that.curPlanIdx].id,
+								code: loginRes.code,
+								type: "Upgrade"
+							}
+							const res = await that.$http('/consumer/orders', 'POST', params)
+							const {
+								nonceStr,
+								package: prepayId,
+								paySign,
+								signType,
+								timeStamp
+							} = res.data.payment
+							// 调用微信支付api
+							try {
+								const payRes = await requestPaymentFun(prepayId, nonceStr, timeStamp, signType, paySign)
+								console.log('payRes', payRes);
+								uni.navigateTo({
+									url: '/pages/home/home'
+								})
+							} catch (e) {
+								//TODO handle the exception
+								console.log('e', e);
+								uni.showToast({
+									title: '充值失败',
+									icon: "error"
+								})
+							}
 
-					uni.redirectTo({
-						url: '/pages/home/home'
+						},
+						fail(err) {
+							console.log('loginErr', err);
+						}
 					})
 				}
-
-
 				// uni.navigateTo({
 				// 	url: "/pages/recharge/recharge"
 				// })
 			},
 			handleShowPriceDetail() {
 				this.isPriceDetailShow = !this.isPriceDetailShow
+			},
+			jumpToProtocol() {
+				uni.navigateTo({
+					url: '/pages/protocol/protocol'
+				})
 			}
 		},
 	}
@@ -315,12 +324,12 @@
 				display: flex;
 				flex-direction: column;
 				align-items: center;
-				justify-content: space-evenly;
 				background-color: #fff;
 				width: 100vw;
-				height: 814rpx;
+				min-height: 870rpx;
 
 				.plan-item-box {
+					margin-top: 32rpx;
 					overflow: hidden;
 					position: relative;
 					display: flex;

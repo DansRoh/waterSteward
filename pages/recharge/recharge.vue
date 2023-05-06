@@ -1,6 +1,5 @@
 <template>
-	<view class="page-recharge" :style="{paddingTop: ptHeight+'px'}">
-		<navbar :needBack="true" title="充值"></navbar>
+	<view class="page-recharge">
 		<view class="accouont-card">
 			<van-image width="100%" height="100%" class="bgi-box" :src="imgBaseURl+'07_cardBg.png'"></van-image>
 			<view class="card-content">
@@ -125,14 +124,9 @@
 		imgBaseURl
 	} from '@/config/index.js'
 	import { requestPaymentFun } from '@/utils/tool.js'
-	import navbar from '@/components/navbar/navbar.vue'
 	export default {
-		components: {
-			navbar
-		},
 		data() {
 			return {
-				ptHeight: 60,
 				imgBaseURl,
 				isPriceDetailShow: false,
 				rechargeSum: 20,
@@ -142,11 +136,6 @@
 			};
 		},
 		onLoad() {
-			const ptHeight = uni.getStorageSync('navHeight')
-			if (ptHeight) {
-				this.ptHeight = ptHeight
-			}
-
 		},
 		methods: {
 			handleShowPriceDetail() {

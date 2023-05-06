@@ -1,19 +1,19 @@
 {
 	"pages": [ //pages数组中第一项表示应用启动页，参考：https://uniapp.dcloud.io/collocation/pages
 		{
+			"path": "pages/login/login",
+			"style": {
+				"navigationBarTitleText": "鲜水管家",
+				"enablePullDownRefresh": false,
+				"usingComponents": {}
+			}
+		},
+		{
 			"path": "pages/home/home",
 			"style": {
 				"navigationBarTitleText": "",
 				"enablePullDownRefresh": false,
 				"navigationStyle": "custom"
-			}
-		},
-		{
-			"path": "pages/login/login",
-			"style": {
-				"navigationStyle": "custom",
-				"enablePullDownRefresh": false,
-				"usingComponents": {}
 			}
 		},
 		{
@@ -41,16 +41,15 @@
 		{
 			"path": "pages/recharge/recharge",
 			"style": {
-				"navigationBarTitleText": "",
-				"enablePullDownRefresh": false,
-				"navigationStyle": "custom"
+				"navigationBarTitleText": "充值",
+				"enablePullDownRefresh": false
 			}
 		},
 		{
 			"path": "pages/mine/mine",
 			"style": {
 				"enablePullDownRefresh": false,
-				"navigationStyle": "custom"
+				"navigationBarTitleText": "我的"
 			}
 
 		},
@@ -58,7 +57,7 @@
 			"path": "pages/service/service",
 			"style": {
 				"enablePullDownRefresh": false,
-				"navigationStyle": "custom"
+				"navigationBarTitleText": "客服与反馈"
 			}
 
 		},
@@ -80,13 +79,26 @@
 		{
 			"path": "pages/accountSafe/accountSafe",
 			"style": {
-				"navigationStyle": "custom",
+				"navigationBarTitleText": "账号与安全",
 				"enablePullDownRefresh": false
 			}
 		}, {
 			"path": "pages/upPlan/upPlan",
 			"style": {
 				"navigationStyle": "custom",
+				"enablePullDownRefresh": false
+			}
+
+		}, {
+			"path": "pages/changePhone/changePhone",
+			"style": {
+				"navigationBarTitleText": "验证新手机号",
+				"enablePullDownRefresh": false
+			}
+		}, {
+			"path": "pages/protocol/protocol",
+			"style": {
+				"navigationBarTitleText": "隐私协议",
 				"enablePullDownRefresh": false
 			}
 
@@ -112,7 +124,8 @@
 			"van-image": "/wxcomponents/@vant/image/index",
 			"van-icon": "/wxcomponents/@vant/icon/index",
 			"van-dialog": "/wxcomponents/@vant/dialog/index",
-			"van-picker": "/wxcomponents/@vant/picker/index"
+			"van-picker": "/wxcomponents/@vant/picker/index",
+			"van-loading": "/wxcomponents/@vant/loading/index"
 		}
 	},
 	"uniIdRouter": {},

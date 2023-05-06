@@ -124,11 +124,7 @@
 			if (ptHeight) {
 				this.ptHeight = ptHeight
 			}
-			
-			// 获取用户信息
 			this.dynamicBottom = this.dynamicBottom/2
-			
-			
 		},
 		onShow() {
 			// 判断是否登录的逻辑
@@ -137,9 +133,15 @@
 				uni.redirectTo({
 					url: '/pages/login/login'
 				})
+				return
 			}
+			this.getUserInfoForStorage()
 		},
 		methods: {
+			// 获取储存本地的userInfo
+			getUserInfoForStorage() {
+				uni.getStorageSync("userInfo")
+			},
 			handleClickTab(type) {
 				if (type === 1) {
 					uni.navigateTo({

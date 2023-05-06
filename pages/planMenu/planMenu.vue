@@ -77,7 +77,10 @@
 					</view>
 				</template>
 				<view id="target-deal" class="agreement">
-					<van-checkbox :value="isCheckAgreement" @change="onChangeAgreement">我同意鲜水管家*****开通协议</van-checkbox>
+					<van-checkbox :value="isCheckAgreement" @change="onChangeAgreement">
+						我同意鲜水管家*****
+						<view @click="jumpToProtocol">开通协议</view>
+					</van-checkbox>
 				</view>
 			</view>
 		</view>
@@ -261,6 +264,11 @@
 			handleShowPriceDetail() {
 				this.isPriceDetailShow = !this.isPriceDetailShow
 			},
+			jumpToProtocol() {
+				uni.navigateTo({
+					url: '/pages/protocol/protocol'
+				})
+			}
 		},
 	}
 </script>

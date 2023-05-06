@@ -38,7 +38,7 @@
 		data() {
 			return {
 				curDate: '2023',
-				devList: ['净水器1',"净水器2","净水器3"],
+				devList: ['净水器1', "净水器2", "净水器3"],
 				curDevIdx: 0,
 				ptHeight: 60,
 			};
@@ -49,7 +49,29 @@
 				this.ptHeight = ptHeight
 			}
 		},
+		onShow() {
+			this.getOrderList()
+		},
 		methods: {
+			// 获取订单列表
+			async getOrderList() {
+				const {
+					statusCode,
+					data
+				} = await this.$http("/consumer/orders", "get")
+				if (statusCode === 200) {
+					//成功
+					console.log('3', data);
+				} else if (statusCode === 204) {
+					console.log('没有数据');
+				} else {
+					uni.showToast({
+						title: '网络错误',
+						icon: 'error'
+					})
+				}
+
+			},
 			bindDateChange(e) {
 				this.curDate = e.detail.value
 			},
@@ -64,9 +86,11 @@
 	.page-rechargeRecord {
 		height: 100vh;
 		background-color: #F2F4F7;
+
 		.filter-box {
 			padding: 50rpx 0;
 		}
+
 		.record-list {
 			.record-item {
 				width: 100vw;

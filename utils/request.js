@@ -17,11 +17,11 @@ export const request = (url, method = 'GET', data = {}) => {
 
 		uni.request({
 			url,
-			method,
+			method: method.toLocaleUpperCase(),
 			data,
 			header: {
 				...header,
-				'Authorization': 'Token ' + uni.getStorageSync("token")
+				'Authorization': 'Token ' + uni.getStorageSync("userInfo").token
 			},
 			timeout,
 			success(res) {

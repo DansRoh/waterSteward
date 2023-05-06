@@ -10,7 +10,7 @@
 		</view>
 
 		<view class="form-phone-verification">
-			<van-field :value="phoneNum" type="number" label="+86" @change="(e)=>{phoneNum = e.detail}" :border="false" />
+			<van-field :value="phoneNum" type="number" clearable label="+86" @change="(e)=>{phoneNum = e.detail}" :border="false" />
 			<van-field :value="veriCode" type="number" @change="(e)=>{veriCode = e.detail}" placeholder="请输入验证码" center clearable label="验证码"
 				:border="false" use-button-slot>
 				<van-button :disabled="isVericodeBtnDisable" type="primary" size="small" color="#fff"
@@ -25,9 +25,6 @@
 </template>
 
 <script>
-	import {
-		apiregister
-	} from '@/utils/api/login.js'
 	export default {
 		data() {
 			return {
@@ -36,6 +33,9 @@
 				isVericodeBtnDisable: false,
 				phoneNum: ''
 			};
+		},
+		onShow() {
+			this.phoneNum = uni.getStorageSync("phone")
 		},
 		methods: {
 			async handleClickLogin() {
@@ -50,6 +50,8 @@
 				if (statusCode === 201) {
 					// 登录成功
 					uni.setStorageSync('isLogin', true)
+					uni.setStorageSync("userInfo", data)
+
 					uni.redirectTo({
 						url: '/pages/home/home'
 					})

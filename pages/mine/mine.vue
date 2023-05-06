@@ -1,6 +1,5 @@
 <template>
-	<view class="page-mine" :style="{paddingTop: ptHeight+20+'px'}">
-		<navbar :needBack="true" title="我的"></navbar>
+	<view class="page-mine">
 		<view class="mine-card">
 			<view class="top-box">
 				<view class="user-photo">
@@ -80,6 +79,7 @@
 
 <style lang="less">
 	.page-mine {
+		padding-top: 40rpx;
 		min-height: 100vh;
 		background-color: #F2F4F7;
 		box-sizing: border-box;
