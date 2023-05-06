@@ -30,7 +30,6 @@
 		},
 		created() {
 			this.navStyle = this.getNavStyle();
-			console.log('nav', this.navStyle);
 		},
 		methods: {
 			goBack() {

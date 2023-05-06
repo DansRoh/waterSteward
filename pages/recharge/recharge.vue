@@ -53,7 +53,7 @@
 				</view>
 				套餐
 			</view>
-			<van-image @click="jumpToPlusPlan" style="margin-bottom: -8rpx;" :src="imgBaseURl+'09_planUp.png'" width="196rpx"
+			<van-image @tap="jumpToPlusPlan" style="margin-bottom: -8rpx;" :src="imgBaseURl+'09_planUp.png'" width="196rpx"
 				height="50rpx"></van-image>
 		</view>
 
@@ -62,7 +62,7 @@
 				自定义充值
 			</view>
 			<view class="refill-num-list">
-				<view v-for="(item, index) in rechargeNumCheckList" :key="item" @click="handleCheckRgNum(index)" class="num-box"
+				<view v-for="(item, index) in rechargeNumCheckList" :key="item" @tap="handleCheckRgNum(index)" class="num-box"
 					:class="curRgNumIdx === index ? 'activate-num-box': ''">
 					<view class="fs64 c262626">
 						{{item}}
@@ -88,13 +88,13 @@
 						{{rechargeSum || 0}}
 					</view>
 				</view>
-				<view @click="handleShowPriceDetail" class="price-detail df aic">
+				<view @tap="handleShowPriceDetail" class="price-detail df aic">
 					明细
 					<van-icon v-if="!isPriceDetailShow" name="/static/icon/21_del02.png" size="34rpx"></van-icon>
 					<van-icon v-else name="/static/icon/22_del03.png" size="34rpx"></van-icon>
 				</view>
 			</view>
-			<van-button :disabled="!rechargeSum" @click="handleClickTransact" class="transaction-btn" type="primary"
+			<van-button :disabled="!rechargeSum" @tap="handleClickTransact" class="transaction-btn" type="primary"
 				color="#00D893" block round>立即充值</van-button>
 		</view>
 		<van-overlay :show="isPriceDetailShow" z-index="300">
@@ -111,7 +111,7 @@
 						<view class="bill-right-num">¥{{rechargeSum}}</view>
 					</view>
 				</view>
-				<view @click="()=>{isPriceDetailShow = false}" class="close">
+				<view @tap="()=>{isPriceDetailShow = false}" class="close">
 					<van-icon name="/static/icon/06_close.png" size="54rpx"></van-icon>
 				</view>
 			</view>

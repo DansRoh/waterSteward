@@ -16,17 +16,17 @@
 			</picker>
 		</view>
 		<view class="record-list">
-			<view class="record-item">
+			<view v-for="item in orderList" :key="item.plan_id" class="record-item">
 				<view class="left-desc fs28 c828698">
 					<view class="">
-						充值时间: 2022年10月24日 12:25
+						充值时间: {{item.created_at}}
 					</view>
 					<view class="">
-						交易单号：68525698752
+						交易单号：{{item.number}}
 					</view>
 				</view>
 				<view class="right-price fs32 c262626">
-					18元
+					{{item.total}}元
 				</view>
 			</view>
 		</view>
@@ -34,6 +34,7 @@
 </template>
 
 <script>
+	import { formatDateTime } from '../../utils/tool.js'
 	export default {
 		data() {
 			return {
@@ -41,6 +42,7 @@
 				devList: ['净水器1', "净水器2", "净水器3"],
 				curDevIdx: 0,
 				ptHeight: 60,
+				orderList: []
 			};
 		},
 		onLoad() {
@@ -55,13 +57,20 @@
 		methods: {
 			// 获取订单列表
 			async getOrderList() {
+				const params = {
+					page: 1,
+					page_size: 100
+				}
 				const {
 					statusCode,
 					data
 				} = await this.$http("/consumer/orders", "get")
 				if (statusCode === 200) {
-					//成功
-					console.log('3', data);
+					const newOrderList = data.records.map(item => {
+						item.created_at = formatDateTime(item.created_at)
+						return item
+					})
+					this.orderList = newOrderList
 				} else if (statusCode === 204) {
 					console.log('没有数据');
 				} else {
@@ -70,14 +79,13 @@
 						icon: 'error'
 					})
 				}
-
 			},
 			bindDateChange(e) {
 				this.curDate = e.detail.value
 			},
 			bindDevChange(e) {
 				this.curDevIdx = e.detail.value
-			}
+			},
 		}
 	}
 </script>

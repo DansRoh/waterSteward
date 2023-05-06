@@ -6,14 +6,14 @@
 			<view class="mt18">
 				<van-field readonly left-icon="/static/icon/24_account_02.png" label="手机号"
 					size="large" :value="phone" clearable type="number">
-					<van-button @click="jumpToEditPhone" class="right-icon-style" slot="right-icon" size="small" round
+					<van-button @tap="jumpToEditPhone" class="right-icon-style" slot="right-icon" size="small" round
 						color="#17DA9C">更改手机号</van-button>
 				</van-field>
 			</view>
 			<van-cell icon="/static/icon/26_account_04.png" custom-class="info-item" is-link title="账号注销"
 				link-type="navigateTo" url="" />
 		</view>
-		<view @click="loginOut" class="login-out">
+		<view @tap="loginOut" class="login-out">
 			退出登录
 		</view>
 		<van-dialog id="van-dialog" />

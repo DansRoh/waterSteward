@@ -14,11 +14,11 @@
 			<van-field :value="veriCode" type="number" @change="(e)=>{veriCode = e.detail}" placeholder="请输入验证码" center clearable label="验证码"
 				:border="false" use-button-slot>
 				<van-button :disabled="isVericodeBtnDisable" type="primary" size="small" color="#fff"
-					custom-style="color:#00D893" @click="handleClickGetVericodeBtn" slot="button" class="get-vericode-btn">
+					custom-style="color:#00D893" @tap="handleClickGetVericodeBtn" slot="button" class="get-vericode-btn">
 					{{vericodeBtnText}}
 				</van-button>
 			</van-field>
-			<van-button :disabled="!Boolean(''+veriCode)" @click="handleClickLogin" class="login-btn" type="primary" block
+			<van-button :disabled="!Boolean(''+veriCode)" @tap="handleClickLogin" class="login-btn" type="primary" block
 				round>立即登录</van-button>
 		</view>
 	</view>

@@ -13,83 +13,89 @@
 				</view>
 			</view>
 		</navbar>
-		<view class="water-banner">
-			<view class="water-bg">
-				<view class="top-bg-box" :style="{bottom: dynamicBottom+'rpx'}">
-					<van-image class="top-bg" :src="imgBaseURl+'12_waterTop.png'" width="100vw" height="248rpx"></van-image>
+		<template v-if="myDevList.length">
+			<view class="water-banner">
+				<view class="water-bg">
+					<view class="top-bg-box" :style="{bottom: dynamicBottom+'rpx'}">
+						<van-image class="top-bg" :src="imgBaseURl+'12_waterTop.png'" width="100vw" height="248rpx"></van-image>
+					</view>
+					<van-image class="bottom-bg" :src="imgBaseURl+'13_waterBottom.png'" width="100vw" height="924rpx"></van-image>
 				</view>
-				<van-image class="bottom-bg" :src="imgBaseURl+'13_waterBottom.png'" width="100vw" height="924rpx"></van-image>
-			</view>
-			<view class="water-inner pt400">
-				<view class="residue-water">
-					<view class="df aic ">
-						<view class="fs144">
-							30
+				<view class="water-inner pt400">
+					<view class="residue-water">
+						<view class="df aic ">
+							<view class="fs144">
+								30
+							</view>
+							<view class="fs56 asfe pb30">
+								L
+							</view>
 						</view>
-						<view class="fs56 asfe pb30">
-							L
+						<view class="tac">
+							可用水量
 						</view>
 					</view>
-					<view class="tac">
-						可用水量
-					</view>
-				</view>
-				<picker mode="selector" :range="myDevList" :value="curCheckedDevIdx" range-key="devName" @change="handleChangeCurDev">
-					<view class="df aic mt200">
-						<view class="my-dev-text">
-							{{myDevList[curCheckedDevIdx].devName}}
+					<picker mode="selector" :range="myDevList" :value="curCheckedDevIdx" range-key="name"
+						@change="handleChangeCurDev">
+						<view class="df aic mt200">
+							<view class="my-dev-text">
+								{{myDevList[curCheckedDevIdx].name}}
+							</view>
+							<van-icon name="/static/icon/08_del_white.png" size="32rpx"></van-icon>
 						</view>
-						<van-icon name="/static/icon/08_del_white.png" size="32rpx"></van-icon>
+					</picker>
+				</view>
+			</view>
+			<view class="user-water-info">
+				<view class="info-card">
+					<view class="fs96 c17DA9C">
+						15.2
 					</view>
-				</picker>
-			</view>
-		</view>
-		<view class="user-water-info">
-			<view class="info-card">
-				<view class="fs96 c17DA9C">
-					15.2
+					<view class="c828698 fs28">
+						今日饮水量 (L)
+					</view>
 				</view>
-				<view class="c828698 fs28">
-					今日饮水量 (L)
-				</view>
-			</view>
-			<view class="info-card">
-				<view class="fs96 c17DA9C">
-					63
-				</view>
-				<view class="c828698 fs28">
-					TDS值 (mg/L)
+				<view class="info-card">
+					<view class="fs96 c17DA9C">
+						63
+					</view>
+					<view class="c828698 fs28">
+						TDS值 (mg/L)
+					</view>
 				</view>
 			</view>
-		</view>
-		<view class="bottom-tab-box fs28 c828698">
-			<view @click="handleClickTab(1)" class="df aic pl40">
-				<van-icon name="/static/icon/14_service.png" size="56rpx"></van-icon>
-				客服
+			<view class="bottom-tab-box fs28 c828698">
+				<view @tap="handleClickTab(1)" class="df aic pl40">
+					<van-icon name="/static/icon/14_service.png" size="56rpx"></van-icon>
+					客服
+				</view>
+				<view @tap="handleClickTab(2)" class="df aic">
+					<van-icon name="/static/icon/15_people.png" size="56rpx"></van-icon>
+					我的
+				</view>
+				<van-button @tap="handleClickTab(3)" type="primary" round>充值</van-button>
 			</view>
-			<view @click="handleClickTab(2)" class="df aic">
-				<van-icon name="/static/icon/15_people.png" size="56rpx"></van-icon>
-				我的
-			</view>
-			<van-button @click="handleClickTab(3)" type="primary" round>充值</van-button>
-		</view>
-		<!-- 掉线提醒model -->
-		<van-overlay class="offline-overlay" :show="isOffline" z-index="100">
-			<view class="wrapper">
-				<view class="inner-box mb30">
-					<view class="icon">
+			<!-- 掉线提醒model -->
+			<van-overlay class="offline-overlay" :show="isOffline" z-index="100">
+				<view class="wrapper">
+					<view class="inner-box mb30">
+						<view class="icon">
 
+						</view>
+						<view class="tips-text">
+							经系统监测，您的设备以断电/网，
+							净水功能已停止，为避免使用，
+							请尽快连网连电。
+						</view>
 					</view>
-					<view class="tips-text">
-						经系统监测，您的设备以断电/网，
-						净水功能已停止，为避免使用，
-						请尽快连网连电。
-					</view>
+					<van-button custom-style="width:384rpx;height:96rpx;font-size:36rpx;" @tap="()=>{isOffline=false}"
+						color="#17DA9C" round>知道了</van-button>
 				</view>
-				<van-button custom-style="width:384rpx;height:96rpx;font-size:36rpx;" @click="()=>{isOffline=false}"
-					color="#17DA9C" round>知道了</van-button>
-			</view>
-		</van-overlay>
+			</van-overlay>
+		</template>
+		<template v-else>
+			<van-empty description="网络错误" />
+		</template>
 	</view>
 </template>
 
@@ -109,13 +115,7 @@
 				ptHeight: 60,
 				dynamicBottom: 876,
 				curCheckedDevIdx: 0,
-				myDevList: [{
-					devName: '净水器1号'
-				},{
-					devName: '净水器2号'
-				},{
-					devName: '净水器3号'
-				}]
+				myDevList: []
 			};
 		},
 		onLoad() {
@@ -124,7 +124,7 @@
 			if (ptHeight) {
 				this.ptHeight = ptHeight
 			}
-			this.dynamicBottom = this.dynamicBottom/2
+			this.dynamicBottom = this.dynamicBottom / 2
 		},
 		onShow() {
 			// 判断是否登录的逻辑
@@ -136,8 +136,30 @@
 				return
 			}
 			this.getUserInfoForStorage()
+			this.getDevList()
 		},
 		methods: {
+			// 获取净水器列表
+			async getDevList() {
+				const params = {
+					page: 1,
+					page_size: 25
+				}
+				const {
+					statusCode,
+					data
+				} = await this.$http('/consumer/devices', 'get', params)
+				if (statusCode === 200) {
+					const {
+						records
+					} = data
+					this.myDevList = [{id: 1, name: '净水器1号'},{id: 2, name: '净水器2号'},{id: 3, name: '净水器3号'}]
+				} else {
+					uni.showToast({
+						title: '网络错误'
+					})
+				}
+			},
 			// 获取储存本地的userInfo
 			getUserInfoForStorage() {
 				uni.getStorageSync("userInfo")
@@ -182,6 +204,7 @@
 				position: relative;
 				height: 100%;
 				background-color: #00D1FF;
+
 				.top-bg-box {
 					background-color: #fff;
 					width: 100vw;
@@ -190,12 +213,14 @@
 					position: absolute;
 					left: 0;
 					bottom: 876rpx;
+
 					.top-bg {
 						position: absolute;
 						left: 0;
 						bottom: -212rpx;
 					}
 				}
+
 				.bottom-bg {
 					z-index: 19;
 					position: absolute;
@@ -221,6 +246,7 @@
 				.residue-water {
 					text-shadow: 4px 4px 12px rgba(0, 209, 255, 0.81);
 				}
+
 				.my-dev-text {
 					text-shadow: 4px 4px 12px rgba(0, 209, 255, 0.81);
 				}

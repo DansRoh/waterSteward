@@ -10,7 +10,7 @@
 				<van-icon class="title-del-icon" name="/static/icon/36_del.png" size="20rpx"></van-icon>
 			</view>
 			<view class="plan-menu">
-				<view @click="handleClickPlanItem(idx)" class="plan-item-box" :class="curPlanIdx===idx ? 'activate-plan' : ''"
+				<view @tap="handleClickPlanItem(idx)" class="plan-item-box" :class="curPlanIdx===idx ? 'activate-plan' : ''"
 					v-for="(item,idx) in planMenuData" :key="item.planType">
 					<view class="item-left">
 						<view class="icon">
@@ -59,7 +59,7 @@
 					<van-checkbox :value="isCheckAgreement" @change="onChangeAgreement">
 						我同意鲜水管家*****
 					</van-checkbox>
-					<view @click="jumpToProtocol">开通协议</view>
+					<view @tap="jumpToProtocol">开通协议</view>
 				</view>
 			</view>
 			<view class="bottom-pay-box">
@@ -70,17 +70,17 @@
 							¥ {{ Number(planMenuData[curPlanIdx].price)+ (isHaveFirst ? 350 : 0) }}
 						</view>
 					</view>
-					<view @click="handleShowPriceDetail" class="price-detail df aic">
+					<view @tap="handleShowPriceDetail" class="price-detail df aic">
 						明细
 						<van-icon v-if="!isPriceDetailShow" name="/static/icon/21_del02.png" size="34rpx"></van-icon>
 						<van-icon v-else name="/static/icon/22_del03.png" size="34rpx"></van-icon>
 					</view>
 				</view>
-				<van-button @click="handleClickTransact" class="transaction-btn" type="primary" color="#00D893" block
+				<van-button @tap="handleClickTransact" class="transaction-btn" type="primary" color="#00D893" block
 					round>立即办理</van-button>
 			</view>
 			<!-- 支付明细model -->
-			<van-overlay :show="isPriceDetailShow" @click="()=>{isPriceDetailShow = false}">
+			<van-overlay :show="isPriceDetailShow" @tap="()=>{isPriceDetailShow = false}">
 				<view v-if="isPriceDetailShow" class="model-price-detail">
 					<view class="title">
 						支付明细
@@ -108,7 +108,7 @@
 							<view class="bill-right-num">-¥10</view>
 						</view>
 					</view>
-					<view @click="()=>{isPriceDetailShow = false}" class="close">
+					<view @tap="()=>{isPriceDetailShow = false}" class="close">
 						<van-icon name="/static/icon/06_close.png" size="54rpx"></van-icon>
 					</view>
 				</view>

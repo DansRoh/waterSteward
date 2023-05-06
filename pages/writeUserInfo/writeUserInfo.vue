@@ -46,12 +46,12 @@
 				<view class="item-label">
 					推荐码
 				</view>
-				<van-field @click-icon="scanCode" input-class="custom-field" icon="/static/icon/05_scan.png"
+				<van-field @tap-icon="scanCode" input-class="custom-field" icon="/static/icon/05_scan.png"
 					placeholder="无可暂时不填" placeholder-style="font-size: 24rpx; color: #CECFD0;" :value='referCode'
 					:border="false" />
 			</view>
 			<view class="form-item">
-				<van-button @click="handleClickTransact" class="transaction-btn" type="primary" block round>立即办理</van-button>
+				<van-button @tap="handleClickTransact" class="transaction-btn" type="primary" block round>立即办理</van-button>
 			</view>
 		</view>
 	</view>

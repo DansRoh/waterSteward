@@ -125,7 +125,8 @@
 			"van-icon": "/wxcomponents/@vant/icon/index",
 			"van-dialog": "/wxcomponents/@vant/dialog/index",
 			"van-picker": "/wxcomponents/@vant/picker/index",
-			"van-loading": "/wxcomponents/@vant/loading/index"
+			"van-loading": "/wxcomponents/@vant/loading/index",
+			"van-empty": "/wxcomponents/@vant/empty/index"
 		}
 	},
 	"uniIdRouter": {},

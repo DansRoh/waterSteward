@@ -41,3 +41,15 @@ export function isValidPhoneNumber(phoneNumber) {
 	const regex = /^1[3-9]\d{9}$/;
 	return regex.test(phoneNumber);
 }
+
+// 时间格式转换
+export function formatDateTime(dateTimeString) {
+	const date = new Date(dateTimeString);
+	const year = date.getFullYear();
+	const month = date.getMonth() + 1;
+	const day = date.getDate();
+	const hours = date.getHours();
+	const minutes = date.getMinutes();
+
+	return `${year}年${month}月${day}日 ${hours}:${minutes.toString().padStart(2, '0')}`;
+}

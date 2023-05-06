@@ -2,7 +2,7 @@
 	<view class="page-login">
 		<van-image src="/static/icon/03_waterStewardLogo.png" width="400rpx" height="150rpx" class="logo-box">
 		</van-image>
-		<van-button :disabled="isBtnLoading" @click="handleClickWxLogin" icon="/static/icon/01_wechartLogo.png"  class="login-btn" type="primary"
+		<van-button :disabled="isBtnLoading" @tap="handleClickWxLogin" icon="/static/icon/01_wechartLogo.png"  class="login-btn" type="primary"
 			block round>微信授权登录</van-button>
 		<van-button :disabled="isBtnLoading" open-type="getPhoneNumber" @getphonenumber="getPhoneNumber" icon="/static/icon/02_phone.png"
 			class="login-btn" color="#23D8FF" plain block hairline round>手机快捷登录</van-button>

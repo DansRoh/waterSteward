@@ -5,10 +5,10 @@
 				url="/pages/recharge/recharge" text="我要充值">
 				<van-icon slot="icon" name="/static/icon/32_feedback_01.png" size="96rpx"></van-icon>
 			</van-grid-item>
-			<van-grid-item @click="clickNotOpen" icon-class="mb18 mt18" content-class="custom-grid-item" text="开发票">
+			<van-grid-item @tap="clickNotOpen" icon-class="mb18 mt18" content-class="custom-grid-item" text="开发票">
 				<van-icon slot="icon" name="/static/icon/33_feedback_02.png" size="96rpx"></van-icon>
 			</van-grid-item>
-			<van-grid-item @click="clickNotOpen" icon-class="mb18 mt18" content-class="custom-grid-item" text="电话联系">
+			<van-grid-item @tap="clickNotOpen" icon-class="mb18 mt18" content-class="custom-grid-item" text="电话联系">
 				<van-icon slot="icon" name="/static/icon/34_feedback_03.png" size="96rpx"></van-icon>
 			</van-grid-item>
 		</van-grid>
@@ -18,7 +18,7 @@
 			</view>
 			<textarea class="voice-msg-textarea" :value="voiceMsg" @input="textAreaInput" placeholder="这里是备注内容" />
 		</view>
-		<van-button :disabled="isDisableSubmit" @click="submit" type="primary" custom-style="width:384rpx;margin:40rpx auto;" color="#17DA9C" block
+		<van-button :disabled="isDisableSubmit" @tap="submit" type="primary" custom-style="width:384rpx;margin:40rpx auto;" color="#17DA9C" block
 			round>确认提交</van-button>
 	</view>
 </template>
