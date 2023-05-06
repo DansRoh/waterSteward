@@ -64,14 +64,14 @@
 		{
 			"path": "pages/rechargeRecord/rechargeRecord",
 			"style": {
-				"navigationStyle": "custom",
+				"navigationBarTitleText": "充值记录",
 				"enablePullDownRefresh": false
 			}
 		},
 		{
 			"path": "pages/devManage/devManage",
 			"style": {
-				"navigationStyle": "custom",
+				"navigationBarTitleText": "净水器管理",
 				"enablePullDownRefresh": false
 			}
 
@@ -85,7 +85,7 @@
 		}, {
 			"path": "pages/upPlan/upPlan",
 			"style": {
-				"navigationStyle": "custom",
+				"navigationBarTitleText": "套餐升级",
 				"enablePullDownRefresh": false
 			}
 

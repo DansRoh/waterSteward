@@ -1,6 +1,5 @@
 <template>
-	<view class="page-rechargeRecord" :style="{paddingTop: ptHeight+'px'}">
-		<navbar :needBack="true" title="充值记录"></navbar>
+	<view class="page-rechargeRecord">
 		<view class="filter-box df">
 			<picker mode="date" :value="curDate" fields="year" @change="bindDateChange">
 				<view class="current-date fs28 c262626 pl40 pr60">
@@ -44,12 +43,6 @@
 				ptHeight: 60,
 				orderList: []
 			};
-		},
-		onLoad() {
-			const ptHeight = uni.getStorageSync('navHeight')
-			if (ptHeight) {
-				this.ptHeight = ptHeight
-			}
 		},
 		onShow() {
 			this.getOrderList()

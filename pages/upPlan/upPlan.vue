@@ -1,10 +1,10 @@
 <template>
-	<scroll-view scroll-into-view="target-deal" class="page-planMenu" :style="{paddingTop: ptHeight+'px'}">
-		<navbar needBack title="套餐升级"></navbar>
+	<scroll-view scroll-into-view="target-deal" class="page-upPlan">
 		<view class="page-title">
 			套餐选择
 		</view>
-		<view class="every-day-plan-box">
+		<van-empty v-if="planMenuData.length===0" description="暂无数据" />
+		<view v-else class="every-day-plan-box">
 			<view class="title">
 				每日鲜套餐
 				<van-icon class="title-del-icon" name="/static/icon/36_del.png" size="20rpx"></van-icon>
@@ -67,7 +67,7 @@
 					<view class="price">
 						实付
 						<view class="price-num">
-							¥ {{ Number(planMenuData[curPlanIdx].price)+ (isHaveFirst ? 350 : 0) }}
+							¥ {{ planMenuData[curPlanIdx].price }}
 						</view>
 					</view>
 					<view @tap="handleShowPriceDetail" class="price-detail df aic">
@@ -86,26 +86,12 @@
 						支付明细
 					</view>
 					<view class="bill-list">
-						<view v-if="isHaveFirst" class="bill-item">
-							<view class="bill-left-desc">
-								<view class="bill-type">商品</view>
-								<view class="bill-name">首充金额</view>
-							</view>
-							<view class="bill-right-num">¥360</view>
-						</view>
 						<view class="bill-item">
 							<view class="bill-left-desc">
 								<view class="bill-type">商品</view>
 								<view class="bill-name">{{ planMenuData[curPlanIdx].title }}</view>
 							</view>
 							<view class="bill-right-num">¥{{ planMenuData[curPlanIdx].price }}</view>
-						</view>
-						<view v-if="isHaveFirst" class="bill-item">
-							<view class="bill-left-desc">
-								<view class="bill-type">优惠</view>
-								<view class="bill-name">首充每月返</view>
-							</view>
-							<view class="bill-right-num">-¥10</view>
 						</view>
 					</view>
 					<view @tap="()=>{isPriceDetailShow = false}" class="close">
@@ -122,78 +108,16 @@
 		requestPaymentFun,
 		rollTarget
 	} from "@/utils/tool.js"
-	import navbar from "@/components/navbar/navbar.vue"
 	export default {
-		components: {
-			navbar
-		},
 		data() {
 			return {
-				ptHeight: 60,
-				planMenuData: [{
-						price: '29',
-						title: '每日鲜A套餐',
-						planType: "A",
-						numOfPeople: "1-2",
-						amount: 60,
-						numOfBucket: "12桶"
-					},
-					{
-						price: '39',
-						planType: "B",
-						title: '每日鲜B套餐',
-						numOfPeople: "3",
-						amount: 90,
-						numOfBucket: "18桶"
-					},
-					{
-						price: '49',
-						planType: "C",
-						title: '每日鲜C套餐',
-						numOfPeople: "4-5",
-						amount: 120,
-						numOfBucket: "24桶"
-					},
-					{
-						price: '69',
-						planType: "D",
-						title: '每日鲜D套餐',
-						numOfPeople: "*",
-						amount: "",
-						numOfBucket: ""
-					}
-				],
-				priceDetailData: [{
-						id: 1,
-						billType: 1,
-						billName: "首充金额",
-						priceNum: 360,
-					},
-					{
-						id: 2,
-						billType: 1,
-						billName: "首充金额",
-						priceNum: 29,
-					},
-					{
-						id: 3,
-						billType: 2,
-						billName: "首充每月返",
-						priceNum: 10,
-					}
-				], // 账单支付明细
+				planMenuData: [], // 账单支付明细
 				isCheckAgreement: false, // 用户是否同意开通鲜水管家协议
 				isPriceDetailShow: false, // 价格明细弹窗是否显示
 				curPlanIdx: 0, // 当前选择的套餐
-				isHaveFirst: true, // 是否有首充
 			};
 		},
 		onLoad() {
-			const ptHeight = uni.getStorageSync('navHeight')
-			if (ptHeight) {
-				this.ptHeight = ptHeight
-			}
-
 			this.getPlanMenuData()
 		},
 		methods: {
@@ -205,17 +129,22 @@
 			},
 			// 获取套餐数据
 			async getPlanMenuData() {
-				const {
-					statusCode,
-					data
-				} = await this.$http('/consumer/plans', 'GET')
-				if (statusCode === 200) {
-					console.log('data', data);
-				} else {
-					uni.showToast({
-						title: '网络错误',
-						icon: "error"
-					})
+				try {
+					const {
+						statusCode,
+						data
+					} = await this.$http('/consumer/plans', 'GET')
+					if (statusCode === 200) {
+						this.planMenuData = data.records
+					} else {
+						uni.showToast({
+							title: '网络错误',
+							icon: "error"
+						})
+					}
+				} catch (e) {
+					//TODO handle the exception
+					console.log('服务器错误', e);
 				}
 			},
 			handleClickTransact() {
@@ -285,7 +214,7 @@
 </script>
 
 <style lang="less">
-	.page-planMenu {
+	.page-upPlan {
 		min-height: 100vh;
 		box-sizing: border-box;
 		padding-bottom: 160rpx;

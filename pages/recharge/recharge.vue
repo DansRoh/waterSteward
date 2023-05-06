@@ -53,8 +53,12 @@
 				</view>
 				套餐
 			</view>
-			<van-image @tap="jumpToPlusPlan" style="margin-bottom: -8rpx;" :src="imgBaseURl+'09_planUp.png'" width="196rpx"
-				height="50rpx"></van-image>
+			<view @tap="jumpToPlusPlan" class="upplan-btn-box">
+				<van-image custom-class="custom-img-cls" src="/static/icon/09_planUp.png" width="196rpx" height="50rpx" />
+				<view class="text">
+					套餐升级
+				</view>
+			</view>
 		</view>
 
 		<view class="custom-refill">
@@ -71,11 +75,11 @@
 				</view>
 			</view>
 			<view class="custom-refill-input-box mt34">
-				<input :value="customRgNum" @input="handleChangeCustomRgNum" @focus="() => {curRgNumIdx = -1;rechargeSum=customRgNum}"
-					class="custom-refill-input" type="number">
 				<view class="refill-inp-tips">
 					输入充值金额 (元)
 				</view>
+				<input :value="customRgNum" @input="handleChangeCustomRgNum"
+					@focus="() => {curRgNumIdx = -1;rechargeSum=customRgNum}" class="custom-refill-input" type="number">
 			</view>
 		</view>
 
@@ -123,7 +127,9 @@
 	import {
 		imgBaseURl
 	} from '@/config/index.js'
-	import { requestPaymentFun } from '@/utils/tool.js'
+	import {
+		requestPaymentFun
+	} from '@/utils/tool.js'
 	export default {
 		data() {
 			return {
@@ -134,8 +140,6 @@
 				curRgNumIdx: 0,
 				customRgNum: '',
 			};
-		},
-		onLoad() {
 		},
 		methods: {
 			handleShowPriceDetail() {
@@ -166,34 +170,36 @@
 				this.rechargeSum = this.customRgNum
 			},
 			handleClickTransact() {
-				if(isNaN(this.rechargeSum) || this.rechargeSum < 0) {
+				if (isNaN(this.rechargeSum) || this.rechargeSum < 0) {
 					uni.showToast({
-						title:'请输入正确的金额',
-						icon:'error'
+						title: '请输入正确的金额',
+						icon: 'error'
 					})
 					return
 				}
 				uni.login({
-					provider:'weixin',
-					async success({code}) {
+					provider: 'weixin',
+					async success({
+						code
+					}) {
 						const params = {
 							total: this.rechargeSum,
 							code,
 							device_id: '',
 							type: 'Recharge'
 						}
-						
+
 						// requestPaymentFun()
 					},
 					fail(e) {
 						console.log(e);
 						uni.showToast({
-							title:'网络错误',
-							icon:'error'
+							title: '网络错误',
+							icon: 'error'
 						})
 					}
 				})
-				
+
 			}
 		}
 	}
@@ -240,6 +246,21 @@
 				height: 50rpx;
 				background-color: aquamarine;
 			}
+
+			.upplan-btn-box {
+				position: relative;
+				margin-bottom: -6rpx;
+
+				.custom-img-cls {}
+
+				.text {
+					left: 24rpx;
+					top: 6rpx;
+					position: absolute;
+					font-size: 24rpx;
+					color: #fff;
+				}
+			}
 		}
 
 		.custom-refill {
@@ -275,25 +296,22 @@
 			.custom-refill-input-box {
 				position: relative;
 				height: 160rpx;
-				display: flex;
-				align-items: flex-end;
 				background-color: #fff;
 				border: 2rpx solid #828698;
 				border-radius: 28rpx;
 
 				.custom-refill-input {
 					width: 666rpx;
-					height: 128rpx;
+					height: 90rpx;
 					color: #54CFE9;
 					caret-color: #54CFE9;
-					font-size: 80rpx;
+					font-size: 70rpx;
 					padding-left: 34rpx;
 				}
 
 				.refill-inp-tips {
-					position: absolute;
-					top: 22rpx;
-					left: 34rpx;
+					padding-top: 22rpx;
+					padding-left: 34rpx;
 					font-size: 24rpx;
 					color: #828698;
 				}
