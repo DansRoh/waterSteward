@@ -3,8 +3,7 @@
 		<view class="accouont-card">
 			<van-image width="100%" height="100%" class="bgi-box" :src="imgBaseURl+'07_cardBg.png'"></van-image>
 
-			<picker mode="selector" :range="myDevList" :value="curDevIdx" range-key="name"
-				@change="handleChangeCurDev">
+			<picker mode="selector" :range="myDevList" :value="curDevIdx" range-key="name" @change="handleChangeCurDev">
 				<view class="change-icon-box">
 					<van-icon name="/static/icon/08_del_white.png" size="32rpx"></van-icon>
 				</view>
@@ -16,7 +15,7 @@
 						充值账号
 					</view>
 					<view class="fs48">
-						爸爸家的净水器
+						{{devInfo.name ? devInfo.name : '暂无净水器'}}
 					</view>
 				</view>
 				<view class="account-info df mt42">
@@ -26,7 +25,7 @@
 						</view>
 						<view class="df aie">
 							<view class="fs64">
-								169
+								{{devInfo.remain ? devInfo.remain : 0}}
 							</view>
 							<view class="fs24">
 								升
@@ -39,7 +38,7 @@
 						</view>
 						<view class="df aie">
 							<view class="fs64">
-								100
+								{{devInfo.amount ? devInfo.amount : 0}}
 							</view>
 							<view class="fs24">
 								元
@@ -55,11 +54,7 @@
 				当前套餐
 			</view>
 			<view class="df">
-				每日鲜
-				<view class="c17DA9C">
-					A
-				</view>
-				套餐
+				{{devInfo.plan_name ? devInfo.plan_name : '暂无套餐'}}
 			</view>
 			<view @tap="jumpToPlusPlan" class="upplan-btn-box">
 				<van-image custom-class="custom-img-cls" src="/static/icon/09_planUp.png" width="196rpx" height="50rpx" />
@@ -202,6 +197,7 @@
 				this.rechargeSum = this.customRgNum
 			},
 			handleClickTransact() {
+				const that = this
 				if (isNaN(this.rechargeSum) || this.rechargeSum < 0) {
 					uni.showToast({
 						title: '请输入正确的金额',
@@ -215,13 +211,44 @@
 						code
 					}) {
 						const params = {
-							total: this.rechargeSum,
+							total: that.rechargeSum,
 							code,
-							device_id: '',
+							device_id: that.devInfo?.id,
 							type: 'Recharge'
 						}
-
-						// requestPaymentFun()
+						const {
+							statusCode,
+							data
+						} = await that.$http('/consumer/orders', 'post', params)
+						if (statusCode === 201) {
+							const {
+								nonceStr,
+								package: prepayId,
+								paySign,
+								signType,
+								timeStamp
+							} = data.payment
+							// 调用微信支付api
+							try {
+								const payRes = await requestPaymentFun(prepayId, nonceStr, timeStamp, signType, paySign)
+								console.log('payRes', payRes);
+								uni.navigateTo({
+									url: '/pages/home/home'
+								})
+							} catch (e) {
+								//TODO handle the exception
+								console.log('e', e);
+								uni.showToast({
+									title: '充值失败',
+									icon: "error"
+								})
+							}
+						} else {
+							uni.showToast({
+								title: '网络错误',
+								icon: 'error'
+							})
+						}
 					},
 					fail(e) {
 						console.log(e);

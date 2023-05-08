@@ -17,7 +17,7 @@
 							¥
 						</view>
 						<view class="price">
-							{{item.price}}
+							{{Number(item.price)}}
 						</view>
 						<view class="unit">
 							/月
@@ -111,8 +111,14 @@
 				isCheckAgreement: false, // 用户是否同意开通鲜水管家协议
 				isPriceDetailShow: false, // 价格明细弹窗是否显示
 				curPlanIdx: 0, // 当前选择的套餐
-				curDevInfo: {}, // 当前充值设备信息，提交订单时需要设备id
+				userInfo: uni.getStorageSync("userInfo"),
+				curDevIdx: this.$store.state.curDevIdx
 			};
+		},
+		computed: {
+			curDevInfo() {
+				return this.userInfo.devices[this.curDevIdx]
+			}
 		},
 		onLoad() {
 			this.getPlanMenuData()
@@ -159,35 +165,33 @@
 						provider: 'weixin',
 						async success(loginRes) {
 							const params = {
-								device_id: 11111,
+								device_id: that.curDevInfo.id,
 								plan_id: that.planMenuData[that.curPlanIdx].id,
 								code: loginRes.code,
 								type: "Upgrade"
 							}
-							const res = await that.$http('/consumer/orders', 'POST', params)
-							const {
-								nonceStr,
-								package: prepayId,
-								paySign,
-								signType,
-								timeStamp
-							} = res.data.payment
-							// 调用微信支付api
-							try {
-								const payRes = await requestPaymentFun(prepayId, nonceStr, timeStamp, signType, paySign)
-								console.log('payRes', payRes);
-								uni.navigateTo({
-									url: '/pages/home/home'
-								})
-							} catch (e) {
-								//TODO handle the exception
-								console.log('e', e);
-								uni.showToast({
-									title: '充值失败',
-									icon: "error"
-								})
+							const {statusCode, data} = await that.$http('/consumer/orders', 'POST', params)
+							if (statusCode === 201) {
+								const {
+									nonceStr,
+									package: prepayId,
+									paySign,
+									signType,
+									timeStamp
+								} = data.payment
+								// 调用微信支付api
+								try {
+									const payRes = await requestPaymentFun(prepayId, nonceStr, timeStamp, signType, paySign)
+									console.log('payRes', payRes);
+								} catch (e) {
+									//TODO handle the exception
+									console.log('e', e);
+									uni.showToast({
+										title: '充值失败',
+										icon: "error"
+									})
+								}
 							}
-
 						},
 						fail(err) {
 							console.log('loginErr', err);

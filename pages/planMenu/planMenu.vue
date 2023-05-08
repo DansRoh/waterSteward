@@ -231,29 +231,30 @@
 								type: "Installation"
 							}
 							const res = await that.$http('/consumer/orders', 'POST', params)
-							const {
-								nonceStr,
-								package: prepayId,
-								paySign,
-								signType,
-								timeStamp
-							} = res.data.payment
-							// 调用微信支付api
-							try {
-								const payRes = await requestPaymentFun(prepayId, nonceStr, timeStamp, signType, paySign)
-								console.log('payRes', payRes);
-								uni.navigateTo({
-									url: '/pages/home/home'
-								})
-							} catch (e) {
-								//TODO handle the exception
-								console.log('e', e);
-								uni.showToast({
-									title: '充值失败',
-									icon: "error"
-								})
+							if (res.statusCode === 201) {
+								const {
+									nonceStr,
+									package: prepayId,
+									paySign,
+									signType,
+									timeStamp
+								} = res.data.payment
+								// 调用微信支付api
+								try {
+									const payRes = await requestPaymentFun(prepayId, nonceStr, timeStamp, signType, paySign)
+									console.log('payRes', payRes);
+									uni.navigateTo({
+										url: '/pages/home/home'
+									})
+								} catch (e) {
+									//TODO handle the exception
+									console.log('e', e);
+									uni.showToast({
+										title: '充值失败',
+										icon: "error"
+									})
+								}
 							}
-
 						},
 						fail(err) {
 							console.log('loginErr', err);

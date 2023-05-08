@@ -16,16 +16,22 @@
 		<template v-if="myDevList.length">
 			<view class="water-banner">
 				<view class="water-bg">
-					<view class="top-bg-box" :style="{bottom: dynamicBottom+'rpx'}">
-						<van-image class="top-bg" :src="imgBaseURl+'12_waterTop.png'" width="100vw" height="248rpx"></van-image>
-					</view>
-					<van-image class="bottom-bg" :src="imgBaseURl+'13_waterBottom.png'" width="100vw" height="924rpx"></van-image>
+					<template v-if="curDevInfo.state === 'installed'">
+						<view class="top-bg-box" :style="{bottom: dynamicBottom+'rpx'}">
+							<van-image class="top-bg" :src="imgBaseURl+'12_waterTop.png'" width="100vw" height="248rpx"></van-image>
+						</view>
+						<van-image class="bottom-bg" :src="imgBaseURl+'13_waterBottom.png'" width="100vw"
+							height="924rpx"></van-image>
+					</template>
+					<template v-else>
+						<van-image class="uninstall-bg" src="/static/icon/39_bgNone.png" width="100vw" height="876rpx"></van-image>
+					</template>
 				</view>
 				<view class="water-inner pt400">
 					<view class="residue-water">
 						<view class="df aic ">
 							<view class="fs144">
-								30
+								{{curDevInfo.remain ? curDevInfo.remain : 0}}
 							</view>
 							<view class="fs56 asfe pb30">
 								L
@@ -39,7 +45,7 @@
 						@change="handleChangeCurDev">
 						<view class="df aic mt200">
 							<view class="my-dev-text">
-								{{myDevList[curCheckedDevIdx].name}}
+								{{curDevInfo.name}}
 							</view>
 							<van-icon name="/static/icon/08_del_white.png" size="32rpx"></van-icon>
 						</view>
@@ -49,7 +55,7 @@
 			<view class="user-water-info">
 				<view class="info-card">
 					<view class="fs96 c17DA9C">
-						15.2
+						{{curDevInfo.daily ? curDevInfo.daily : 0}}
 					</view>
 					<view class="c828698 fs28">
 						今日饮水量 (L)
@@ -57,7 +63,7 @@
 				</view>
 				<view class="info-card">
 					<view class="fs96 c17DA9C">
-						63
+						{{curDevInfo.tds ? curDevInfo.tds : 0}}
 					</view>
 					<view class="c828698 fs28">
 						TDS值 (mg/L)
@@ -113,10 +119,17 @@
 				imgBaseURl,
 				isOffline: true,
 				ptHeight: 60,
-				dynamicBottom: 876,
 				curCheckedDevIdx: this.$store.state.curDevIdx,
 				myDevList: []
 			};
+		},
+		computed: {
+			curDevInfo() {
+				return this.myDevList[this.curCheckedDevIdx]
+			},
+			dynamicBottom() {
+				return 876*(this.curDevInfo?.remain/this.curDevInfo?.total) && 876
+			}
 		},
 		onLoad() {
 			// 获取导航栏高度
@@ -124,15 +137,24 @@
 			if (ptHeight) {
 				this.ptHeight = ptHeight
 			}
-			this.dynamicBottom = this.dynamicBottom / 2
 		},
 		onShow() {
 			this.getDevList()
+			this.curCheckedDevIdx = this.$store.state.curDevIdx
 		},
 		methods: {
 			// 获取净水器列表
 			async getDevList() {
-				this.myDevList = [{id: 1, name: '净水器1号'},{id: 2, name: '净水器2号'},{id: 3, name: '净水器3号'}]
+				this.myDevList = [{
+					id: 1,
+					name: '净水器1号'
+				}, {
+					id: 2,
+					name: '净水器2号'
+				}, {
+					id: 3,
+					name: '净水器3号'
+				}]
 			},
 			handleClickTab(type) {
 				if (type === 1) {
@@ -173,8 +195,15 @@
 			.water-bg {
 				overflow: hidden;
 				position: relative;
+				background-color: #fff;
 				height: 100%;
-				background-color: #00D1FF;
+
+				.uninstall-bg {
+					position: absolute;
+					bottom: 0;
+					left: 0;
+					background-color: #F2F4F7;
+				}
 
 				.top-bg-box {
 					background-color: #fff;
@@ -211,7 +240,6 @@
 				left: 0;
 				width: 100%;
 				height: 100%;
-				border: 1px solid;
 				color: #fff;
 
 				.residue-water {
