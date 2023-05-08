@@ -2,6 +2,14 @@
 	<view class="page-recharge">
 		<view class="accouont-card">
 			<van-image width="100%" height="100%" class="bgi-box" :src="imgBaseURl+'07_cardBg.png'"></van-image>
+
+			<picker mode="selector" :range="myDevList" :value="curDevIdx" range-key="name"
+				@change="handleChangeCurDev">
+				<view class="change-icon-box">
+					<van-icon name="/static/icon/08_del_white.png" size="32rpx"></van-icon>
+				</view>
+			</picker>
+
 			<view class="card-content">
 				<view class="card-title">
 					<view class="fs24">
@@ -139,10 +147,33 @@
 				rechargeNumCheckList: [20, 50, 100], // 可选充值金额
 				curRgNumIdx: 0,
 				customRgNum: '',
+				myDevList: uni.getStorageSync("userInfo").devices && [{
+					id: 1,
+					name: '净水器1号'
+				}, {
+					id: 2,
+					name: '净水器2号'
+				}, {
+					id: 3,
+					name: '净水器3号'
+				}],
+				userInfo: uni.getStorageSync("userInfo"),
 				curDevIdx: this.$store.state.curDevIdx
 			};
 		},
+		computed: {
+			devInfo() {
+				return this.userInfo.devices[this.curDevIdx]
+			}
+		},
+		onShow() {
+
+		},
 		methods: {
+			handleChangeCurDev(e) {
+				this.curDevIdx = e.detail.value
+				this.$store.commit("changeCurDevIdx", e.detail.value)
+			},
 			handleShowPriceDetail() {
 				this.isPriceDetailShow = !this.isPriceDetailShow
 			},
@@ -219,6 +250,17 @@
 			margin: 40rpx auto;
 			width: 672rpx;
 			height: 368rpx;
+
+			.change-icon-box {
+				display: flex;
+				justify-content: center;
+				align-items: center;
+				width: 60rpx;
+				height: 60rpx;
+				position: absolute;
+				top: 80rpx;
+				right: 70rpx;
+			}
 
 			.card-content {
 				position: absolute;
