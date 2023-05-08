@@ -114,7 +114,7 @@
 				isOffline: true,
 				ptHeight: 60,
 				dynamicBottom: 876,
-				curCheckedDevIdx: 0,
+				curCheckedDevIdx: this.$store.state.curDevIdx,
 				myDevList: []
 			};
 		},
@@ -127,42 +127,12 @@
 			this.dynamicBottom = this.dynamicBottom / 2
 		},
 		onShow() {
-			// 判断是否登录的逻辑
-			const isLogin = uni.getStorageSync('isLogin');
-			if (!isLogin) {
-				uni.redirectTo({
-					url: '/pages/login/login'
-				})
-				return
-			}
-			this.getUserInfoForStorage()
 			this.getDevList()
 		},
 		methods: {
 			// 获取净水器列表
 			async getDevList() {
-				const params = {
-					page: 1,
-					page_size: 25
-				}
-				const {
-					statusCode,
-					data
-				} = await this.$http('/consumer/devices', 'get', params)
-				if (statusCode === 200) {
-					const {
-						records
-					} = data
-					this.myDevList = [{id: 1, name: '净水器1号'},{id: 2, name: '净水器2号'},{id: 3, name: '净水器3号'}]
-				} else {
-					uni.showToast({
-						title: '网络错误'
-					})
-				}
-			},
-			// 获取储存本地的userInfo
-			getUserInfoForStorage() {
-				uni.getStorageSync("userInfo")
+				this.myDevList = [{id: 1, name: '净水器1号'},{id: 2, name: '净水器2号'},{id: 3, name: '净水器3号'}]
 			},
 			handleClickTab(type) {
 				if (type === 1) {
@@ -183,6 +153,7 @@
 			},
 			handleChangeCurDev(e) {
 				this.curCheckedDevIdx = e.detail.value
+				this.$store.commit("changeCurDevIdx", e.detail.value)
 			}
 		}
 	}

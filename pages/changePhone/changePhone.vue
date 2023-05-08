@@ -1,8 +1,9 @@
 <template>
 	<view class="page-changePhone">
 		<view class="field-box">
-			<van-field custom-style="height: 100rpx" label-class="custom-label" input-class="custom-inp" size="lanrge" title-width="100rpx" label="+86" placeholder="输入新号码"
-				:value="newPhone" @change="changeNewPhone" type="number"></van-field>
+			<van-field custom-style="height: 100rpx" label-class="custom-label" input-class="custom-inp" size="lanrge"
+				title-width="100rpx" label="+86" placeholder="输入新号码" :value="newPhone" @change="changeNewPhone"
+				type="number"></van-field>
 		</view>
 		<view class="field-box">
 			<van-field title-width="100rpx" input-class="cus-inp-veri" label="验证码" size="large" :value="veriCode"
@@ -35,8 +36,31 @@
 			}
 		},
 		methods: {
-			handleClickConfirm() {
-				
+			async handleClickConfirm() {
+				const params = {
+					phone: this.newPhone,
+					code: this.veriCode
+				}
+				const {
+					statusCode,
+					data
+				} = await this.$http('/consumer/profile/phone', "put", params)
+
+				// 本地更新修改后的数据
+				if (statusCode === 200) {
+					uni.setStorageSync("userInfo", data)
+					this.newPhone = ""
+					this.veriCode = ""
+					uni.showToast({
+						title: '修改成功',
+						icon: 'success'
+					})
+				} else {
+					uni.showToast({
+						title: '修改失败',
+						icon: 'error'
+					})
+				}
 			},
 			changeNewPhone(e) {
 				this.newPhone = e.detail
@@ -53,21 +77,6 @@
 					})
 					return
 				}
-				// 发送请求
-				const data = {
-					phone: this.newPhone,
-					debug: true
-				}
-				// 获取验证码
-				const {
-					statusCode
-				} = await this.$http('/consumer/verify_codes/register', "POST", data)
-				if (statusCode !== 201) {
-					uni.showToast({
-						title: '获取验证码失败',
-						icon: 'error'
-					})
-				}
 				this.isVericodeBtnDisable = true;
 				this.vericodeBtnText = "剩余60s"
 				let num = 59
@@ -81,6 +90,22 @@
 						num--;
 					}
 				}, 1000)
+
+				// 发送请求
+				const data = {
+					phone: this.newPhone,
+					debug: true
+				}
+				// 获取验证码
+				const {
+					statusCode
+				} = await this.$http('/consumer/verify_codes/reset', "POST", data)
+				if (statusCode !== 201) {
+					uni.showToast({
+						title: '获取验证码失败',
+						icon: "error"
+					})
+				}
 			}
 		}
 	}
@@ -104,6 +129,7 @@
 			.cus-inp-veri {
 				margin-top: -4rpx;
 			}
+
 			.custom-label {
 				margin-top: 11rpx;
 			}

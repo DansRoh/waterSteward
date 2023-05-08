@@ -135,10 +135,11 @@
 			return {
 				imgBaseURl,
 				isPriceDetailShow: false,
-				rechargeSum: 20,
-				rechargeNumCheckList: [20, 50, 100],
+				rechargeSum: 20, // 支付金额
+				rechargeNumCheckList: [20, 50, 100], // 可选充值金额
 				curRgNumIdx: 0,
 				customRgNum: '',
+				curDevIdx: this.$store.state.curDevIdx
 			};
 		},
 		methods: {

@@ -11,7 +11,7 @@
 			</view>
 			<view class="plan-menu">
 				<view @tap="handleClickPlanItem(idx)" class="plan-item-box" :class="curPlanIdx===idx ? 'activate-plan' : ''"
-					v-for="(item,idx) in planMenuData" :key="item.planType">
+					v-for="(item,idx) in planMenuData" :key="item.id">
 					<view class="item-left">
 						<view class="icon">
 							¥
@@ -23,11 +23,9 @@
 							/月
 						</view>
 					</view>
-					<view v-if="item.planType === 'D'" class="item-right">
+					<view v-if="item.type === 4" class="item-right">
 						<view class="plan-name">
-							每日鲜 <view class="plan-type">
-								D
-							</view> 套餐（大家庭）
+							{{item.title}}
 						</view>
 						<view class="plan-tips">
 							<view class="stress-box">
@@ -37,9 +35,7 @@
 					</view>
 					<view v-else class="item-right">
 						<view class="plan-name">
-							每日鲜 <view class="plan-type">
-								{{item.planType}}
-							</view> 套餐（{{item.numOfPeople}}人）
+							{{item.title}}
 						</view>
 						<view class="plan-tips">
 							共<view class="stress-box">
@@ -115,6 +111,7 @@
 				isCheckAgreement: false, // 用户是否同意开通鲜水管家协议
 				isPriceDetailShow: false, // 价格明细弹窗是否显示
 				curPlanIdx: 0, // 当前选择的套餐
+				curDevInfo: {}, // 当前充值设备信息，提交订单时需要设备id
 			};
 		},
 		onLoad() {

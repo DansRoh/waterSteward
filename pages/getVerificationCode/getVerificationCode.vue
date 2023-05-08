@@ -10,9 +10,10 @@
 		</view>
 
 		<view class="form-phone-verification">
-			<van-field :value="phoneNum" type="number" clearable label="+86" @change="(e)=>{phoneNum = e.detail}" :border="false" />
-			<van-field :value="veriCode" type="number" @change="(e)=>{veriCode = e.detail}" placeholder="请输入验证码" center clearable label="验证码"
-				:border="false" use-button-slot>
+			<van-field :value="phoneNum" type="number" clearable label="+86" @change="(e)=>{phoneNum = e.detail}"
+				:border="false" />
+			<van-field :value="veriCode" type="number" @change="(e)=>{veriCode = e.detail}" placeholder="请输入验证码" center
+				clearable label="验证码" :border="false" use-button-slot>
 				<van-button :disabled="isVericodeBtnDisable" type="primary" size="small" color="#fff"
 					custom-style="color:#00D893" @tap="handleClickGetVericodeBtn" slot="button" class="get-vericode-btn">
 					{{vericodeBtnText}}
@@ -25,6 +26,9 @@
 </template>
 
 <script>
+	import {
+		isValidPhoneNumber
+	} from "../../utils/tool.js"
 	export default {
 		data() {
 			return {
@@ -68,22 +72,15 @@
 				}
 			},
 			async handleClickGetVericodeBtn() {
-				// 发送请求
-				const data = {
-					phone: '18672824015',
-					debug: true
-				}
-				// 获取验证码
-				const {
-					statusCode
-				} = await this.$http('/consumer/verify_codes/register', "POST", data)
-				if (statusCode !== 201) {
+				// 校验手机号
+				if (!isValidPhoneNumber(this.phoneNum)) {
 					uni.showToast({
-						title: '获取验证码失败',
-						icon: 'error'
+						title: '手机号格式错误',
+						icon: "error"
 					})
+					return
 				}
-
+				
 				this.isVericodeBtnDisable = true;
 				this.vericodeBtnText = "剩余60s"
 				let num = 59
@@ -97,7 +94,24 @@
 						num--;
 					}
 				}, 1000)
+				// 发送请求
+				const data = {
+					phone: this.phoneNum,
+					debug: true
+				}
+				// 获取验证码
+				const {
+					statusCode
+				} = await this.$http('/consumer/verify_codes/register', "POST", data)
+				if (statusCode !== 201) {
+					uni.showToast({
+						title: '获取验证码失败',
+						icon: 'error'
+					})
+					return
+				}
 			}
+
 		}
 	}
 </script>
