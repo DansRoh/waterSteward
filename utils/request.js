@@ -21,7 +21,7 @@ export const request = (url, method = 'GET', data = {}) => {
 			data,
 			header: {
 				...header,
-				'Authorization': 'Token ' + uni.getStorageSync("userInfo").token
+				'Authorization': 'Token ' + uni.getStorageSync("token")
 			},
 			timeout,
 			success(res) {

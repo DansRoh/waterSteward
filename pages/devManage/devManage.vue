@@ -71,15 +71,31 @@
 				</van-button>
 			</view>
 		</view>
+
+		<!-- dialog -->
+		<van-dialog use-slot title="修改设备名称" :show="isShowChangeDevNameModel" show-cancel-button
+			@close="()=>{isShowChangeDevNameModel=false}" @confirm="changeDevName">
+			<van-field :value="newDevName" placeholder="请输入新设备名" @change="onchangeNewDevName"></van-field>
+		</van-dialog>
 	</view>
 </template>
 
 <script>
 	export default {
 		data() {
-			return {};
+			return {
+				isShowChangeDevNameModel: false,
+				newDevName: '',
+				userInfo: uni.getStorageSync("userInfo")
+			};
 		},
 		methods: {
+			async changeDevName() {
+				const {statusCode, data} = await this.$http('/consumer/devices/设备ID', 'put')
+			},
+			onchangeNewDevName(e) {
+				this.newDevName = e.detail.value
+			},
 			jumpToPlusPlan() {
 				uni.navigateTo({
 					url: '/pages/upPlan/upPlan'

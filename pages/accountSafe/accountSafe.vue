@@ -10,7 +10,7 @@
 						color="#17DA9C">更改手机号</van-button>
 				</van-field>
 			</view>
-			<van-cell icon="/static/icon/26_account_04.png" custom-class="info-item" is-link title="账号注销"
+			<van-cell @tap="handleTapDelAccount" icon="/static/icon/26_account_04.png" custom-class="info-item" is-link title="账号注销"
 				link-type="navigateTo" url="" />
 		</view>
 		<view @tap="loginOut" class="login-out">
@@ -36,6 +36,25 @@
 		methods: {
 			handleBlurName() {
 				
+			},
+			async handleTapDelAccount() {
+				Dialog.confirm({
+						title: '注销账号',
+						message: '点击确认将注销账号',
+					})
+					.then(async () => {
+						// on confirm
+						const res = await this.$http('/consumer/profile', 'delete')
+						if (res.statusCode === 200) {
+							uni.clearStorageSync();
+							uni.navigateTo({
+								url: "/pages/login/login"
+							})
+						}
+					})
+					.catch(() => {
+						// on cancel
+					});
 			},
 			async handleConfirmName({
 				detail

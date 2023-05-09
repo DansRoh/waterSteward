@@ -69,7 +69,7 @@
 							if (statusCode === 201) {
 								// 登录成功
 								uni.setStorageSync("isLogin", true)
-								uni.setStorageSync("userInfo", data)
+								uni.setStorageSync('token', data.token)
 								uni.redirectTo({
 									url: '/pages/home/home'
 								})

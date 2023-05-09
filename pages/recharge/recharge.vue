@@ -142,16 +142,7 @@
 				rechargeNumCheckList: [20, 50, 100], // 可选充值金额
 				curRgNumIdx: 0,
 				customRgNum: '',
-				myDevList: uni.getStorageSync("userInfo").devices && [{
-					id: 1,
-					name: '净水器1号'
-				}, {
-					id: 2,
-					name: '净水器2号'
-				}, {
-					id: 3,
-					name: '净水器3号'
-				}],
+				myDevList: uni.getStorageSync("userInfo").devices,
 				userInfo: uni.getStorageSync("userInfo"),
 				curDevIdx: this.$store.state.curDevIdx
 			};

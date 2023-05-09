@@ -13,95 +13,89 @@
 				</view>
 			</view>
 		</navbar>
-		<template v-if="myDevList.length">
-			<view class="water-banner">
-				<view class="water-bg">
-					<template v-if="curDevInfo.state === 'installed'">
-						<view class="top-bg-box" :style="{bottom: dynamicBottom+'rpx'}">
-							<van-image class="top-bg" :src="imgBaseURl+'12_waterTop.png'" width="100vw" height="248rpx"></van-image>
+		<view class="water-banner">
+			<view class="water-bg">
+				<template v-if="curDevInfo.state === 'installed'">
+					<view class="top-bg-box" :style="{bottom: dynamicBottom+'rpx'}">
+						<van-image class="top-bg" :src="imgBaseURl+'12_waterTop.png'" width="100vw" height="248rpx"></van-image>
+					</view>
+					<van-image class="bottom-bg" :src="imgBaseURl+'13_waterBottom.png'" width="100vw" height="924rpx"></van-image>
+				</template>
+				<template v-else>
+					<van-image class="uninstall-bg" src="/static/icon/39_bgNone.png" width="100vw" height="876rpx"></van-image>
+				</template>
+			</view>
+			<view class="water-inner pt400">
+				<view class="residue-water">
+					<view class="df aic ">
+						<view class="fs144">
+							{{curDevInfo.remain ? curDevInfo.remain : 0}}
 						</view>
-						<van-image class="bottom-bg" :src="imgBaseURl+'13_waterBottom.png'" width="100vw"
-							height="924rpx"></van-image>
-					</template>
-					<template v-else>
-						<van-image class="uninstall-bg" src="/static/icon/39_bgNone.png" width="100vw" height="876rpx"></van-image>
-					</template>
-				</view>
-				<view class="water-inner pt400">
-					<view class="residue-water">
-						<view class="df aic ">
-							<view class="fs144">
-								{{curDevInfo.remain ? curDevInfo.remain : 0}}
-							</view>
-							<view class="fs56 asfe pb30">
-								L
-							</view>
-						</view>
-						<view class="tac">
-							可用水量
+						<view class="fs56 asfe pb30">
+							L
 						</view>
 					</view>
-					<picker mode="selector" :range="myDevList" :value="curCheckedDevIdx" range-key="name"
-						@change="handleChangeCurDev">
-						<view class="df aic mt200">
-							<view class="my-dev-text">
-								{{curDevInfo.name}}
-							</view>
-							<van-icon name="/static/icon/08_del_white.png" size="32rpx"></van-icon>
+					<view class="tac">
+						可用水量
+					</view>
+				</view>
+				<picker mode="selector" :range="myDevList" :value="curCheckedDevIdx" range-key="name"
+					@change="handleChangeCurDev">
+					<view class="df aic mt200">
+						<view class="my-dev-text">
+							{{curDevInfo.name}}
 						</view>
-					</picker>
+						<van-icon name="/static/icon/08_del_white.png" size="32rpx"></van-icon>
+					</view>
+				</picker>
+			</view>
+		</view>
+		<view class="user-water-info">
+			<view class="info-card">
+				<view class="fs96 c17DA9C">
+					{{curDevInfo.daily ? curDevInfo.daily : 0}}
+				</view>
+				<view class="c828698 fs28">
+					今日饮水量 (L)
 				</view>
 			</view>
-			<view class="user-water-info">
-				<view class="info-card">
-					<view class="fs96 c17DA9C">
-						{{curDevInfo.daily ? curDevInfo.daily : 0}}
-					</view>
-					<view class="c828698 fs28">
-						今日饮水量 (L)
-					</view>
+			<view class="info-card">
+				<view class="fs96 c17DA9C">
+					{{curDevInfo.tds ? curDevInfo.tds : 0}}
 				</view>
-				<view class="info-card">
-					<view class="fs96 c17DA9C">
-						{{curDevInfo.tds ? curDevInfo.tds : 0}}
-					</view>
-					<view class="c828698 fs28">
-						TDS值 (mg/L)
-					</view>
+				<view class="c828698 fs28">
+					TDS值 (mg/L)
 				</view>
 			</view>
-			<view class="bottom-tab-box fs28 c828698">
-				<view @tap="handleClickTab(1)" class="df aic pl40">
-					<van-icon name="/static/icon/14_service.png" size="56rpx"></van-icon>
-					客服
-				</view>
-				<view @tap="handleClickTab(2)" class="df aic">
-					<van-icon name="/static/icon/15_people.png" size="56rpx"></van-icon>
-					我的
-				</view>
-				<van-button @tap="handleClickTab(3)" type="primary" round>充值</van-button>
+		</view>
+		<view class="bottom-tab-box fs28 c828698">
+			<view @tap="handleClickTab(1)" class="df aic pl40">
+				<van-icon name="/static/icon/14_service.png" size="56rpx"></van-icon>
+				客服
 			</view>
-			<!-- 掉线提醒model -->
-			<van-overlay class="offline-overlay" :show="isOffline" z-index="100">
-				<view class="wrapper">
-					<view class="inner-box mb30">
-						<view class="icon">
+			<view @tap="handleClickTab(2)" class="df aic">
+				<van-icon name="/static/icon/15_people.png" size="56rpx"></van-icon>
+				我的
+			</view>
+			<van-button @tap="handleClickTab(3)" type="primary" round>充值</van-button>
+		</view>
+		<!-- 掉线提醒model -->
+		<van-overlay class="offline-overlay" :show="isOffline" z-index="100">
+			<view class="wrapper">
+				<view class="inner-box mb30">
+					<view class="icon">
 
-						</view>
-						<view class="tips-text">
-							经系统监测，您的设备以断电/网，
-							净水功能已停止，为避免使用，
-							请尽快连网连电。
-						</view>
 					</view>
-					<van-button custom-style="width:384rpx;height:96rpx;font-size:36rpx;" @tap="()=>{isOffline=false}"
-						color="#17DA9C" round>知道了</van-button>
+					<view class="tips-text">
+						经系统监测，您的设备以断电/网，
+						净水功能已停止，为避免使用，
+						请尽快连网连电。
+					</view>
 				</view>
-			</van-overlay>
-		</template>
-		<template v-else>
-			<van-empty description="网络错误" />
-		</template>
+				<van-button custom-style="width:384rpx;height:96rpx;font-size:36rpx;" @tap="()=>{isOffline=false}"
+					color="#17DA9C" round>知道了</van-button>
+			</view>
+		</van-overlay>
 	</view>
 </template>
 
@@ -120,15 +114,16 @@
 				isOffline: true,
 				ptHeight: 60,
 				curCheckedDevIdx: this.$store.state.curDevIdx,
-				myDevList: []
+				myDevList: [],
+				userInfo: {}
 			};
 		},
 		computed: {
 			curDevInfo() {
-				return this.myDevList[this.curCheckedDevIdx]
+				return this.myDevList ? this.myDevList[this.curCheckedDevIdx] : []
 			},
 			dynamicBottom() {
-				return 876*(this.curDevInfo?.remain/this.curDevInfo?.total) && 876
+				return 876 * (this.curDevInfo?.remain / this.curDevInfo?.total)
 			}
 		},
 		onLoad() {
@@ -137,24 +132,61 @@
 			if (ptHeight) {
 				this.ptHeight = ptHeight
 			}
+			this.getUserInfo()
 		},
 		onShow() {
 			this.getDevList()
 			this.curCheckedDevIdx = this.$store.state.curDevIdx
 		},
 		methods: {
+			// 获取并存储账号信息
+			async getUserInfo() {
+				const {
+					statusCode,
+					data
+				} = await this.$http('/consumer/profile', 'get')
+				if (statusCode === 200) {
+					const mockDevices = [{
+							"id": "0001",
+							"name": " 净水器1号",
+							"plan_id": "cf01af48-e13a-4ccf-9313-329962ca96ab",
+							"tds": 10, // TDS 值
+							"amount": 99, // 余额
+							"remain": 90, // 剩余水量
+							"total": 90, // 套餐总量
+							"daily": 10, // 当日用水量
+							"address": "云南省 昆明市 呈贡区 test", // 设备地址
+							"state": "installed", // 待预约 pending；scheduled 已预约测试信号；surveyed 已完成信号测试；installed 已安装
+							"survey_at": "2023.03.10", // 预约安装日期
+							"stoppted": true // 是否关停状态
+						},
+						{
+							"id": "0002",
+							"name": " 净水器2号",
+							"plan_id": "cf01af48-e13a-4ccf-9313-329962ca96ab",
+							"tds": 15, // TDS 值
+							"amount": 40, // 余额
+							"remain": 10, // 剩余水量
+							"total": 90, // 套餐总量
+							"daily": 15, // 当日用水量
+							"address": "云南省 昆明市 呈贡区 test", // 设备地址
+							"state": "installed", // 待预约 pending；scheduled 已预约测试信号；surveyed 已完成信号测试；installed 已安装
+							"survey_at": "2023.03.10", // 预约安装日期
+							"stoppted": true // 是否关停状态
+						}
+					]
+					const mockData = {
+						...data,
+						devices: mockDevices
+					}
+					this.userInfo = mockData
+					this.getDevList()
+					uni.setStorageSync("userInfo", mockData)
+				}
+			},
 			// 获取净水器列表
-			async getDevList() {
-				this.myDevList = [{
-					id: 1,
-					name: '净水器1号'
-				}, {
-					id: 2,
-					name: '净水器2号'
-				}, {
-					id: 3,
-					name: '净水器3号'
-				}]
+			getDevList() {
+				this.myDevList = this.userInfo.devices
 			},
 			handleClickTab(type) {
 				if (type === 1) {
@@ -195,7 +227,6 @@
 			.water-bg {
 				overflow: hidden;
 				position: relative;
-				background-color: #fff;
 				height: 100%;
 
 				.uninstall-bg {

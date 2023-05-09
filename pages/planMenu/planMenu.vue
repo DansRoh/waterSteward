@@ -79,8 +79,8 @@
 				<view id="target-deal" class="agreement">
 					<van-checkbox :value="isCheckAgreement" @change="onChangeAgreement">
 						我同意鲜水管家*****
-						<view @tap="jumpToProtocol">开通协议</view>
 					</van-checkbox>
+					<view @tap="jumpToProtocol">开通协议</view>
 				</view>
 			</view>
 		</view>
