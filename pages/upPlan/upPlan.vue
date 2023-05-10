@@ -182,7 +182,9 @@
 								// 调用微信支付api
 								try {
 									const payRes = await requestPaymentFun(prepayId, nonceStr, timeStamp, signType, paySign)
-									console.log('payRes', payRes);
+									uni.navigateTo({
+										url: `/pages/rechargeSuccess/rechargeSuccess?orderInfo=${data}`
+									})
 								} catch (e) {
 									//TODO handle the exception
 									console.log('e', e);

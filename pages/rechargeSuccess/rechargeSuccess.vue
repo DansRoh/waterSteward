@@ -10,7 +10,7 @@
 					充值金额
 				</view>
 				<view>
-					¥20
+					¥{{orderInfo.total}}
 				</view>
 			</view>
 			<view class="info-item">
@@ -18,7 +18,7 @@
 					交易单号
 				</view>
 				<view>
-					S12548963315
+					{{orderInfo.number}}
 				</view>
 			</view>
 			<view class="info-item">
@@ -30,10 +30,11 @@
 				</view>
 			</view>
 		</view>
-	
+
 		<view class="btn-box">
-			<van-button custom-class="mb30" type="primary" size="lang" color="#5A92FF" round block>返回首页</van-button>
-			<van-button type="primary" size="lang" color="#979797" plain round block>继续充值</van-button>
+			<van-button @tap="goBackHome" custom-class="mb30" type="primary" size="lang" color="#5A92FF" round
+				block>返回首页</van-button>
+			<van-button @tap="goBackReg" type="primary" size="lang" color="#979797" plain round block>继续充值</van-button>
 		</view>
 	</view>
 </template>
@@ -42,8 +43,23 @@
 	export default {
 		data() {
 			return {
-
+				orderInfo: null
 			};
+		},
+		onLoad({
+			orderInfo
+		}) {
+			this.orderInfo = orderInfo
+		},
+		methods: {
+			goBackHome() {
+				uni.navigateTo({
+					url: '/pages/home/home'
+				})
+			},
+			goBackReg() {
+				uni.navigateBack(1)
+			}
 		}
 	}
 </script>
@@ -60,6 +76,7 @@
 		.info-list {
 			margin-top: 60rpx;
 			width: 100%;
+
 			.info-item {
 				display: flex;
 				justify-content: space-between;

@@ -222,9 +222,8 @@
 							// 调用微信支付api
 							try {
 								const payRes = await requestPaymentFun(prepayId, nonceStr, timeStamp, signType, paySign)
-								console.log('payRes', payRes);
 								uni.navigateTo({
-									url: '/pages/home/home'
+									url: `/pages/rechargeSuccess/rechargeSuccess?orderInfo=${data}`
 								})
 							} catch (e) {
 								//TODO handle the exception
@@ -257,15 +256,17 @@
 
 <style lang="less">
 	.page-recharge {
+		padding-top: 40rpx;
 		background-color: #F2F4F7;
 		min-height: 100vh;
 		box-sizing: border-box;
-
+		
 		.accouont-card {
 			position: relative;
 			border-radius: 40rpx;
 			overflow: hidden;
 			margin: 40rpx auto;
+			margin-top: 0;
 			width: 672rpx;
 			height: 368rpx;
 
