@@ -1,10 +1,16 @@
 <template>
 	<view class="page-devManage">
-		<view class="dev-card">
+		<view @tap="jumpToPlanMenu" class="add-dev-box">
+			<view class="fs36 c38 mr10">
+				添加净水器
+			</view>
+			<van-icon name="/static/icon/41_add.png" size="48rpx"></van-icon>
+		</view>
+		<view v-for="devItem in devices" :key="devItem.id" class="dev-card">
 			<view class="dev-name">
-				<van-icon name="/static/icon/11_phone02.png" size="44rpx" />
-				<view class="fs36 c262626">
-					爸爸家的净水器
+				<view class="fs36 c262626 df aic">
+					<van-icon name="/static/icon/11_phone02.png" size="44rpx" />
+					{{devItem.name}}
 				</view>
 				<view class="fs24 c17DA9C">
 					修改名称
@@ -14,7 +20,7 @@
 			<view class="address df aic">
 				<van-icon name="/static/icon/27_local.png" size="32rpx" />
 				<view class="fs28 c000">
-					重庆市渝中区长江路地产大厦2号楼 2-1
+					{{devItem.address}}
 				</view>
 			</view>
 			<van-divider customStyle="margin: 30rpx 0;" />
@@ -23,11 +29,7 @@
 					当前套餐
 				</view>
 				<view class="df fs36 c000">
-					每日鲜
-					<view class="c17DA9C">
-						A
-					</view>
-					套餐
+					{{devItem.plan_name}}
 				</view>
 				<view @tap="jumpToPlusPlan" class="upplan-btn-box">
 					<van-image custom-class="custom-img-cls" src="/static/icon/09_planUp.png" width="196rpx" height="50rpx" />
@@ -43,7 +45,7 @@
 						当前余额
 					</view>
 					<view class="fs32 c17DA9C">
-						100元
+						{{devItem.amount}}元
 					</view>
 				</view>
 				<view class="">
@@ -51,7 +53,7 @@
 						剩余水量
 					</view>
 					<view class="fs32 c17DA9C">
-						60升
+						{{devItem.remain}}升
 					</view>
 				</view>
 				<view class="">
@@ -61,7 +63,7 @@
 			</view>
 			<van-divider customStyle="margin: 30rpx 0;" />
 			<view class="dev-handle">
-				<view v-if="false" class="fs28 c5e df aic">
+				<view v-if="devItem.stoppted" class="fs28 c5e df aic">
 					<van-icon name="/static/icon/28_phone05.png" size="48rpx" />
 					远程关停
 				</view>
@@ -86,12 +88,18 @@
 			return {
 				isShowChangeDevNameModel: false,
 				newDevName: '',
-				userInfo: uni.getStorageSync("userInfo")
+				devices: []
 			};
+		},
+		onShow() {
+			this.initData()
 		},
 		methods: {
 			async changeDevName() {
 				const {statusCode, data} = await this.$http('/consumer/devices/设备ID', 'put')
+			},
+			initData() {
+				this.devices = uni.getStorageSync("userInfo").devices
 			},
 			onchangeNewDevName(e) {
 				this.newDevName = e.detail.value
@@ -99,6 +107,11 @@
 			jumpToPlusPlan() {
 				uni.navigateTo({
 					url: '/pages/upPlan/upPlan'
+				})
+			},
+			jumpToPlanMenu() {
+				uni.navigateTo({
+					url:'/pages/planMenu/planMenu'
 				})
 			},
 			jumpToRecharge() {
@@ -117,8 +130,15 @@
 		background-color: #F2F4F7;
 		box-sizing: border-box;
 		padding: 50rpx 40rpx;
-
+		.add-dev-box {
+			width: 666rpx;
+			display: flex;
+			align-items: center;
+			justify-content: flex-end;
+			margin-bottom: 50rpx;
+		}
 		.dev-card {
+			margin-top: 40rpx;
 			width: 666rpx;
 			background-color: #fff;
 			box-shadow: 4rpx 8rpx 48rpx 0rpx rgba(0, 0, 0, 0.17);

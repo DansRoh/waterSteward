@@ -1,6 +1,5 @@
 <template>
 	<view class="page-writeUserInfo" :style="{paddingTop: ptHeight+'px'}">
-		<navbar needBack title="鲜水管家"></navbar>
 		<view class="title">
 			<view class="title-content">
 				完善信息
@@ -57,10 +56,8 @@
 </template>
 
 <script>
-	import navbar from '@/components/navbar/navbar.vue'
 	export default {
 		comments: {
-			navbar
 		},
 		data() {
 			return {
@@ -71,17 +68,12 @@
 					localDetail: "",
 					referCode: '',
 				},
-				ptHeight: 60,
 				wechat_openid: ''
 			}
 		},
 		onLoad(option) {
 			this.wechat_openid = option.wechat_openid
 			this.userInfo.phoneNum = uni.getStorageSync('phone')
-			const ptHeight = uni.getStorageSync('navHeight')
-			if (ptHeight) {
-				this.ptHeight = ptHeight
-			}
 		},
 		methods: {
 			async handleClickTransact() {

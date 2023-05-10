@@ -1,96 +1,65 @@
 <template>
-	<view class="navbar" :class="needBack? 'need-back': ''" :style='[navStyle]'>
-		<view v-if="needBack" class="back" @tap="goBack">
-			<van-icon name="/static/icon/35_right.png" size="40rpx"></van-icon>
+	<view class="cus-nav-box">
+		<view class="navbar"
+			:style="{height: navigationBarHeight + statusBarHeight + 'px', paddingTop: statusBarHeight + 'px', paddingRight: navigationPaddingRight + 'px'}">
+			<!-- 在这里添加你的自定义导航栏内容 -->
+			<slot name="content"></slot>
 		</view>
-		<slot v-else name="left-box">
-		</slot>
-		<view @tap="goBack" class="title">{{ title }}</view>
-		<slot name="right-box">
-		</slot>
+
+		<!-- 添加一个同样高度的占位元素，防止内容被导航栏遮挡 -->
+		<view :style="{height: navigationBarHeight + statusBarHeight + 'px'}"></view>
 	</view>
 </template>
 
 <script>
 	export default {
-		props: {
-			title: {
-				type: String,
-				default: ' '
-			},
-			needBack: {
-				type: Boolean,
-				default: false
-			},
-		},
 		data() {
 			return {
-				navStyle: null
-			}
+				statusBarHeight: 0,
+				menuButtonInfo: null,
+				navigationBarHeight: 0,
+				navigationPaddingRight: 0, // 导航栏右侧按钮宽度
+			};
 		},
 		created() {
-			this.navStyle = this.getNavStyle();
+			this.getNavBarInfo();
 		},
 		methods: {
-			goBack() {
-				uni.navigateBack({
-					delta: 1
-				})
-			},
-			getNavStyle() {
-				const {
-					screenWidth,
-					statusBarHeight
-				} = uni.getSystemInfoSync()
-				const navHeight = 40
-				const navWidth = Number(screenWidth) - 124
-				return {
-					height: `${navHeight}px`,
-					paddingTop: `${statusBarHeight}px`,
-					width: `${navWidth}px`,
+			getNavBarInfo() {
+				const systemInfo = uni.getSystemInfoSync();
+				let menuButtonInfo = uni.getMenuButtonBoundingClientRect();
+
+				if (!menuButtonInfo) {
+					menuButtonInfo = {
+						width: 96,
+						height: 32,
+						top: systemInfo.statusBarHeight + 6,
+						right: systemInfo.windowWidth - 10
+					};
 				}
+
+				const navigationBarHeight = (menuButtonInfo.top - systemInfo.statusBarHeight) * 2 + menuButtonInfo.height;
+
+				this.statusBarHeight = systemInfo.statusBarHeight;
+				this.menuButtonInfo = menuButtonInfo;
+				this.navigationBarHeight = navigationBarHeight;
+				this.navigationPaddingRight = systemInfo.windowWidth - menuButtonInfo.left + 10
+
 			}
 		}
-	}
+	};
 </script>
 
-<style>
+<style lang="less" scoped>
 	.navbar {
+		box-sizing: border-box;
 		position: fixed;
-		left: 0;
 		top: 0;
-		display: flex;
-		align-items: center;
-		justify-content: space-between;
+		left: 0;
+		right: 0;
 		background-color: #fff;
-		z-index: 9999;
-		box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
-		padding-left: 48rpx;
-		padding-right: 100px;
-	}
-	.need-back {
-		justify-content: flex-start;
-	}
+		z-index: 999;
 
-	.back {
-		width: 44px;
-		height: 44px;
-		display: flex;
-		justify-content: center;
-		align-items: center;
-	}
-
-	.title {
-		font-size: 36rpx;
-		color: #262626;
-		font-weight: 400;
-	}
-
-	.right {
-		width: 44px;
-		height: 44px;
-		display: flex;
-		justify-content: center;
-		align-items: center;
+		/* 保证导航栏在内容之上 */
 	}
 </style>

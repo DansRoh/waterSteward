@@ -1,15 +1,18 @@
 <template>
-	<view class="page-home" :style="{paddingTop: ptHeight+'px'}">
+	<view class="page-home">
 		<navbar>
-			<van-image slot="left-box" width="208rpx" height="40rpx" src="/static/icon/10_waterStewardText.png"></van-image>
-			<view slot="right-box">
-				<view v-if="true" class="fs28 c828698 df aie">
-					<van-icon name="/static/icon/11_phone02.png" size="48rpx"></van-icon>
-					在线
-				</view>
-				<view v-else class="fs28 c828698 df aie">
-					<van-icon name="/static/icon/16_phone03.png" size="48rpx"></van-icon>
-					离线
+			<view slot="content" class="custon-nav-content">
+				<van-image class="left-box" width="208rpx" height="40rpx"
+					src="/static/icon/10_waterStewardText.png"></van-image>
+				<view class="right-box">
+					<view v-if="true" class="fs28 c828698 df aie">
+						<van-icon name="/static/icon/11_phone02.png" size="48rpx"></van-icon>
+						在线
+					</view>
+					<view v-else class="fs28 c828698 df aie">
+						<van-icon name="/static/icon/16_phone03.png" size="48rpx"></van-icon>
+						离线
+					</view>
 				</view>
 			</view>
 		</navbar>
@@ -103,7 +106,7 @@
 	import {
 		imgBaseURl
 	} from '@/config/index.js'
-	import navbar from '@/components/navbar/navbar.vue';
+	import navbar from '../../components/navbar/navbar.vue';
 	export default {
 		components: {
 			navbar
@@ -112,7 +115,6 @@
 			return {
 				imgBaseURl,
 				isOffline: true,
-				ptHeight: 60,
 				curCheckedDevIdx: this.$store.state.curDevIdx,
 				myDevList: [],
 				userInfo: {}
@@ -127,11 +129,6 @@
 			}
 		},
 		onLoad() {
-			// 获取导航栏高度
-			const ptHeight = uni.getStorageSync('navHeight')
-			if (ptHeight) {
-				this.ptHeight = ptHeight
-			}
 			this.getUserInfo()
 		},
 		onShow() {
@@ -150,7 +147,8 @@
 							"id": "0001",
 							"name": " 净水器1号",
 							"plan_id": "cf01af48-e13a-4ccf-9313-329962ca96ab",
-							"tds": 10, // TDS 值
+							"plan_name": "每日鲜A套餐",
+							"tds": 15, // TDS 值
 							"amount": 99, // 余额
 							"remain": 90, // 剩余水量
 							"total": 90, // 套餐总量
@@ -164,7 +162,8 @@
 							"id": "0002",
 							"name": " 净水器2号",
 							"plan_id": "cf01af48-e13a-4ccf-9313-329962ca96ab",
-							"tds": 15, // TDS 值
+							"plan_name": "每日鲜B套餐",
+							"tds": 10, // TDS 值
 							"amount": 40, // 余额
 							"remain": 10, // 剩余水量
 							"total": 90, // 套餐总量
@@ -218,6 +217,16 @@
 		min-height: 100vh;
 		background-color: #F2F4F7;
 		box-sizing: border-box;
+
+		.custon-nav-content {
+			box-sizing: border-box;
+			padding-left: 30rpx;
+			width: 100%;
+			height: 100%;
+			display: flex;
+			justify-content: space-between;
+			align-items: center;
+		}
 
 		.water-banner {
 			width: 100vw;

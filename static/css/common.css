@@ -82,7 +82,12 @@
 .mt400 {
 	margin-top: 400rpx;
 }
-
+.mr10 {
+	margin-right: 10rpx;
+}
+.mt80 {
+	margin-top: 80rpx;
+}
 .mr40 {
 	margin-right: 40rpx;
 }
@@ -124,7 +129,9 @@
 .c000 {
 	color: #000000;
 }
-
+.c38 {
+	color: #383838;
+}
 .c17DA9C {
 	color: #17DA9C;
 }

@@ -9,14 +9,6 @@
 					url: '/pages/login/login'
 				})
 			}
-
-			// 计算自定义navbar高度（单位px）,并存入localStorage
-			const {
-				screenWidth,
-				statusBarHeight
-			} = uni.getSystemInfoSync()
-			const navHeight = 40 + statusBarHeight
-			uni.setStorageSync('navHeight', navHeight)
 		}
 	}
 </script>

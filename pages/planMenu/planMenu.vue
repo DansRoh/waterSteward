@@ -138,15 +138,11 @@
 </template>
 
 <script>
-	import navbar from "@/components/navbar/navbar.vue"
 	import {
 		requestPaymentFun,
 		rollTarget
 	} from "@/utils/tool.js"
 	export default {
-		components: {
-			navbar
-		},
 		data() {
 			return {
 				planMenuData: [],
@@ -176,10 +172,6 @@
 			};
 		},
 		onLoad() {
-			const ptHeight = uni.getStorageSync('navHeight')
-			if (ptHeight) {
-				this.ptHeight = ptHeight
-			}
 			this.getPlanMenuData();
 		},
 		methods: {
