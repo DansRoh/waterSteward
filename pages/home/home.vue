@@ -19,17 +19,18 @@
 		<view class="water-banner">
 			<view class="water-bg">
 				<template v-if="curDevInfo.state === 'installed'">
-					<view class="top-bg-box" :style="{bottom: dynamicBottom+'rpx'}">
+					<view class="top-bg-box" :style="{bottom: dynamicBottom+100+'rpx'}">
 						<van-image class="top-bg" :src="imgBaseURl+'12_waterTop.png'" width="100vw" height="248rpx"></van-image>
 					</view>
 					<van-image class="bottom-bg" :src="imgBaseURl+'13_waterBottom.png'" width="100vw" height="924rpx"></van-image>
 				</template>
 				<template v-else>
-					<van-image class="uninstall-bg" src="/static/icon/39_bgNone.png" width="100vw" height="876rpx"></van-image>
+					<van-image class="uninstall-bg" src="/static/icon/39_bgNone.png" width="100vw" height="980rpx"></van-image>
 				</template>
 			</view>
 			<view class="water-inner pt400">
-				<view class="residue-water">
+				<view v-if="curDevInfo.state==='installed'" class="residue-water"
+					:class="dynamicBottom < 400 ? 'small-remain-text-class' : ''">
 					<view class="df aic ">
 						<view class="fs144">
 							{{curDevInfo.remain ? curDevInfo.remain : 0}}
@@ -42,13 +43,22 @@
 						可用水量
 					</view>
 				</view>
+				<view v-else class="uninstall-box">
+					<view class="c262626">
+						该净水器尚未安装
+					</view>
+					<navigator class="c17DA9C" url="">查看进度></navigator>
+				</view>
+
+				<!-- 净水器选择 -->
 				<picker mode="selector" :range="myDevList" :value="curCheckedDevIdx" range-key="name"
 					@change="handleChangeCurDev">
-					<view class="df aic mt200">
-						<view class="my-dev-text">
+					<view class="my-dev-box df aic mt200">
+						<view class="my-dev-text" :class="isTextStyleShowy ? '' : 'uninstall-text-class'">
 							{{curDevInfo.name}}
 						</view>
-						<van-icon name="/static/icon/08_del_white.png" size="32rpx"></van-icon>
+						<van-icon v-if="isTextStyleShowy" name="/static/icon/08_del_white.png" size="32rpx"></van-icon>
+						<van-icon v-else name="/static/icon/04_del.png" size="32rpx"></van-icon>
 					</view>
 				</picker>
 			</view>
@@ -80,7 +90,7 @@
 				<van-icon name="/static/icon/15_people.png" size="56rpx"></van-icon>
 				我的
 			</view>
-			<van-button @tap="handleClickTab(3)" type="primary" round>充值</van-button>
+			<van-button @tap="handleClickTab(3)" type="primary" color="#17DA9C" round>充值</van-button>
 		</view>
 		<!-- 掉线提醒model -->
 		<van-overlay class="offline-overlay" :show="isOffline" z-index="100">
@@ -126,6 +136,9 @@
 			},
 			dynamicBottom() {
 				return 876 * (this.curDevInfo?.remain / this.curDevInfo?.total)
+			},
+			isTextStyleShowy() {
+				return (this.curDevInfo?.state === 'installed' && this.dynamicBottom > 115)
 			}
 		},
 		onLoad() {
@@ -154,7 +167,7 @@
 							"total": 90, // 套餐总量
 							"daily": 10, // 当日用水量
 							"address": "云南省 昆明市 呈贡区 test", // 设备地址
-							"state": "installed", // 待预约 pending；scheduled 已预约测试信号；surveyed 已完成信号测试；installed 已安装
+							"state": "scheduled", // 待预约 pending；scheduled 已预约测试信号；surveyed 已完成信号测试；installed 已安装
 							"survey_at": "2023.03.10", // 预约安装日期
 							"stoppted": true // 是否关停状态
 						},
@@ -165,7 +178,7 @@
 							"plan_name": "每日鲜B套餐",
 							"tds": 10, // TDS 值
 							"amount": 40, // 余额
-							"remain": 10, // 剩余水量
+							"remain": 40, // 剩余水量
 							"total": 90, // 套餐总量
 							"daily": 15, // 当日用水量
 							"address": "云南省 昆明市 呈贡区 test", // 设备地址
@@ -286,8 +299,33 @@
 					text-shadow: 4px 4px 12px rgba(0, 209, 255, 0.81);
 				}
 
-				.my-dev-text {
-					text-shadow: 4px 4px 12px rgba(0, 209, 255, 0.81);
+				.small-remain-text-class {
+					color: #5E5E5E;
+					text-shadow: unset;
+				}
+
+				.my-dev-box {
+					position: absolute;
+					bottom: 60rpx;
+					left: 50%;
+					transform: translateX(-50%);
+
+					.my-dev-text {
+						text-shadow: 4px 4px 12px rgba(0, 209, 255, 0.81);
+						margin-right: 10rpx;
+					}
+
+					.uninstall-text-class {
+						color: #262626;
+						text-shadow: unset;
+					}
+				}
+
+				.uninstall-box {
+					display: flex;
+					flex-direction: column;
+					align-items: center;
+					font-size: 24rpx;
 				}
 			}
 		}
