@@ -47,7 +47,7 @@
 					<view class="c262626">
 						该净水器尚未安装
 					</view>
-					<navigator class="c17DA9C" url="">查看进度></navigator>
+					<navigator class="c17DA9C" url="/pages/devInstallProgress/devInstallProgress">查看进度></navigator>
 				</view>
 
 				<!-- 净水器选择 -->
@@ -96,9 +96,7 @@
 		<van-overlay class="offline-overlay" :show="isOffline" z-index="100">
 			<view class="wrapper">
 				<view class="inner-box mb30">
-					<view class="icon">
-
-					</view>
+					<van-image src="/static/icon/43_outage.png" width="170rpx" height="150rpx"></van-image>
 					<view class="tips-text">
 						经系统监测，您的设备以断电/网，
 						净水功能已停止，为避免使用，
@@ -142,9 +140,14 @@
 			}
 		},
 		onLoad() {
+			console.log('onload')
 			this.getUserInfo()
 		},
+		created() {
+			console.log('created');
+		},
 		onShow() {
+			console.log('onshow');
 			this.getDevList()
 			this.curCheckedDevIdx = this.$store.state.curDevIdx
 		},

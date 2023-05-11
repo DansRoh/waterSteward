@@ -101,17 +101,22 @@
 				"enablePullDownRefresh": false
 			}
 
+		}, {
+			"path": "pages/rechargeSuccess/rechargeSuccess",
+			"style": {
+				"navigationBarTitleText": "充值",
+				"enablePullDownRefresh": false
+			}
+
+		}, {
+			"path": "pages/devInstallProgress/devInstallProgress",
+			"style": {
+				"navigationBarTitleText": "安装进度",
+				"enablePullDownRefresh": false
+			}
+
 		}
-	    ,{
-            "path" : "pages/rechargeSuccess/rechargeSuccess",
-            "style" :                                                                                    
-            {
-                "navigationBarTitleText": "充值",
-                "enablePullDownRefresh": false
-            }
-            
-        }
-    ],
+	],
 	"globalStyle": {
 		"navigationBarTextStyle": "black",
 		"navigationBarTitleText": "鲜水管家",
