@@ -46,10 +46,8 @@
 				orderInfo: null
 			};
 		},
-		onLoad({
-			orderInfo
-		}) {
-			this.orderInfo = orderInfo
+		onLoad(option) {
+			this.orderInfo = JSON.parse(option.orderInfo)
 		},
 		methods: {
 			goBackHome() {

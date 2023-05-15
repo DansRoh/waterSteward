@@ -235,7 +235,7 @@
 								try {
 									const payRes = await requestPaymentFun(prepayId, nonceStr, timeStamp, signType, paySign)
 									uni.navigateTo({
-										url: `/pages/rechargeSuccess/rechargeSuccess?orderInfo=${data}`
+										url: `/pages/rechargeSuccess/rechargeSuccess?orderInfo=${JSON.stringify(res.data)}`
 									})
 								} catch (e) {
 									//TODO handle the exception
