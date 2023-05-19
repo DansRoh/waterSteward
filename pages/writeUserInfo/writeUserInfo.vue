@@ -1,5 +1,5 @@
 <template>
-	<view class="page-writeUserInfo" :style="{paddingTop: ptHeight+'px'}">
+	<view class="page-writeUserInfo">
 		<view class="title">
 			<view class="title-content">
 				完善信息
@@ -20,8 +20,17 @@
 				<view class="item-label">
 					身份证号
 				</view>
-				<van-field @click-icon="scanId" input-class="custom-field" icon="/static/icon/05_scan.png"
-					placeholder-style="font-size: 24rpx; color: #CECFD0;" :value='userinfo.id' :border="false" />
+				<van-field input-class="custom-field" placeholder-style="font-size: 24rpx; color: #CECFD0;" :value='userInfo.id'
+					@change="vanFieldChange('id', $event)" :border="false">
+					<view slot="right-icon">
+						<ocr-navigator @onSuccess="scanId" certificateType="idCard" :opposite="false">
+							<button class="scanId-btn"
+								style="background-color: #fff;line-height: unset;padding: 0;margin: 0;display: flex;overflow: visible;"
+								type="primary"><van-icon name="/static/icon/05_scan.png" size="32rpx"></van-icon></button>
+						</ocr-navigator>
+					</view>
+
+				</van-field>
 			</view>
 			<view class="form-item">
 				<view class="item-label">
@@ -84,6 +93,7 @@
 			this.userInfo.phoneNum = uni.getStorageSync('phone')
 		},
 		methods: {
+
 			async handleClickTransact() {
 				// 校验数据
 				for (let key in this.userInfo) {
@@ -144,15 +154,8 @@
 					}
 				})
 			},
-			scanId() {
-				uni.scanCode({
-					success(res) {
-						console.log(res.result);
-					},
-					fail(err) {
-						console.log(err);
-					}
-				})
+			scanId(e) {
+				this.userInfo.id = e.detail.id.text
 			},
 			handleClickAddressBtn() {
 				uni.chooseAddress({
@@ -212,6 +215,11 @@
 		.form-user-info {
 			.form-item {
 				display: flex;
+
+				.scanId-btn::after {
+					display: none;
+					content: '';
+				}
 
 				.item-label {
 					min-width: 110rpx;

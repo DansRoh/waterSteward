@@ -27,7 +27,10 @@
 			"path": "pages/writeUserInfo/writeUserInfo",
 			"style": {
 				"navigationBarTitleText": "鲜水管家",
-				"enablePullDownRefresh": false
+				"enablePullDownRefresh": false,
+				"usingComponents": {
+					"ocr-navigator": "plugin://ocr-plugin/ocr-navigator"
+				}
 			}
 		},
 		{
@@ -113,6 +116,16 @@
 			"style": {
 				"navigationBarTitleText": "安装进度",
 				"enablePullDownRefresh": false
+			}
+
+		}, {
+			"path": "pages/scanId/scanId",
+			"style": {
+				"navigationBarTitleText": "",
+				"enablePullDownRefresh": false,
+				"usingComponents": {
+					"ocr-navigator": "plugin://ocr-plugin/ocr-navigator"
+				}
 			}
 
 		}
