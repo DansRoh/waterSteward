@@ -2,14 +2,18 @@
 	<view class="page-login">
 		<van-image src="/static/icon/03_waterStewardLogo.png" width="400rpx" height="150rpx" class="logo-box">
 		</van-image>
-		<van-button :disabled="isBtnLoading" @tap="handleClickWxLogin" icon="/static/icon/01_wechartLogo.png"  class="login-btn" type="primary"
-			block round>微信授权登录</van-button>
-		<van-button :disabled="isBtnLoading" open-type="getPhoneNumber" @getphonenumber="getPhoneNumber" icon="/static/icon/02_phone.png"
-			class="login-btn" color="#23D8FF" plain block hairline round>手机快捷登录</van-button>
+		<van-button :disabled="isBtnLoading" @tap="handleClickWxLogin" icon="/static/icon/01_wechartLogo.png"
+			class="login-btn" type="primary" block round>微信授权登录</van-button>
+		<van-button :disabled="isBtnLoading" open-type="getPhoneNumber" @getphonenumber="getPhoneNumber"
+			icon="/static/icon/02_phone.png" class="login-btn" color="#23D8FF" plain block hairline round>手机快捷登录</van-button>
 	</view>
 </template>
 
 <script>
+	import {
+		debounce,
+		throttle
+	} from '@/utils/tool.js'
 	export default {
 		data() {
 			return {
@@ -28,11 +32,15 @@
 		},
 		methods: {
 			async getPhoneNumber(e) {
-				this.isBtnLoading = true
 				if (e.detail.code) {
 					// 获取到用户手机号和国家码
-					const { statusCode, data } = await this.$http('/consumer/profile/phone', 'GET', {code: e.detail.code})
-					if(statusCode === 200) {
+					const {
+						statusCode,
+						data
+					} = await this.$http('/consumer/profile/phone', 'GET', {
+						code: e.detail.code
+					})
+					if (statusCode === 200) {
 						uni.setStorageSync('phone', data.phone)
 						uni.setStorageSync('country_code', data.country_code)
 						uni.navigateTo({
@@ -45,11 +53,10 @@
 						})
 					}
 				}
-				this.isBtnLoading = false
 			},
-			handleClickWxLogin() {
+			handleClickWxLogin: throttle(function() {
 				const that = this
-				this.isBtnLoading = true
+				that.isBtnLoading = true
 				wx.login({
 					async success(res) {
 						const {
@@ -84,18 +91,18 @@
 						} else {
 							wx.showToast('登录失败')
 						}
-						this.isBtnLoading = false
+						that.isBtnLoading = false
 					},
 					fail(e) {
 						console.log('e', e);
 						uni.showToast({
-							title:'微信授权失败',
-							icon:'error'
+							title: '微信授权失败',
+							icon: 'error'
 						})
-						this.isBtnLoading = false
-					}
+						that.isBtnLoading = false
+					},
 				})
-			}
+			}, 1000)
 		}
 	}
 </script>

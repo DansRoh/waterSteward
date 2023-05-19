@@ -18,6 +18,13 @@
 			</view>
 			<view class="form-item">
 				<view class="item-label">
+					身份证号
+				</view>
+				<van-field @click-icon="scanId" input-class="custom-field" icon="/static/icon/05_scan.png"
+					placeholder-style="font-size: 24rpx; color: #CECFD0;" :value='userinfo.id' :border="false" />
+			</view>
+			<view class="form-item">
+				<view class="item-label">
 					手机号码
 				</view>
 				<van-field type="number" input-class="custom-field custom-phone" :value="userInfo.phoneNum"
@@ -45,8 +52,9 @@
 				<view class="item-label">
 					推荐码
 				</view>
-				<van-field @tap-icon="scanCode" input-class="custom-field" icon="/static/icon/05_scan.png" placeholder="无可暂时不填"
-					placeholder-style="font-size: 24rpx; color: #CECFD0;" :value='referCode' :border="false" />
+				<van-field @click-icon="scanCode" input-class="custom-field" icon="/static/icon/05_scan.png"
+					placeholder="无可暂时不填" placeholder-style="font-size: 24rpx; color: #CECFD0;" :value='userInfo.referCode'
+					:border="false" />
 			</view>
 			<view class="form-item">
 				<van-button @tap="handleClickTransact" class="transaction-btn" type="primary" block round>立即办理</van-button>
@@ -57,8 +65,7 @@
 
 <script>
 	export default {
-		comments: {
-		},
+		comments: {},
 		data() {
 			return {
 				userInfo: {
@@ -66,6 +73,7 @@
 					phoneNum: "",
 					region: ['重庆市', '重庆市', '渝中区'],
 					localDetail: "",
+					id: '',
 					referCode: '',
 				},
 				wechat_openid: ''
@@ -136,6 +144,16 @@
 					}
 				})
 			},
+			scanId() {
+				uni.scanCode({
+					success(res) {
+						console.log(res.result);
+					},
+					fail(err) {
+						console.log(err);
+					}
+				})
+			},
 			handleClickAddressBtn() {
 				uni.chooseAddress({
 					success(res) {
@@ -196,7 +214,7 @@
 				display: flex;
 
 				.item-label {
-					min-width: 104rpx;
+					min-width: 110rpx;
 					line-height: 88rpx;
 					color: #828698;
 					font-size: 28rpx

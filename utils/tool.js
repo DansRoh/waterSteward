@@ -53,3 +53,27 @@ export function formatDateTime(dateTimeString) {
 
 	return `${year}年${month}月${day}日 ${hours}:${minutes.toString().padStart(2, '0')}`;
 }
+
+// 防抖函数
+export const debounce = (func, delay) => {
+	let timer = null;
+	return function(...args) {
+		clearTimeout(timer);
+		timer = setTimeout(() => {
+			func.apply(this, args);
+		}, delay);
+	};
+}
+
+// 节流函数
+export function throttle(func, delay) {
+	let lastTime = 0;
+
+	return function(...args) {
+		const currentTime = new Date().getTime();
+		if (currentTime - lastTime > delay) {
+			func.apply(this, args);
+			lastTime = currentTime;
+		}
+	};
+}
