@@ -1,17 +1,16 @@
 <template>
 	<view class="page-accountSafe">
 		<view class="info-list fs36 c828698">
-			<van-field @confirm="handleConfirmName" @change="handleChangeName" @blur="handleBlurName"
-				left-icon="/static/icon/23_account_01.png" label="昵称" size="large" :value="name" />
+			<van-field left-icon="/static/icon/23_account_01.png" label="姓名" size="large" :value="name" readonly />
 			<view class="mt18">
-				<van-field readonly left-icon="/static/icon/24_account_02.png" label="手机号"
-					size="large" :value="phone" clearable type="number">
+				<van-field readonly left-icon="/static/icon/24_account_02.png" label="手机号" size="large" :value="phone" clearable
+					type="number">
 					<van-button @tap="jumpToEditPhone" class="right-icon-style" slot="right-icon" size="small" round
 						color="#17DA9C">更改手机号</van-button>
 				</van-field>
 			</view>
-			<van-cell @tap="handleTapDelAccount" icon="/static/icon/26_account_04.png" custom-class="info-item" is-link title="账号注销"
-				link-type="navigateTo" url="" />
+			<van-cell @tap="handleTapDelAccount" icon="/static/icon/26_account_04.png" custom-class="info-item" is-link
+				title="账号注销" link-type="navigateTo" url="" />
 		</view>
 		<view @tap="loginOut" class="login-out">
 			退出登录
@@ -34,9 +33,6 @@
 			this.initData()
 		},
 		methods: {
-			handleBlurName() {
-				
-			},
 			async handleTapDelAccount() {
 				Dialog.confirm({
 						title: '注销账号',
@@ -56,36 +52,11 @@
 						// on cancel
 					});
 			},
-			async handleConfirmName({
-				detail
-			}) {
-				const {
-					statusCode,
-					data
-				} = await this.$http('/consumer/profile', 'put', {
-					name: detail
-				})
-				if (statusCode === 200) {
-					uni.setStorageSync("userInfo", data)
-					this.initData()
-					uni.showToast({
-						title: '修改成功',
-						icon: 'success'
-					})
-				} else {
-					uni.showToast({
-						title: '网络错误',
-						icon: 'error'
-					})
-				}
-			},
+
 			jumpToEditPhone() {
 				uni.navigateTo({
-					url:'/pages/changePhone/changePhone'
+					url: '/pages/changePhone/changePhone'
 				})
-			},
-			handleChangeName(e) {
-				this.name = e.detail
 			},
 			loginOut() {
 				Dialog.confirm({

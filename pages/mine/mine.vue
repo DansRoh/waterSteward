@@ -3,9 +3,10 @@
 		<view class="mine-card">
 			<view class="top-box">
 				<view class="user-photo">
-					<van-image class="photo-img-class" image-class="cus-img" width="200rpx" height="200rpx" :src="avatarUrl"></van-image>
+					<van-image class="photo-img-class" image-class="cus-img" :src="avatarUrl"></van-image>
 					<view @tap="handleChangeAvatar" class="upload-box">
-						<van-icon name="/static/icon/20_camera.png" size="48rpx"></van-icon>
+						<van-image src="/static/icon/20_camera.png" image-class="camera-img-class" width="50rpx"
+							height="50rpx"></van-image>
 					</view>
 				</view>
 				<view class="user-name">
@@ -42,6 +43,9 @@
 				</view>
 			</view>
 		</view>
+		<!-- 引入 wx-cropper 组件 -->
+		<my-cropper class="my-cropper" @close="hideCut" :cutRatio="cutRatio" v-if="showCropper" :imageSrc="imageSrc"
+			:cropperWidth="cropperWidth" :minCropperW="minCropperW" />
 	</view>
 </template>
 
@@ -53,63 +57,77 @@
 		data() {
 			return {
 				avatarUrl: '/static/icon/40_defaultPhoto.png',
-				name: ''
+				name: '',
+				cutRatio: 1, // 初始化裁剪比例,
+				showCropper: false,
+				imageSrc: '',
+				minCropperW: 100,
+				cropperWidth: 720,
 			};
 		},
 		onShow() {
 			this.initData()
 		},
 		methods: {
+			async hideCut() {
+				this.showCropper = false
+				const img = arguments[0].detail
+				if (img && img.path) {
+					console.log(img)
+					// 图片上传到服务器
+					try {
+						const {
+							statusCode,
+							data
+						} = await uni.uploadFile({
+							url: baseURL + '/consumer/profile/avatar', // 你的头像上传接口地址
+							filePath: img.path,
+							header: {
+								'Authorization': 'Token ' + uni.getStorageSync("userInfo").token,
+								'Content-Type': 'multipart/form-data',
+								'Accept': 'application/json;version=1'
+							},
+							name: 'avatar',
+						});
+
+						if (statusCode !== 201) {
+							uni.showToast({
+								title: '上传失败',
+								icon: 'none',
+							});
+							return;
+						}
+
+						// 更新头像 URL，假设服务器返回的新头像 URL 在 data.avatarUrl
+						const newAvatarUrl = JSON.parse(data).avatar_url;
+						this.avatarUrl = newAvatarUrl;
+
+						const {
+							data: userInfo
+						} = await this.$http('/consumer/profile', 'get')
+						uni.setStorageSync("userInfo", userInfo)
+					} catch (e) {
+						//TODO handle the exception
+						console.log(e);
+					}
+				}
+			},
 			initData() {
 				const userInfo = uni.getStorageSync("userInfo")
 				this.avatarUrl = userInfo.avatar_url
 				this.name = userInfo.name
 			},
 			async handleChangeAvatar() {
-				try {
-					// 选择图片
-					const {
-						tempFilePaths
-					} = await uni.chooseImage({
-						count: 1, // 最多可以选择的图片张数
-						sizeType: ['compressed'], // 可以指定是原图还是压缩图，默认二者都有
-						sourceType: ['album', 'camera'], // 可以指定来源是相册还是相机，默认二者都有
-					});
-
-					// 图片上传到服务器
-					const {
-						statusCode,
-						data
-					} = await uni.uploadFile({
-						url: baseURL + '/consumer/profile/avatar', // 你的头像上传接口地址
-						filePath: tempFilePaths[0],
-						header: {
-							'Authorization': 'Token ' + uni.getStorageSync("userInfo").token,
-							'Content-Type': 'multipart/form-data',
-							'Accept': 'application/json;version=1'
-						},
-						name: 'avatar',
-					});
-
-					if (statusCode !== 201) {
-						uni.showToast({
-							title: '上传失败',
-							icon: 'none',
-						});
-						return;
-					}
-
-					// 更新头像 URL，假设服务器返回的新头像 URL 在 data.avatarUrl
-					const newAvatarUrl = JSON.parse(data).avatar_url;
-					this.avatarUrl = newAvatarUrl;
-
-					const {
-						data: userInfo
-					} = await this.$http('/consumer/profile', 'get')
-					uni.setStorageSync("userInfo", userInfo)
-				} catch (error) {
-					console.error('更换头像出错:', error);
-				}
+				// 选择图片
+				const {
+					tempFilePaths
+				} = await uni.chooseImage({
+					count: 1, // 最多可以选择的图片张数
+					sizeType: ['compressed'], // 可以指定是原图还是压缩图，默认二者都有
+					sourceType: ['album', 'camera'], // 可以指定来源是相册还是相机，默认二者都有
+				});
+				this.imageSrc = tempFilePaths[0]
+				this.showCropper = true
 			},
 			handleMineSettings(type) {
 				if (type === 1) {
@@ -172,15 +190,18 @@
 						top: 50%;
 						transform: translateX(-50%) translateY(-50%);
 					}
+
 					.cus-img {
 						position: absolute;
 						left: 50%;
 						top: 50%;
 						transform: translateX(-50%) translateY(-50%);
 					}
+
 					.van-image {
 						position: unset;
 					}
+
 					.upload-box {
 						position: absolute;
 						bottom: 0;
@@ -189,6 +210,12 @@
 						height: 48rpx;
 						border-radius: 50%;
 						border: 6rpx solid #FFFFFF;
+						.camera-img-class {
+							width: 52rpx;
+							height: 52rpx;
+							margin-top: -4rpx;
+							margin-left: -2rpx;
+						}
 					}
 				}
 
@@ -216,6 +243,14 @@
 					color: #262626;
 				}
 			}
+		}
+
+		.my-cropper {
+			position: fixed;
+			top: 0;
+			left: 0;
+			width: 100vw;
+			height: 100vh;
 		}
 	}
 </style>

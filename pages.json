@@ -51,7 +51,10 @@
 			"path": "pages/mine/mine",
 			"style": {
 				"enablePullDownRefresh": false,
-				"navigationBarTitleText": "我的"
+				"navigationBarTitleText": "我的",
+				"usingComponents": {
+					"my-cropper": "/wxcomponents/@dw/wx-cropper/src"
+				}
 			}
 
 		},

@@ -73,6 +73,10 @@
 </template>
 
 <script>
+	import {
+		isValidPhoneNumber,
+		validateIdNumber
+	} from '../../utils/tool.js'
 	export default {
 		comments: {},
 		data() {
@@ -104,6 +108,27 @@
 						})
 						return
 					}
+				}
+				if (this.userInfo.userName.length < 2 || this.userInfo.userName.length > 9) {
+					uni.showToast({
+						title: '限制2-9个字符',
+						icon: 'error'
+					})
+					return
+				}
+				if (!isValidPhoneNumber(this.userInfo.phoneNum)) {
+					uni.showToast({
+						title: '手机号格式错误',
+						icon: 'error'
+					})
+					return
+				}
+				if (!validateIdNumber(this.userInfo.id)) {
+					uni.showToast({
+						title: '身份证格式错误',
+						icon: 'error'
+					})
+					return
 				}
 
 				// 发送请求
