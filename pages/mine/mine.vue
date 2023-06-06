@@ -73,7 +73,6 @@
 				this.showCropper = false
 				const img = arguments[0].detail
 				if (img && img.path) {
-					console.log(img)
 					// 图片上传到服务器
 					try {
 						const {

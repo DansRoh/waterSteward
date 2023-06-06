@@ -10,7 +10,7 @@
 					充值金额
 				</view>
 				<view>
-					¥{{orderInfo.total}}
+					¥{{total}}
 				</view>
 			</view>
 			<view class="info-item">
@@ -18,7 +18,7 @@
 					交易单号
 				</view>
 				<view>
-					{{orderInfo.number}}
+					{{number}}
 				</view>
 			</view>
 			<view class="info-item">
@@ -43,11 +43,17 @@
 	export default {
 		data() {
 			return {
-				orderInfo: null
+				total: 0, // 充值金额
+				number: '', // 充值单号
 			};
 		},
 		onLoad(option) {
-			this.orderInfo = JSON.parse(option.orderInfo)
+			const {
+				total,
+				number
+			} = option
+			this.total = total;
+			this.number = number
 		},
 		methods: {
 			goBackHome() {
@@ -84,6 +90,7 @@
 				margin-top: 32rpx;
 			}
 		}
+
 		.btn-box {
 			margin-top: 200rpx;
 			width: 100%;

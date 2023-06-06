@@ -260,7 +260,7 @@
 		background-color: #F2F4F7;
 		min-height: 100vh;
 		box-sizing: border-box;
-		
+
 		.accouont-card {
 			position: relative;
 			border-radius: 40rpx;

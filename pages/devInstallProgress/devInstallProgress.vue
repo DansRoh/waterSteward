@@ -4,7 +4,11 @@
 			净水器安装进度
 		</view>
 		<view class="progress-box">
-			<view class="top-circle-class fs24" :class="state==='scheduled' ? '':'top-circle-class-surveyed'">
+			<view class="top-circle-class fs24"
+				:class="['surveyed', 'installed'].includes(state) ? 'top-circle-class-surveyed':''">
+				<template v-if="state==='pending'">
+					<view>待预约</view>
+				</template>
 				<template v-if="state==='scheduled'">
 					<view class="fs36">
 						待测试信号
@@ -19,7 +23,7 @@
 						<van-icon name="/static/icon/44_dot.png" size="22rpx"></van-icon>
 					</view>
 				</template>
-				<template v-else>
+				<template v-if="['surveyed','installed'].includes(state)">
 					<view class="fs36">
 						信号测试
 					</view>
@@ -35,28 +39,30 @@
 			<view class="dashed-line">
 
 			</view>
-			<view class="bottom-circle-class fs36">
+			<view class="bottom-circle-class fs36" :class="state==='installed' ? 'top-circle-class-surveyed cfff':'c5e'">
 				<view class="">
 					净水器
 				</view>
 				<view class="">
-					待安装
+					{{state === "installed" ? "已安装" : "待安装"}}
 				</view>
-				<view class="icon-box" :style="{backgroundColor: state==='surveyed'?'#23D8FF':'#828698'}">
-					<van-icon name="/static/icon/44_dot.png" size="22rpx"></van-icon>
+				<view class="icon-box"
+					:style="{backgroundColor: ['surveyed', 'installed'].includes(state) ?'#23D8FF':'#828698'}">
+					<van-icon v-if="state==='installed'" name="/static/icon/45_success.png" size="22rpx"></van-icon>
+					<van-icon v-else name="/static/icon/44_dot.png" size="22rpx"></van-icon>
 				</view>
 			</view>
 
 			<view class="dashed-line" />
 
-			<view class="success-icon">
+			<view class="success-icon" :style="{backgroundColor: ['installed'].includes(state) ?'#23D8FF':'#828698'}">
 				<van-icon name="/static/icon/45_success.png" size="28rpx"></van-icon>
 			</view>
 		</view>
-		<van-icon v-if="true" name="/static/icon/34_feedback_03.png" size="96rpx"></van-icon>
-		<van-button v-else @tap="jumpToHome" color="#7A6AF4" custom-style="width:344rpx;height:112rpx" size="large" block
+		<van-icon v-if="state !== 'installed'" name="/static/icon/34_feedback_03.png" size="96rpx"></van-icon>
+		<van-button v-else @tap="scanBind" color="#7A6AF4" custom-style="width:344rpx;height:112rpx" size="large" block
 			round>
-			进入主页
+			扫码绑定
 		</van-button>
 	</view>
 </template>
@@ -65,13 +71,45 @@
 	export default {
 		data() {
 			return {
-				state: "scheduled" // 待预约 pending；scheduled 已预约测试信号；surveyed 已完成信号测试；installed 已安装
+				state: "installed", // 待预约 pending；scheduled 已预约测试信号；surveyed 已完成信号测试；installed 已安装
+				devicesId: ''
 			};
 		},
+		onLoad(option) {
+			this.devicesId = option.devicesId
+		},
 		methods: {
-			jumpToHome() {
-				uni.navigateTo({
-					url: '/pages/home/home'
+			scanBind() {
+				const that = this
+				uni.scanCode({
+					async success(res) {
+						const devInfoRes = await that.$http('/consumer/devices/' + that.devicesId + '/bind', 'put', {
+							filter: res.result
+						})
+						console.log('dev', devInfoRes);
+						if (devInfoRes.statusCode === 200) {
+							uni.showToast({
+								title: '绑定成功',
+								icon: 'success'
+							})
+							setTimeout(() => {
+								uni.navigateTo({
+									url: '/pages/home/home'
+								})
+							}, 2000)
+						} else {
+							uni.showToast({
+								title: '无法识别二维码',
+								icon: 'error'
+							})
+						}
+					},
+					fail() {
+						uni.showToast({
+							title: '无法识别二维码',
+							icon: 'error'
+						})
+					}
 				})
 			}
 		}
@@ -152,7 +190,6 @@
 				width: 224rpx;
 				height: 224rpx;
 				border-radius: 50%;
-				color: #5E5E5E;
 
 				.icon-box {
 					position: absolute;

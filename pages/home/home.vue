@@ -47,7 +47,8 @@
 					<view class="c262626">
 						该净水器尚未安装
 					</view>
-					<navigator class="c17DA9C" url="/pages/devInstallProgress/devInstallProgress">查看进度></navigator>
+					<navigator class="c17DA9C" :url="'/pages/devInstallProgress/devInstallProgress?devicesId='+curDevInfo.id">
+						查看进度></navigator>
 				</view>
 
 				<!-- 净水器选择 -->
@@ -143,8 +144,9 @@
 			console.log('onload')
 			this.getUserInfo()
 		},
-		created() {
-			console.log('created');
+		onPullDownRefresh() {
+			console.log('onpull')
+			this.getUserInfo()
 		},
 		onShow() {
 			console.log('onshow');
@@ -194,9 +196,10 @@
 						...data,
 						devices: mockDevices
 					}
-					this.userInfo = mockData
+					this.userInfo = data
 					this.getDevList()
-					uni.setStorageSync("userInfo", mockData)
+					uni.setStorageSync("userInfo", data)
+					uni.stopPullDownRefresh();
 				}
 			},
 			// 获取净水器列表
