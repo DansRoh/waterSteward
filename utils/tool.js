@@ -1,6 +1,3 @@
-// 一些常用方法的封装
-
-
 // 调用微信支付
 export const requestPaymentFun = (prepayId, nonceStr, timeStamp, signType, paySign) => {
 	return new Promise((resolve, reject) => {

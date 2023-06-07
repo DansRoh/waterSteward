@@ -25,6 +25,15 @@
 				</view>
 				<view @tap="handleMineSettings(2)" class="handle-box">
 					<view class="df">
+						<van-icon name="/static/icon/17_sheet.png" size="48rpx"></van-icon>
+						<view class="ml10">
+							账单
+						</view>
+					</view>
+					<van-icon name="/static/icon/31_triangeRight.png" size="48rpx"></van-icon>
+				</view>
+				<view @tap="handleMineSettings(3)" class="handle-box">
+					<view class="df">
 						<van-icon name="/static/icon/18_phone04.png" size="48rpx"></van-icon>
 						<view class="ml10">
 							净水器管理
@@ -32,7 +41,7 @@
 					</view>
 					<van-icon name="/static/icon/31_triangeRight.png" size="48rpx"></van-icon>
 				</view>
-				<view @tap="handleMineSettings(3)" class="handle-box">
+				<view @tap="handleMineSettings(4)" class="handle-box">
 					<view class="df">
 						<van-icon name="/static/icon/19_account.png" size="48rpx"></van-icon>
 						<view class="ml10">
@@ -134,10 +143,12 @@
 						url: "/pages/rechargeRecord/rechargeRecord"
 					})
 				} else if (type === 2) {
+
+				} else if (type === 3) {
 					uni.navigateTo({
 						url: "/pages/devManage/devManage"
 					})
-				} else if (type === 3) {
+				} else if (type === 4) {
 					uni.navigateTo({
 						url: "/pages/accountSafe/accountSafe"
 					})
@@ -209,6 +220,7 @@
 						height: 48rpx;
 						border-radius: 50%;
 						border: 6rpx solid #FFFFFF;
+
 						.camera-img-class {
 							width: 52rpx;
 							height: 52rpx;
@@ -238,7 +250,7 @@
 					justify-content: space-between;
 					align-items: center;
 					padding: 0 34rpx;
-					font-size: 28rpx;
+					font-size: 32rpx;
 					color: #262626;
 				}
 			}

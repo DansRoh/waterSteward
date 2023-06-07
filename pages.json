@@ -132,7 +132,16 @@
 			}
 
 		}
-	],
+	    ,{
+            "path" : "pages/bill/bill",
+            "style" :                                                                                    
+            {
+                "navigationBarTitleText": "账单明细",
+                "enablePullDownRefresh": false
+            }
+            
+        }
+    ],
 	"globalStyle": {
 		"navigationBarTextStyle": "black",
 		"navigationBarTitleText": "鲜水管家",

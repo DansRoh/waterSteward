@@ -40,7 +40,6 @@
 				curDate: '2023',
 				devList: ['净水器1', "净水器2", "净水器3"],
 				curDevIdx: 0,
-				ptHeight: 60,
 				orderList: []
 			};
 		},
