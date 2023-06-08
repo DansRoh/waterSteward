@@ -7,9 +7,9 @@
 					<van-icon class="ml10" name="/static/icon/04_del.png" size="28rpx"></van-icon>
 				</view>
 			</picker>
-			<picker mode="selector" @change="bindDevChange" :value="curDevIdx" :range="devList">
+			<picker mode="selector" @change="bindDevChange" :value="curDevIdx" :range="devList" range-key="name">
 				<view class="current-dev fs28 c262626">
-					{{devList[curDevIdx]}}
+					{{devList[curDevIdx].name}}
 					<van-icon class="ml10" name="/static/icon/04_del.png" size="28rpx"></van-icon>
 				</view>
 			</picker>
@@ -74,94 +74,6 @@
 						5L
 					</view>
 				</view>
-				<view class="record-item">
-					<view class="date-box">
-						03月30日
-					</view>
-					<view class="count">
-						3L
-					</view>
-				</view>
-				<view class="record-item">
-					<view class="date-box">
-						03月30日
-					</view>
-					<view class="count">
-						3L
-					</view>
-				</view>
-				<view class="record-item">
-					<view class="date-box">
-						03月30日
-					</view>
-					<view class="count">
-						3L
-					</view>
-				</view>
-				<view class="record-item">
-					<view class="date-box">
-						03月30日
-					</view>
-					<view class="count">
-						3L
-					</view>
-				</view>
-				<view class="record-item">
-					<view class="date-box">
-						03月30日
-					</view>
-					<view class="count">
-						3L
-					</view>
-				</view>
-				<view class="record-item">
-					<view class="date-box">
-						03月30日
-					</view>
-					<view class="count">
-						3L
-					</view>
-				</view>
-				<view class="record-item">
-					<view class="date-box">
-						03月30日
-					</view>
-					<view class="count">
-						3L
-					</view>
-				</view>
-				<view class="record-item">
-					<view class="date-box">
-						03月30日
-					</view>
-					<view class="count">
-						3L
-					</view>
-				</view>
-				<view class="record-item">
-					<view class="date-box">
-						03月30日
-					</view>
-					<view class="count">
-						3L
-					</view>
-				</view>
-				<view class="record-item">
-					<view class="date-box">
-						03月30日
-					</view>
-					<view class="count">
-						3L
-					</view>
-				</view>
-				<view class="record-item">
-					<view class="date-box">
-						03月30日
-					</view>
-					<view class="count">
-						3L
-					</view>
-				</view>
 			</view>
 		</view>
 	</view>
@@ -171,17 +83,23 @@
 	export default {
 		data() {
 			return {
-				curDate: '2023-03',
-				devList: ['净水器1', "净水器2", "净水器3"],
+				curDate: '2023-06',
 				curDevIdx: 0,
 				unfold: false, // 是否展开
+				billData: {}, // 账单数据
 			}
 		},
 		computed: {
+			devList() {
+				return this.$store.state.userInfo.devices
+			},
 			getCurDateFormat() {
 				const arr = this.curDate.split('-')
 				return arr[0] + '年' + arr[1] + '月'
 			}
+		},
+		onShow() {
+			this.getBillData()
 		},
 		methods: {
 			bindDateChange(e) {
@@ -192,6 +110,20 @@
 			},
 			handleClickUnfoldBtn() {
 				this.unfold = !this.unfold
+			},
+			// 获取账单数据
+			async getBillData() {
+				const params = {
+					devId: this.devList[this.curDevIdx].id,
+					billDate: this.curDate.replace('-', "")
+				}
+				const {
+					statusCode,
+					data
+				} = await this.$http(`/consumer/billing/${params.devId}/${params.billDate}`, "get")
+				if (statusCode === 200) {
+					console.log('data', data);
+				}
 			},
 		}
 	}

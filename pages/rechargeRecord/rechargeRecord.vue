@@ -39,7 +39,7 @@
 	export default {
 		data() {
 			return {
-				curDate: 2023,
+				curDate: '2023',
 				curDevIdx: 0,
 				orderList: []
 			};

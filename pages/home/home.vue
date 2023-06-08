@@ -155,9 +155,6 @@
 			this.$store.dispatch('changeUserInfoSync')
 			uni.stopPullDownRefresh()
 		},
-		onShow() {
-			console.log('onshow');
-		},
 		methods: {
 			handleClickTab(type) {
 				if (type === 1) {

@@ -141,6 +141,15 @@
             }
             
         }
+        ,{
+            "path" : "pages/waterUsageRecord/waterUsageRecord",
+            "style" :                                                                                    
+            {
+                "navigationBarTitleText": "",
+                "enablePullDownRefresh": false
+            }
+            
+        }
     ],
 	"globalStyle": {
 		"navigationBarTextStyle": "black",

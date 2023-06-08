@@ -86,7 +86,6 @@
 						const devInfoRes = await that.$http('/consumer/devices/' + that.devicesId + '/bind', 'put', {
 							filter: res.result
 						})
-						console.log('dev', devInfoRes);
 						if (devInfoRes.statusCode === 200) {
 							uni.showToast({
 								title: '绑定成功',
@@ -104,11 +103,8 @@
 							})
 						}
 					},
-					fail() {
-						uni.showToast({
-							title: '无法识别二维码',
-							icon: 'error'
-						})
+					fail(err) {
+						console.log('err', err);
 					}
 				})
 			}

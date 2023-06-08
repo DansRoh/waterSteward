@@ -11,38 +11,12 @@
 				</view>
 			</view>
 			<view class="mine-card-content">
-				<view @tap="handleMineSettings(1)" class="handle-box">
+				<view v-for="(menuItem,menuIdx) in menuData" :key="menuItem.name" @tap="handleMineSettings(menuIdx+1)"
+					class="handle-box">
 					<view class="df">
-						<van-icon name="/static/icon/17_sheet.png" size="48rpx"></van-icon>
+						<van-icon :name="menuItem.icon" size="48rpx"></van-icon>
 						<view class="ml10">
-							充值记录
-						</view>
-					</view>
-					<van-icon name="/static/icon/31_triangeRight.png" size="48rpx"></van-icon>
-				</view>
-				<view @tap="handleMineSettings(2)" class="handle-box">
-					<view class="df">
-						<van-icon name="/static/icon/17_sheet.png" size="48rpx"></van-icon>
-						<view class="ml10">
-							账单
-						</view>
-					</view>
-					<van-icon name="/static/icon/31_triangeRight.png" size="48rpx"></van-icon>
-				</view>
-				<view @tap="handleMineSettings(3)" class="handle-box">
-					<view class="df">
-						<van-icon name="/static/icon/18_phone04.png" size="48rpx"></van-icon>
-						<view class="ml10">
-							净水器管理
-						</view>
-					</view>
-					<van-icon name="/static/icon/31_triangeRight.png" size="48rpx"></van-icon>
-				</view>
-				<view @tap="handleMineSettings(4)" class="handle-box">
-					<view class="df">
-						<van-icon name="/static/icon/19_account.png" size="48rpx"></van-icon>
-						<view class="ml10">
-							账号与安全
+							{{menuItem.name}}
 						</view>
 					</view>
 					<van-icon name="/static/icon/31_triangeRight.png" size="48rpx"></van-icon>
@@ -62,6 +36,27 @@
 	export default {
 		data() {
 			return {
+				menuData: [{
+						name: "充值记录",
+						icon: "/static/icon/17_sheet.png"
+					},
+					{
+						name: "用水记录",
+						icon: "/static/icon/17_sheet.png"
+					},
+					{
+						name: "账单",
+						icon: "/static/icon/17_sheet.png"
+					},
+					{
+						name: "净水器管理",
+						icon: "/static/icon/18_phone04.png"
+					},
+					{
+						name: "账号与安全",
+						icon: "/static/icon/19_account.png"
+					}
+				],
 				avatarUrl: '/static/icon/40_defaultPhoto.png',
 				name: '',
 				cutRatio: 1, // 初始化裁剪比例,
@@ -137,13 +132,17 @@
 					})
 				} else if (type === 2) {
 					uni.navigateTo({
-						url: "/pages/bill/bill"
+						url: "/pages/waterUsageRecord/waterUsageRecord"
 					})
 				} else if (type === 3) {
 					uni.navigateTo({
-						url: "/pages/devManage/devManage"
+						url: "/pages/bill/bill"
 					})
 				} else if (type === 4) {
+					uni.navigateTo({
+						url: "/pages/devManage/devManage"
+					})
+				} else if (type === 5) {
 					uni.navigateTo({
 						url: "/pages/accountSafe/accountSafe"
 					})
@@ -163,7 +162,6 @@
 		.mine-card {
 			margin: 0 auto;
 			width: 700rpx;
-			height: 824rpx;
 			background-color: #fff;
 			border-radius: 96rpx;
 			overflow: hidden;

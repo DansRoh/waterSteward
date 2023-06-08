@@ -55,6 +55,9 @@
 			this.total = total;
 			this.number = number
 		},
+		onShow() {
+			this.$store.dispatch("changeUserInfoSync")
+		},
 		methods: {
 			goBackHome() {
 				uni.navigateTo({
