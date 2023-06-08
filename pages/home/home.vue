@@ -123,13 +123,19 @@
 		data() {
 			return {
 				imgBaseURl,
-				isOffline: true,
-				curCheckedDevIdx: this.$store.state.curDevIdx,
-				myDevList: [],
-				userInfo: {}
+				isOffline: false,
 			};
 		},
 		computed: {
+			curCheckedDevIdx() {
+				return this.$store.state.curDevIdx
+			},
+			userInfo() {
+				return this.$store.state.userInfo
+			},
+			myDevList() {
+				return this.userInfo.devices
+			},
 			curDevInfo() {
 				return this.myDevList ? this.myDevList[this.curCheckedDevIdx] : []
 			},
@@ -142,70 +148,17 @@
 		},
 		onLoad() {
 			console.log('onload')
-			this.getUserInfo()
+			this.$store.dispatch('changeUserInfoSync')
 		},
 		onPullDownRefresh() {
 			console.log('onpull')
-			this.getUserInfo()
+			this.$store.dispatch('changeUserInfoSync')
+			uni.stopPullDownRefresh()
 		},
 		onShow() {
 			console.log('onshow');
-			this.getDevList()
-			this.curCheckedDevIdx = this.$store.state.curDevIdx
 		},
 		methods: {
-			// 获取并存储账号信息
-			async getUserInfo() {
-				const {
-					statusCode,
-					data
-				} = await this.$http('/consumer/profile', 'get')
-				if (statusCode === 200) {
-					const mockDevices = [{
-							"id": "0001",
-							"name": " 净水器1号",
-							"plan_id": "cf01af48-e13a-4ccf-9313-329962ca96ab",
-							"plan_name": "每日鲜A套餐",
-							"tds": 15, // TDS 值
-							"amount": 99, // 余额
-							"remain": 90, // 剩余水量
-							"total": 90, // 套餐总量
-							"daily": 10, // 当日用水量
-							"address": "云南省 昆明市 呈贡区 test", // 设备地址
-							"state": "scheduled", // 待预约 pending；scheduled 已预约测试信号；surveyed 已完成信号测试；installed 已安装
-							"survey_at": "2023.03.10", // 预约安装日期
-							"stoppted": true // 是否关停状态
-						},
-						{
-							"id": "0002",
-							"name": " 净水器2号",
-							"plan_id": "cf01af48-e13a-4ccf-9313-329962ca96ab",
-							"plan_name": "每日鲜B套餐",
-							"tds": 10, // TDS 值
-							"amount": 40, // 余额
-							"remain": 40, // 剩余水量
-							"total": 90, // 套餐总量
-							"daily": 15, // 当日用水量
-							"address": "云南省 昆明市 呈贡区 test", // 设备地址
-							"state": "installed", // 待预约 pending；scheduled 已预约测试信号；surveyed 已完成信号测试；installed 已安装
-							"survey_at": "2023.03.10", // 预约安装日期
-							"stoppted": true // 是否关停状态
-						}
-					]
-					const mockData = {
-						...data,
-						devices: mockDevices
-					}
-					this.userInfo = data
-					this.getDevList()
-					uni.setStorageSync("userInfo", data)
-					uni.stopPullDownRefresh();
-				}
-			},
-			// 获取净水器列表
-			getDevList() {
-				this.myDevList = this.userInfo.devices
-			},
 			handleClickTab(type) {
 				if (type === 1) {
 					uni.navigateTo({
@@ -224,7 +177,6 @@
 				}
 			},
 			handleChangeCurDev(e) {
-				this.curCheckedDevIdx = e.detail.value
 				this.$store.commit("changeCurDevIdx", e.detail.value)
 			}
 		}

@@ -7,18 +7,18 @@
 					<van-icon class="ml10" name="/static/icon/04_del.png" size="28rpx"></van-icon>
 				</view>
 			</picker>
-			<picker mode="selector" @change="bindDevChange" :value="curDevIdx" :range="devList">
+			<picker mode="selector" @change="bindDevChange" :value="curDevIdx" :range="devList" range-key="name">
 				<view class="current-dev fs28 c262626">
-					{{devList[curDevIdx]}}
+					{{devList[curDevIdx].name}}
 					<van-icon class="ml10" name="/static/icon/04_del.png" size="28rpx"></van-icon>
 				</view>
 			</picker>
 		</view>
 		<view class="record-list">
-			<view v-for="item in orderList" :key="item.plan_id" class="record-item">
+			<view v-for="item in filterOrderList" :key="item.plan_id" class="record-item">
 				<view class="left-desc fs28 c828698">
 					<view class="">
-						充值时间: {{item.created_at}}
+						充值时间: {{item.created_at_format}}
 					</view>
 					<view class="">
 						交易单号：{{item.number}}
@@ -33,15 +33,33 @@
 </template>
 
 <script>
-	import { formatDateTime } from '../../utils/tool.js'
+	import {
+		formatDateTime
+	} from '../../utils/tool.js'
 	export default {
 		data() {
 			return {
-				curDate: '2023',
-				devList: ['净水器1', "净水器2", "净水器3"],
+				curDate: 2023,
 				curDevIdx: 0,
 				orderList: []
 			};
+		},
+		computed: {
+			devList() {
+				return this.$store.state.userInfo.devices
+			},
+			filterOrderList() {
+				const newOrderList = this.orderList.filter(orderItem => {
+					let itemDateYear = (new Date(orderItem.created_at)).getFullYear();
+					let itemDevIdx = this.devList.findIndex(devItem => devItem.id === orderItem.device_id)
+					if ((itemDateYear == this.curDate) && (itemDevIdx == this.curDevIdx)) {
+						orderItem.created_at_format = formatDateTime(orderItem.created_at)
+						return true
+					}
+					return false
+				})
+				return newOrderList
+			}
 		},
 		onShow() {
 			this.getOrderList()
@@ -58,11 +76,7 @@
 					data
 				} = await this.$http("/consumer/orders", "get")
 				if (statusCode === 200) {
-					const newOrderList = data.records.map(item => {
-						item.created_at = formatDateTime(item.created_at)
-						return item
-					})
-					this.orderList = newOrderList
+					this.orderList = data.records
 				} else if (statusCode === 204) {
 					console.log('没有数据');
 				} else {

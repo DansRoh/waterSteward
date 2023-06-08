@@ -3,11 +3,8 @@
 		<view class="mine-card">
 			<view class="top-box">
 				<view class="user-photo">
-					<van-image class="photo-img-class" image-class="cus-img" :src="avatarUrl"></van-image>
-					<view @tap="handleChangeAvatar" class="upload-box">
-						<van-image src="/static/icon/20_camera.png" image-class="camera-img-class" width="50rpx"
-							height="50rpx"></van-image>
-					</view>
+					<van-image @tap="handleChangeAvatar" class="photo-img-class" image-class="cus-img"
+						:src="avatarUrl"></van-image>
 				</view>
 				<view class="user-name">
 					{{name}}
@@ -91,7 +88,7 @@
 							url: baseURL + '/consumer/profile/avatar', // 你的头像上传接口地址
 							filePath: img.path,
 							header: {
-								'Authorization': 'Token ' + uni.getStorageSync("userInfo").token,
+								'Authorization': 'Token ' + uni.getStorageSync("token"),
 								'Content-Type': 'multipart/form-data',
 								'Accept': 'application/json;version=1'
 							},
@@ -109,11 +106,7 @@
 						// 更新头像 URL，假设服务器返回的新头像 URL 在 data.avatarUrl
 						const newAvatarUrl = JSON.parse(data).avatar_url;
 						this.avatarUrl = newAvatarUrl;
-
-						const {
-							data: userInfo
-						} = await this.$http('/consumer/profile', 'get')
-						uni.setStorageSync("userInfo", userInfo)
+						this.$store.dispatch('changeUserInfoSync')
 					} catch (e) {
 						//TODO handle the exception
 						console.log(e);
@@ -121,7 +114,7 @@
 				}
 			},
 			initData() {
-				const userInfo = uni.getStorageSync("userInfo")
+				const userInfo = this.$store.state.userInfo
 				this.avatarUrl = userInfo.avatar_url
 				this.name = userInfo.name
 			},
@@ -143,7 +136,9 @@
 						url: "/pages/rechargeRecord/rechargeRecord"
 					})
 				} else if (type === 2) {
-
+					uni.navigateTo({
+						url: "/pages/bill/bill"
+					})
 				} else if (type === 3) {
 					uni.navigateTo({
 						url: "/pages/devManage/devManage"
@@ -180,6 +175,8 @@
 				background-color: #17DA9C;
 
 				.user-photo {
+					box-sizing: border-box;
+					overflow: hidden;
 					position: absolute;
 					bottom: -92rpx;
 					left: 50%;

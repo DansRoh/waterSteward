@@ -75,8 +75,8 @@
 					});
 			},
 			initData() {
-				this.name = uni.getStorageSync("userInfo").name
-				this.phone = uni.getStorageSync("userInfo").phone
+				this.name = this.$store.state.userInfo.name
+				this.phone = this.$store.state.userInfo.phone
 			},
 		}
 	}

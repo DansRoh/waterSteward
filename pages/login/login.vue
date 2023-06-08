@@ -22,9 +22,8 @@
 		},
 		onLoad() {
 			// 判断是否有登录
-			const userInfo = uni.getStorageSync("userInfo")
 			const isLogin = uni.getStorageSync("isLogin")
-			if (userInfo && isLogin) {
+			if (isLogin) {
 				uni.redirectTo({
 					url: '/pages/home/home'
 				})

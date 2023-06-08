@@ -3,7 +3,7 @@
 		<view class="accouont-card">
 			<van-image width="100%" height="100%" class="bgi-box" :src="imgBaseURl+'07_cardBg.png'"></van-image>
 
-			<picker mode="selector" :range="myDevList" :value="curDevIdx" range-key="name" @change="handleChangeCurDev">
+			<picker mode="selector" :range="devices" :value="curDevIdx" range-key="name" @change="handleChangeCurDev">
 				<view class="change-icon-box">
 					<van-icon name="/static/icon/08_del_white.png" size="32rpx"></van-icon>
 				</view>
@@ -15,7 +15,7 @@
 						充值账号
 					</view>
 					<view class="fs48">
-						{{devInfo.name ? devInfo.name : '暂无净水器'}}
+						{{curDevInfo.name ? curDevInfo.name : '暂无净水器'}}
 					</view>
 				</view>
 				<view class="account-info df mt42">
@@ -25,7 +25,7 @@
 						</view>
 						<view class="df aie">
 							<view class="fs64">
-								{{devInfo.remain ? devInfo.remain : 0}}
+								{{curDevInfo.remain ? curDevInfo.remain : 0}}
 							</view>
 							<view class="fs24">
 								升
@@ -38,7 +38,7 @@
 						</view>
 						<view class="df aie">
 							<view class="fs64">
-								{{devInfo.amount ? devInfo.amount : 0}}
+								{{curDevInfo.amount ? curDevInfo.amount : 0}}
 							</view>
 							<view class="fs24">
 								元
@@ -54,7 +54,7 @@
 				当前套餐
 			</view>
 			<view class="df">
-				{{devInfo.plan_name ? devInfo.plan_name : '暂无套餐'}}
+				{{curDevInfo.plan_name ? curDevInfo.plan_name : '暂无套餐'}}
 			</view>
 			<view @tap="jumpToPlusPlan" class="upplan-btn-box">
 				<van-image custom-class="custom-img-cls" src="/static/icon/09_planUp.png" width="196rpx" height="50rpx" />
@@ -142,22 +142,21 @@
 				rechargeNumCheckList: [20, 50, 100], // 可选充值金额
 				curRgNumIdx: 0,
 				customRgNum: '',
-				myDevList: uni.getStorageSync("userInfo").devices,
-				userInfo: uni.getStorageSync("userInfo"),
-				curDevIdx: this.$store.state.curDevIdx
 			};
 		},
 		computed: {
-			devInfo() {
-				return this.userInfo.devices[this.curDevIdx]
+			curDevIdx() {
+				return this.$store.state.curDevIdx
+			},
+			devices() {
+				return this.$store.state.userInfo.devices
+			},
+			curDevInfo() {
+				return this.devices[this.curDevIdx]
 			}
-		},
-		onShow() {
-
 		},
 		methods: {
 			handleChangeCurDev(e) {
-				this.curDevIdx = e.detail.value
 				this.$store.commit("changeCurDevIdx", e.detail.value)
 			},
 			handleShowPriceDetail() {
@@ -204,7 +203,7 @@
 						const params = {
 							total: that.rechargeSum,
 							code,
-							device_id: that.devInfo?.id,
+							device_id: that.curDevInfo?.id,
 							type: 'Recharge'
 						}
 						const {
@@ -223,7 +222,7 @@
 							try {
 								const payRes = await requestPaymentFun(prepayId, nonceStr, timeStamp, signType, paySign)
 								uni.navigateTo({
-									url: `/pages/rechargeSuccess/rechargeSuccess?orderInfo=${data}`
+									url: `/pages/rechargeSuccess/rechargeSuccess?total=${data.total}&number=${data.number}`
 								})
 							} catch (e) {
 								//TODO handle the exception

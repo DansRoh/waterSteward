@@ -6,13 +6,13 @@
 			</view>
 			<van-icon name="/static/icon/41_add.png" size="48rpx"></van-icon>
 		</view>
-		<view v-for="devItem in devices" :key="devItem.id" class="dev-card">
+		<view v-for="(devItem, devIdx) in devices" :key="devItem.id" class="dev-card">
 			<view class="dev-name">
 				<view class="fs36 c262626 df aic">
 					<van-icon name="/static/icon/11_phone02.png" size="44rpx" />
 					{{devItem.name}}
 				</view>
-				<view class="fs24 c17DA9C">
+				<view @tap="handleClickChangeNameBtn(devItem)" class="fs24 c17DA9C">
 					修改名称
 				</view>
 			</view>
@@ -57,8 +57,8 @@
 					</view>
 				</view>
 				<view class="">
-					<van-button @tap="jumpToRecharge" type="primary" custom-style="width: 194rpx; height: 48rpx" color="#17DA9C"
-						round>充值</van-button>
+					<van-button @tap="jumpToRecharge(devIdx)" type="primary" custom-style="width: 194rpx; height: 48rpx"
+						color="#17DA9C" round>充值</van-button>
 				</view>
 			</view>
 			<van-divider customStyle="margin: 30rpx 0;" />
@@ -75,9 +75,12 @@
 		</view>
 
 		<!-- dialog -->
-		<van-dialog use-slot title="修改设备名称" :show="isShowChangeDevNameModel" show-cancel-button
-			@close="()=>{isShowChangeDevNameModel=false}" @confirm="changeDevName">
-			<van-field :value="newDevName" placeholder="请输入新设备名" @change="onchangeNewDevName"></van-field>
+		<van-dialog v-if="isShowChangeDevNameModel" use-slot title="修改设备名称" :show="isShowChangeDevNameModel"
+			show-cancel-button @close="closeChangeDevName" @confirm="changeDevName">
+			<view class="">
+				<van-field :value="newDevName" placeholder="请输入新设备名" @change="onchangeNewDevName" clearable
+					auto-focus></van-field>
+			</view>
 		</van-dialog>
 	</view>
 </template>
@@ -88,21 +91,33 @@
 			return {
 				isShowChangeDevNameModel: false,
 				newDevName: '',
-				devices: []
+				selectDev: null
 			};
 		},
-		onShow() {
-			this.initData()
+		computed: {
+			devices() {
+				return this.$store.state.userInfo.devices
+			},
 		},
 		methods: {
 			async changeDevName() {
-				const {statusCode, data} = await this.$http('/consumer/devices/设备ID', 'put')
-			},
-			initData() {
-				this.devices = uni.getStorageSync("userInfo").devices
+				const params = {
+					name: this.newDevName
+				}
+				const {
+					statusCode,
+					data
+				} = await this.$http('/consumer/devices/' + this.selectDev.id, 'put', params)
+				if (statusCode === 200) {
+					await this.$store.dispatch('changeUserInfoSync')
+					uni.showToast({
+						title: "更改成功",
+						icon: "success"
+					})
+				}
 			},
 			onchangeNewDevName(e) {
-				this.newDevName = e.detail.value
+				this.newDevName = e.detail
 			},
 			jumpToPlusPlan() {
 				uni.navigateTo({
@@ -111,13 +126,22 @@
 			},
 			jumpToPlanMenu() {
 				uni.navigateTo({
-					url:'/pages/planMenu/planMenu'
+					url: '/pages/planMenu/planMenu'
 				})
 			},
-			jumpToRecharge() {
+			jumpToRecharge(devIdx) {
+				this.$store.commit("changeCurDevIdx", devIdx)
 				uni.navigateTo({
 					url: '/pages/recharge/recharge'
 				})
+			},
+			handleClickChangeNameBtn(devItem) {
+				this.selectDev = devItem
+				this.newDevName = devItem.name
+				this.isShowChangeDevNameModel = true
+			},
+			closeChangeDevName() {
+				this.isShowChangeDevNameModel = false
 			}
 		}
 	}
@@ -130,6 +154,7 @@
 		background-color: #F2F4F7;
 		box-sizing: border-box;
 		padding: 50rpx 40rpx;
+
 		.add-dev-box {
 			width: 666rpx;
 			display: flex;
@@ -137,6 +162,7 @@
 			justify-content: flex-end;
 			margin-bottom: 50rpx;
 		}
+
 		.dev-card {
 			margin-top: 40rpx;
 			width: 666rpx;

@@ -10,7 +10,7 @@
 				<van-icon class="title-del-icon" name="/static/icon/36_del.png" size="20rpx"></van-icon>
 			</view>
 			<view class="plan-menu">
-				<view @tap="handleClickPlanItem(idx)" class="plan-item-box" :class="curPlanIdx===idx ? 'activate-plan' : ''"
+				<view @tap="handleClickPlanItem(idx)" class="plan-item-box" :class="selectPlanIdx===idx ? 'activate-plan' : ''"
 					v-for="(item,idx) in planMenuData" :key="item.id">
 					<view class="item-left">
 						<view class="icon">
@@ -45,7 +45,7 @@
 							</view>
 						</view>
 					</view>
-					<view v-show="curPlanIdx === idx" class="plan-item-activate-icon">
+					<view v-show="selectPlanIdx === idx" class="plan-item-activate-icon">
 						<van-image src="/static/icon/37_activate.png" width="116rpx" height="98rpx"></van-image>
 					</view>
 				</view>
@@ -63,7 +63,7 @@
 					<view class="price">
 						实付
 						<view class="price-num">
-							¥ {{ planMenuData[curPlanIdx].price }}
+							¥ {{ planMenuData[selectPlanIdx].price }}
 						</view>
 					</view>
 					<view @tap="handleShowPriceDetail" class="price-detail df aic">
@@ -85,9 +85,9 @@
 						<view class="bill-item">
 							<view class="bill-left-desc">
 								<view class="bill-type">商品</view>
-								<view class="bill-name">{{ planMenuData[curPlanIdx].title }}</view>
+								<view class="bill-name">{{ planMenuData[selectPlanIdx].title }}</view>
 							</view>
-							<view class="bill-right-num">¥{{ planMenuData[curPlanIdx].price }}</view>
+							<view class="bill-right-num">¥{{ planMenuData[selectPlanIdx].price }}</view>
 						</view>
 					</view>
 					<view @tap="()=>{isPriceDetailShow = false}" class="close">
@@ -110,14 +110,15 @@
 				planMenuData: [], // 账单支付明细
 				isCheckAgreement: false, // 用户是否同意开通鲜水管家协议
 				isPriceDetailShow: false, // 价格明细弹窗是否显示
-				curPlanIdx: 0, // 当前选择的套餐
-				userInfo: uni.getStorageSync("userInfo"),
-				curDevIdx: this.$store.state.curDevIdx
+				selectPlanIdx: 0, // 当前选择的套餐
 			};
 		},
 		computed: {
+			curDevIdx() {
+				return this.$store.state.curDevIdx
+			},
 			curDevInfo() {
-				return this.userInfo.devices[this.curDevIdx]
+				return this.$store.state.userInfo.devices[this.curDevIdx]
 			}
 		},
 		onLoad() {
@@ -128,7 +129,7 @@
 				this.isCheckAgreement = e.detail
 			},
 			handleClickPlanItem(index) {
-				this.curPlanIdx = index
+				this.selectPlanIdx = index
 			},
 			// 获取套餐数据
 			async getPlanMenuData() {
@@ -152,6 +153,14 @@
 			},
 			handleClickTransact() {
 				const that = this
+				console.log(111, this.curDevInfo, this.planMenuData[this.selectPlanIdx].id);
+				if (this.curDevInfo.plan_id === this.planMenuData[this.selectPlanIdx].id) {
+					uni.showToast({
+						title: '您已是该套餐',
+						icon: "none"
+					})
+					return
+				}
 				if (!this.isCheckAgreement) {
 					uni.showToast({
 						title: '请勾选用户协议',
@@ -166,11 +175,14 @@
 						async success(loginRes) {
 							const params = {
 								device_id: that.curDevInfo.id,
-								plan_id: that.planMenuData[that.curPlanIdx].id,
+								plan_id: that.planMenuData[that.selectPlanIdx].id,
 								code: loginRes.code,
 								type: "Upgrade"
 							}
-							const {statusCode, data} = await that.$http('/consumer/orders', 'POST', params)
+							const {
+								statusCode,
+								data
+							} = await that.$http('/consumer/orders', 'POST', params)
 							if (statusCode === 201) {
 								const {
 									nonceStr,
