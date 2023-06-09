@@ -99,8 +99,8 @@
 				<view class="inner-box mb30">
 					<van-image src="/static/icon/43_outage.png" width="170rpx" height="150rpx"></van-image>
 					<view class="tips-text">
-						经系统监测，您的设备以断电/网，
-						净水功能已停止，为避免使用，
+						经系统监测，您的设备已断电/网，
+						净水功能已停止，为避免影响使用，
 						请尽快连网连电。
 					</view>
 				</view>

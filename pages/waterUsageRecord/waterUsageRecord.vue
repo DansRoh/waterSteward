@@ -17,20 +17,20 @@
 
 		<view class="total">
 			<view class="label">
-				当月用水总量
+				当月用水总量(升)
 			</view>
 			<view class="num-box">
-				34L
+				{{waterUsageAmount}}
 			</view>
 		</view>
 
 		<view class="detail-list">
 			<view v-for="item in waterUsageData" :key="item.date" class="item-box">
 				<view class="label">
-					{{item.date}}
+					{{item.day}}
 				</view>
 				<view class="num-box">
-					{{item.num}}
+					{{item.amount}}(升）
 				</view>
 			</view>
 		</view>
@@ -43,31 +43,56 @@
 			return {
 				curDate: '2023-06',
 				curDevIdx: 0,
-				waterUsageData: [{
-					date: "03月31日",
-					num: "5L"
-				}, {
-					date: "03月30日",
-					num: "2L"
-				}]
+				waterUsageData: []
 			}
 		},
 		computed: {
 			devList() {
 				return this.$store.state.userInfo.devices
 			},
+			devId() {
+				return this.devList[this.curDevIdx].id
+			},
 			getCurDateFormat() {
 				const arr = this.curDate.split('-')
 				return arr[0] + '年' + arr[1] + '月'
+			},
+			waterUsageAmount() {
+				let amount = 0
+				this.waterUsageData.forEach(item => {
+					amount += Number(item.amount)
+				})
+				return amount
 			}
+		},
+		onShow() {
+			this.getWaterUsageData()
 		},
 		methods: {
 			bindDateChange(e) {
 				this.curDate = e.detail.value
+				this.getWaterUsageData()
 			},
 			bindDevChange(e) {
 				this.curDevIdx = e.detail.value
+				this.getWaterUsageData()
 			},
+			async getWaterUsageData() {
+				const params = {
+					start_date: 20230601,
+					end_date: 20230630
+				}
+				const {
+					statusCode,
+					data
+				} = await this.$http(`/consumer/devices/${this.devId}/waterings`, 'get', params)
+				if (statusCode === 200) {
+					this.waterUsageData = data.records.map(item => {
+						item.amount = (item.amount / 1000).toFixed(1)
+						return item
+					})
+				}
+			}
 		}
 	}
 </script>
@@ -76,6 +101,7 @@
 	.page-waterUsageRecord {
 		background-color: #F2F4F7;
 		min-height: 100vh;
+
 		.filter-box {
 			padding: 50rpx 0;
 		}
@@ -102,6 +128,7 @@
 		.detail-list {
 			background-color: #fff;
 			margin-top: 20rpx;
+
 			.item-box {
 				padding: 18rpx 44rpx;
 				display: flex;

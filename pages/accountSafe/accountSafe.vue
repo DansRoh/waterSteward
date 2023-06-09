@@ -43,7 +43,7 @@
 						const res = await this.$http('/consumer/profile', 'delete')
 						if (res.statusCode === 200) {
 							uni.clearStorageSync();
-							uni.navigateTo({
+							uni.redirectTo({
 								url: "/pages/login/login"
 							})
 						}

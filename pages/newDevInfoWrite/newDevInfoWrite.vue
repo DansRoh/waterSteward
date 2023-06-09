@@ -1,44 +1,11 @@
 <template>
-	<view class="page-writeUserInfo">
+	<view class="page-newDevInfoWrite">
 		<view class="title">
 			<view class="title-content">
 				完善信息
 			</view>
-			<view class="title-tip">
-				免费领取净水器 · 滤芯免费
-			</view>
 		</view>
 		<view class="form-user-info">
-			<view class="form-item">
-				<view class="item-label label-name">
-					姓名
-				</view>
-				<van-field input-class="custom-field" :value="userInfo.userName" @change="vanFieldChange('userName', $event)"
-					placeholder="请输入姓名" :border="false" />
-			</view>
-			<view class="form-item">
-				<view class="item-label">
-					身份证号
-				</view>
-				<van-field input-class="custom-field" placeholder-style="font-size: 24rpx; color: #CECFD0;" :value='userInfo.id'
-					@change="vanFieldChange('id', $event)" :border="false">
-					<view slot="right-icon">
-						<ocr-navigator @onSuccess="scanId" certificateType="idCard" :opposite="false">
-							<button class="scanId-btn"
-								style="background-color: #fff;line-height: unset;padding: 0;margin: 0;display: flex;overflow: visible;"
-								type="primary"><van-icon name="/static/icon/05_scan.png" size="32rpx"></van-icon></button>
-						</ocr-navigator>
-					</view>
-
-				</van-field>
-			</view>
-			<view class="form-item">
-				<view class="item-label">
-					手机号码
-				</view>
-				<van-field type="number" input-class="custom-field custom-phone" :value="userInfo.phoneNum"
-					@change="vanFieldChange('phoneNum', $event)" :border="false" />
-			</view>
 			<view class="form-item">
 				<view class="item-label">
 					安装地址
@@ -82,22 +49,13 @@
 		data() {
 			return {
 				userInfo: {
-					userName: "",
-					phoneNum: "",
 					region: ['重庆市', '重庆市', '渝中区'],
 					localDetail: "",
-					id: '',
 					referCode: '',
 				},
-				wechat_openid: ''
 			}
 		},
-		onLoad(option) {
-			this.wechat_openid = option.wechat_openid
-			this.userInfo.phoneNum = uni.getStorageSync('phone')
-		},
 		methods: {
-
 			async handleClickTransact() {
 				// 校验数据
 				for (let key in this.userInfo) {
@@ -109,65 +67,21 @@
 						return
 					}
 				}
-				if (this.userInfo.userName.length < 2 || this.userInfo.userName.length > 9) {
-					uni.showToast({
-						title: '限制2-9个字符',
-						icon: 'error'
-					})
-					return
-				}
-				if (!isValidPhoneNumber(this.userInfo.phoneNum)) {
-					uni.showToast({
-						title: '手机号格式错误',
-						icon: 'error'
-					})
-					return
-				}
-				if (!validateIdNumber(this.userInfo.id)) {
-					uni.showToast({
-						title: '身份证格式错误',
-						icon: 'error'
-					})
-					return
-				}
-
-				// 发送请求
-				const {
-					phoneNum,
-					userName,
-					referCode,
-					localDetail,
-					region
-				} = this.userInfo
 				const params = {
-					phone: phoneNum,
-					name: userName,
-					refer_code: referCode,
-					address_attributes: {
-						region: region,
-						detail: localDetail,
-					},
-					wechat_openid: this.wechat_openid
+					region: this.userInfo.region,
+					detail: this.userInfo.localDetail,
+					default: false
 				}
 				const {
 					statusCode,
 					data
-				} = await this.$http('/consumer/profile', "POST", params)
-
+				} = await this.$http("/consumer/addresses", "post", params)
 				if (statusCode === 201) {
-					// 注册成功
-					uni.setStorageSync('token', data.token)
-					uni.setStorageSync("isLogin", true)
-					uni.redirectTo({
-						url: '/pages/planMenu/planMenu'
-					})
-				} else {
-					// 注册失败
-					uni.showToast({
-						title: '注册失败',
-						icon: 'error'
+					uni.navigateTo({
+						url: `/pages/planMenu/planMenu?address_id=${data.id}`
 					})
 				}
+
 			},
 			scanCode() {
 				uni.scanCode({
@@ -217,7 +131,7 @@
 </script>
 
 <style lang="less">
-	.page-writeUserInfo {
+	.page-newDevInfoWrite {
 		box-sizing: border-box;
 		padding: 0 48rpx;
 

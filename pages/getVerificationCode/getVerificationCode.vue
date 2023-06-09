@@ -52,9 +52,16 @@
 					statusCode
 				} = await this.$http('/consumer/session/sms', "PUT", params)
 				if (statusCode === 201) {
+					uni.setStorageSync('token', data.token)
+					// 判断用户是否办理过套餐
+					if (!data.devices.length) {
+						uni.navigateTo({
+							url: "/pages/planMenu/planMenu"
+						})
+						return
+					}
 					// 登录成功
 					uni.setStorageSync('isLogin', true)
-					uni.setStorageSync('token', data.token)
 					uni.redirectTo({
 						url: '/pages/home/home'
 					})
@@ -79,7 +86,7 @@
 					})
 					return
 				}
-				
+
 				this.isVericodeBtnDisable = true;
 				this.vericodeBtnText = "剩余60s"
 				let num = 59

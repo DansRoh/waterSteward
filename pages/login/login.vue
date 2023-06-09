@@ -68,6 +68,7 @@
 							} = await that.$http('/consumer/session/wechat', 'PUT', {
 								code
 							})
+							that.isBtnLoading = false
 							if (statusCode === 201) {
 								// 登录成功
 								uni.setStorageSync("isLogin", true)
@@ -90,7 +91,6 @@
 						} else {
 							wx.showToast('登录失败')
 						}
-						that.isBtnLoading = false
 					},
 					fail(e) {
 						console.log('e', e);

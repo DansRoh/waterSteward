@@ -1,6 +1,6 @@
 <template>
 	<view class="page-devManage">
-		<view @tap="jumpToPlanMenu" class="add-dev-box">
+		<view @tap="jumpToPlanNew" class="add-dev-box">
 			<view class="fs36 c38 mr10">
 				添加净水器
 			</view>
@@ -124,9 +124,9 @@
 					url: '/pages/upPlan/upPlan'
 				})
 			},
-			jumpToPlanMenu() {
+			jumpToPlanNew() {
 				uni.navigateTo({
-					url: '/pages/planMenu/planMenu'
+					url: '/pages/newDevInfoWrite/newDevInfoWrite'
 				})
 			},
 			jumpToRecharge(devIdx) {

@@ -145,7 +145,16 @@
             "path" : "pages/waterUsageRecord/waterUsageRecord",
             "style" :                                                                                    
             {
-                "navigationBarTitleText": "",
+                "navigationBarTitleText": "用水记录",
+                "enablePullDownRefresh": false
+            }
+            
+        }
+        ,{
+            "path" : "pages/newDevInfoWrite/newDevInfoWrite",
+            "style" :                                                                                    
+            {
+                "navigationBarTitleText": "套餐办理",
                 "enablePullDownRefresh": false
             }
             

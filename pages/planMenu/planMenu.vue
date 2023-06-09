@@ -169,10 +169,12 @@
 				isPriceDetailShow: false, // 价格明细弹窗是否显示
 				curPlanIdx: 0, // 当前选择的套餐
 				isHaveFirst: true, // 是否有首充
+				address_id: ''
 			};
 		},
-		onLoad() {
+		onLoad(option) {
 			this.getPlanMenuData();
+			this.address_id = option.address_id
 		},
 		methods: {
 			onChangeAgreement(e) {
@@ -188,7 +190,6 @@
 					data
 				}) => {
 					if (statusCode === 200) {
-						console.log('data', data);
 						const {
 							records,
 							first_time
@@ -220,7 +221,9 @@
 							const params = {
 								plan_id: that.planMenuData[that.curPlanIdx].id,
 								code: loginRes.code,
-								type: "Installation"
+								type: "Installation",
+								refer_code: that.referCode,
+								address_id: that.address_id
 							}
 							const res = await that.$http('/consumer/orders', 'POST', params)
 							if (res.statusCode === 201) {

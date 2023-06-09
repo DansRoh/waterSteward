@@ -29,6 +29,7 @@ const store = new Vuex.Store({
 				statusCode,
 				data
 			} = await request('/consumer/profile', 'get')
+			console.log('userInfo', data);
 			if (statusCode === 200) {
 				commit('changeUserInfo', data)
 			}
