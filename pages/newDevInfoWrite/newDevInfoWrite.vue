@@ -81,7 +81,6 @@
 						url: `/pages/planMenu/planMenu?address_id=${data.id}`
 					})
 				}
-
 			},
 			scanCode() {
 				uni.scanCode({
@@ -96,14 +95,13 @@
 			scanId(e) {
 				this.userInfo.id = e.detail.id.text
 			},
-			handleClickAddressBtn() {
-				uni.chooseAddress({
-					success(res) {
-						console.log('res', res);
-					}
-				})
-			},
 			bindRegionChange(e) {
+				console.log(e);
+				if (e.detail.code[2] !== "500103") {
+					uni.showToast({
+						title: "当前地区暂不支持"
+					})
+				}
 				this.userInfo.region = e.detail.value
 			},
 			vanFieldChange(key, {

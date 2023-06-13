@@ -175,15 +175,15 @@
 			handleChangeCustomRgNum({
 				detail
 			}) {
+				this.curRgNumIdx = -1
 				const {
 					value
 				} = detail
-				this.curRgNumIdx = -1
-				this.customRgNum = value
 				if (!value) {
 					this.rechargeSum = 0
 					return
 				}
+				this.customRgNum = value
 				this.rechargeSum = this.customRgNum
 			},
 			handleClickTransact() {
@@ -276,7 +276,7 @@
 				width: 60rpx;
 				height: 60rpx;
 				position: absolute;
-				top: 80rpx;
+				top: 70rpx;
 				right: 70rpx;
 			}
 

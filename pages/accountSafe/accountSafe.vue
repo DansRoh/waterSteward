@@ -43,7 +43,7 @@
 						const res = await this.$http('/consumer/profile', 'delete')
 						if (res.statusCode === 200) {
 							uni.clearStorageSync();
-							uni.redirectTo({
+							uni.reLaunch({
 								url: "/pages/login/login"
 							})
 						}
@@ -54,7 +54,7 @@
 			},
 
 			jumpToEditPhone() {
-				uni.navigateTo({
+				uni.reLaunch({
 					url: '/pages/changePhone/changePhone'
 				})
 			},
@@ -66,7 +66,7 @@
 					.then(() => {
 						// on confirm
 						uni.clearStorageSync();
-						uni.navigateTo({
+						uni.reLaunch({
 							url: "/pages/login/login"
 						})
 					})

@@ -1,11 +1,8 @@
 <template>
 	<scroll-view scroll-into-view="target-deal" class="page-planMenu">
-		<view class="page-title">
-			套餐选择
-		</view>
 		<view class="every-day-plan-box">
 			<view class="title">
-				每日鲜套餐
+				套餐选择
 				<van-icon class="title-del-icon" name="/static/icon/36_del.png" size="20rpx"></van-icon>
 			</view>
 			<view class="plan-menu">
@@ -39,8 +36,14 @@
 						<view class="plan-tips">
 							共<view class="stress-box">
 								{{item.amount}}升
-							</view>水，相当于5L桶 * <view class="stress-box">
-								{{item.amount/5}}桶
+							</view>水，套餐外<view class="stress-box">
+								0.6元/升
+							</view>
+						</view>
+						<view class="plan-tips">
+							<view class="stress-box">
+								{{ item.type === 4 ? "无限量使用/立省108元" : "69元封顶，无限量使用"}}
+								
 							</view>
 						</view>
 					</view>
@@ -55,6 +58,9 @@
 						首充金额
 					</view>
 					<view class="plan-item-box">
+						<view class="qeury-icon">
+							?
+						</view>
 						<view class="item-left">
 							<view class="icon">
 								¥
@@ -65,10 +71,13 @@
 						</view>
 						<view class="item-right">
 							<view class="plan-name">
-								首充￥360，全额逐月返！
+								基础服务费，全额逐月返！
 							</view>
 							<view class="plan-tips">
-								36个月每月反10元。
+								月套餐: 每月返10元
+							</view>
+							<view class="plan-tips">
+								年套餐: 每年返120元
 							</view>
 						</view>
 						<view class="plan-item-activate-icon">
@@ -80,7 +89,7 @@
 					<van-checkbox :value="isCheckAgreement" @change="onChangeAgreement">
 						我同意鲜水管家*****
 					</van-checkbox>
-					<view @tap="jumpToProtocol">开通协议</view>
+					<view class="c00B8DF" @tap="jumpToProtocol">开通协议</view>
 				</view>
 			</view>
 		</view>
@@ -282,6 +291,7 @@
 		}
 
 		.every-day-plan-box {
+			margin-top: 20rpx;
 			display: flex;
 			flex-direction: column;
 			align-items: center;
@@ -318,20 +328,19 @@
 					position: relative;
 					display: flex;
 					align-items: center;
-					justify-content: space-around;
 					padding: 26rpx;
 					box-sizing: border-box;
 					width: 666rpx;
-					height: 160rpx;
+					height: 180rpx;
 					background: #FFFFFF;
 					border-radius: 28rpx;
 					box-shadow: 4rpx 8rpx 48rpx 0rpx rgba(0, 0, 0, 0.17);
-
 					&.activate-plan {
 						border: 4rpx solid rgba(0, 216, 147, 1);
 					}
 
 					.item-left {
+						margin-right: 50rpx;
 						>view {
 							display: inline-block;
 							color: #17DA9C;
@@ -351,7 +360,6 @@
 					}
 
 					.item-right {
-						width: 400rpx;
 
 						.plan-name {
 							font-size: 36rpx;
@@ -398,13 +406,27 @@
 					padding: 26rpx;
 					box-sizing: border-box;
 					width: 666rpx;
-					height: 160rpx;
+					height: 180rpx;
 					background: #FFFFFF;
 					border-radius: 28rpx;
 					box-shadow: 4rpx 8rpx 48rpx 0rpx rgba(0, 0, 0, 0.17);
 					border: 4rpx solid #000;
 
+					.qeury-icon {
+						text-align: center;
+						position: absolute;
+						border-radius: 50%;
+						top: 37rpx;
+						right: 16rpx;
+						width: 32rpx;
+						line-height: 32rpx;
+						background-color: #CECFD0;
+						color: #828698;
+						font-size: 24rpx
+					}
+
 					.item-left {
+						margin-right: 50rpx;
 						>view {
 							display: inline-block;
 							color: #262626;
@@ -424,7 +446,6 @@
 					}
 
 					.item-right {
-						width: 400rpx;
 
 						.plan-name {
 							font-size: 32rpx;

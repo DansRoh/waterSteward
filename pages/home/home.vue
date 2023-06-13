@@ -148,7 +148,13 @@
 		},
 		onLoad() {
 			console.log('onload')
-			this.$store.dispatch('changeUserInfoSync')
+			this.$store.dispatch('changeUserInfoSync').then(() => {
+				if (this.myDevList.length === 0) {
+					uni.navigateTo({
+						url: "/pages/planMenu/planMenu"
+					})
+				}
+			})
 		},
 		onPullDownRefresh() {
 			console.log('onpull')

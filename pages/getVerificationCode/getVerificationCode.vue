@@ -10,16 +10,16 @@
 		</view>
 
 		<view class="form-phone-verification">
-			<van-field :value="phoneNum" type="number" clearable label="+86" @change="(e)=>{phoneNum = e.detail}"
-				:border="false" />
+			<van-field :value="phoneNum" type="number" clearable label="+86" placeholder="请输入手机号" @change="(e)=>{phoneNum = e.detail}"
+				:border="true" />
 			<van-field :value="veriCode" type="number" @change="(e)=>{veriCode = e.detail}" placeholder="请输入验证码" center
-				clearable label="验证码" :border="false" use-button-slot>
+				clearable label="验证码" :border="true" use-button-slot>
 				<van-button :disabled="isVericodeBtnDisable" type="primary" size="small" color="#fff"
 					custom-style="color:#00D893" @tap="handleClickGetVericodeBtn" slot="button" class="get-vericode-btn">
 					{{vericodeBtnText}}
 				</van-button>
 			</van-field>
-			<van-button :disabled="!Boolean(''+veriCode)" @tap="handleClickLogin" class="login-btn" type="primary" block
+			<van-button :disabled="!Boolean(''+veriCode)" @click="handleClickLogin" class="login-btn" type="primary" block
 				round>立即登录</van-button>
 		</view>
 	</view>
@@ -67,6 +67,7 @@
 					})
 				} else if (statusCode === 424) {
 					// 用户未注册
+					uni.setStorageSync("phone", this.phoneNum)
 					uni.navigateTo({
 						url: "/pages/writeUserInfo/writeUserInfo"
 					})
@@ -103,7 +104,7 @@
 				// 发送请求
 				const data = {
 					phone: this.phoneNum,
-					debug: true
+					debug: false
 				}
 				// 获取验证码
 				const {

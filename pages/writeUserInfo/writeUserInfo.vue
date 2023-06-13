@@ -92,12 +92,11 @@
 				wechat_openid: ''
 			}
 		},
-		onLoad(option) {
-			this.wechat_openid = option.wechat_openid
+		onLoad() {
+			this.wechat_openid = uni.getStorageSync('wechat_openid')
 			this.userInfo.phoneNum = uni.getStorageSync('phone')
 		},
 		methods: {
-
 			async handleClickTransact() {
 				// 校验数据
 				for (let key in this.userInfo) {
@@ -181,13 +180,6 @@
 			},
 			scanId(e) {
 				this.userInfo.id = e.detail.id.text
-			},
-			handleClickAddressBtn() {
-				uni.chooseAddress({
-					success(res) {
-						console.log('res', res);
-					}
-				})
 			},
 			bindRegionChange(e) {
 				this.userInfo.region = e.detail.value

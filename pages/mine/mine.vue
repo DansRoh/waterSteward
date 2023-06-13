@@ -53,6 +53,10 @@
 						icon: "/static/icon/18_phone04.png"
 					},
 					{
+						name: "优惠券",
+						icon: "/static/icon/49_coupon_icon.png"
+					},
+					{
 						name: "账号与安全",
 						icon: "/static/icon/19_account.png"
 					}
@@ -144,9 +148,13 @@
 					})
 				} else if (type === 5) {
 					uni.navigateTo({
+						url: "/pages/coupon/coupon"
+					})
+				} else {
+					uni.navigateTo({
 						url: "/pages/accountSafe/accountSafe"
 					})
-				} else {}
+				}
 			}
 		}
 	}

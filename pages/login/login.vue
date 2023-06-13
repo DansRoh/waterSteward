@@ -11,7 +11,6 @@
 
 <script>
 	import {
-		debounce,
 		throttle
 	} from '@/utils/tool.js'
 	export default {
@@ -78,8 +77,9 @@
 								})
 							} else if (statusCode === 424) {
 								// 用户未注册
+								uni.setStorageSync("wechat_openid", data.wechat_openid)
 								uni.navigateTo({
-									url: '/pages/writeUserInfo/writeUserInfo?wechat_openid=' + data.wechat_openid,
+									url: '/pages/getVerificationCode/getVerificationCode?wechat_openid=' + data.wechat_openid,
 								})
 							} else {
 								// 登录失败

@@ -55,7 +55,7 @@
 					<van-checkbox :value="isCheckAgreement" @change="onChangeAgreement">
 						我同意鲜水管家*****
 					</van-checkbox>
-					<view @tap="jumpToProtocol">开通协议</view>
+					<view class="c00B8DF" @tap="jumpToProtocol">开通协议</view>
 				</view>
 			</view>
 			<view class="bottom-pay-box">
