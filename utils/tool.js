@@ -78,6 +78,27 @@ export function formatDateTime(dateTimeString) {
 	return `${year}年${month}月${day}日 ${hours}:${minutes.toString().padStart(2, '0')}`;
 }
 
+// 根据时间戳计算相差天数
+export function getDaysBetweenTimestamps(timestamp1, timestamp2) {
+	const oneDay = 24 * 60 * 60 * 1000; // 1 day in milliseconds
+	const timeDifference = Math.abs(timestamp1 - timestamp2); // difference in milliseconds
+	return Math.floor(timeDifference / oneDay);
+}
+
+// 对象数组根据时间字段进行排序 data--进行排序的对象，  key--表示时间的字段名,    type----排序类型，0:顺时针， 1:逆时针
+export function sortTime(data, key, type) {
+	data.sort(function(a, b) {
+		const dateA = new Date(a[key]);
+		const dateB = new Date(b[key]);
+		if (type === 0) {
+			return dateA - dateB;
+		} else {
+			return dateB - dateA
+		}
+	});
+	return data;
+}
+
 // 防抖函数
 export const debounce = (func, delay) => {
 	let timer = null;

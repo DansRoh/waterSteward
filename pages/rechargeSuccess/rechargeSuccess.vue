@@ -60,7 +60,7 @@
 		},
 		methods: {
 			goBackHome() {
-				uni.navigateTo({
+				uni.reLaunch({
 					url: '/pages/home/home'
 				})
 			},

@@ -8,11 +8,11 @@
 		<view class="field-box">
 			<van-field title-width="100rpx" input-class="cus-inp-veri" label="验证码" size="large" :value="veriCode"
 				@change="changeVeriCode" type="number">
-				<van-button @tap="handleClickGetVericodeBtn" :disabled="isVericodeBtnDisable" slot="button" size="small" round
+				<van-button @click="handleClickGetVericodeBtn" :disabled="isVericodeBtnDisable" slot="button" size="small" round
 					color="#17DA9C">{{vericodeBtnText}}</van-button>
 			</van-field>
 		</view>
-		<van-button @tap="handleClickConfirm" :disabled="isDisabled" custom-class="mt60"
+		<van-button @click="handleClickConfirm" :disabled="isDisabled" custom-class="mt60"
 			custom-style="width: 590rpx;height: 110rpx; font-size: 36rpx;" round color="#5A92FF" block>完 成</van-button>
 	</view>
 </template>
@@ -55,6 +55,11 @@
 						title: '修改成功',
 						icon: 'success'
 					})
+					setTimeout(() => {
+						uni.reLaunch({
+							url: "/pages/home/home"
+						})
+					},1000)
 				} else {
 					uni.showToast({
 						title: '修改失败',

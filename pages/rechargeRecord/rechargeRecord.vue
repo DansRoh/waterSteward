@@ -14,7 +14,8 @@
 				</view>
 			</picker>
 		</view>
-		<view class="record-list">
+		<van-empty v-if="filterOrderList.length===0" description="暂无数据" />
+		<view v-else class="record-list">
 			<view v-for="item in filterOrderList" :key="item.plan_id" class="record-item">
 				<view class="left-desc fs28 c828698">
 					<view class="">

@@ -23,7 +23,7 @@
 				{{waterUsageAmount}}
 			</view>
 		</view>
-
+		<van-empty v-if="waterUsageData.length===0" description="暂无数据" />
 		<view class="detail-list">
 			<view v-for="item in waterUsageData" :key="item.date" class="item-box">
 				<view class="label">

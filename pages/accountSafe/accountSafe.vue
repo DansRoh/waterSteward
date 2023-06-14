@@ -54,7 +54,7 @@
 			},
 
 			jumpToEditPhone() {
-				uni.reLaunch({
+				uni.navigateTo({
 					url: '/pages/changePhone/changePhone'
 				})
 			},

@@ -76,7 +76,6 @@
 			"path": "pages/rechargeRecord/rechargeRecord",
 			"style": {
 				"navigationBarTitleText": "充值记录",
-				"disableScroll": true,
 				"enablePullDownRefresh": false
 			}
 		},
@@ -84,7 +83,6 @@
 			"path": "pages/devManage/devManage",
 			"style": {
 				"navigationBarTitleText": "净水器管理",
-				"disableScroll": true,
 				"enablePullDownRefresh": false
 			}
 		},
@@ -99,7 +97,6 @@
 			"path": "pages/upPlan/upPlan",
 			"style": {
 				"navigationBarTitleText": "套餐升级",
-				"disableScroll": true,
 				"enablePullDownRefresh": false
 			}
 
@@ -114,7 +111,6 @@
 			"path": "pages/protocol/protocol",
 			"style": {
 				"navigationBarTitleText": "隐私协议",
-				"disableScroll": true,
 				"enablePullDownRefresh": false
 			}
 
@@ -149,7 +145,6 @@
 			"path": "pages/bill/bill",
 			"style": {
 				"navigationBarTitleText": "账单明细",
-				"disableScroll": true,
 				"enablePullDownRefresh": false
 			}
 
@@ -157,7 +152,6 @@
 			"path": "pages/waterUsageRecord/waterUsageRecord",
 			"style": {
 				"navigationBarTitleText": "用水记录",
-				"disableScroll": true,
 				"enablePullDownRefresh": false
 			}
 
@@ -165,21 +159,18 @@
 			"path": "pages/newDevInfoWrite/newDevInfoWrite",
 			"style": {
 				"navigationBarTitleText": "套餐办理",
-				"disableScroll": true,
 				"enablePullDownRefresh": false
 			}
 
+		}, {
+			"path": "pages/coupon/coupon",
+			"style": {
+				"navigationBarTitleText": "优惠券",
+				"enablePullDownRefresh": true
+			}
+
 		}
-	    ,{
-            "path" : "pages/coupon/coupon",
-            "style" :                                                                                    
-            {
-                "navigationBarTitleText": "优惠券",
-                "enablePullDownRefresh": false
-            }
-            
-        }
-    ],
+	],
 	"globalStyle": {
 		"navigationBarTextStyle": "black",
 		"navigationBarTitleText": "鲜水管家",

@@ -14,68 +14,71 @@
 				</view>
 			</picker>
 		</view>
-		<view class="charge-list">
-			<view class="charge-item">
-				<view class="title">
-					固定套餐
+		<van-empty v-if="!billData" description="暂无数据" />
+		<template v-else>
+			<view class="charge-list">
+				<view class="charge-item">
+					<view class="title">
+						固定套餐
+					</view>
+					<view class="item-info">
+						<view class="tip-box">
+							{{billData.plan_title}}
+						</view>
+						<view class="num-box">
+							¥{{billData.plan_price}}
+						</view>
+					</view>
+					<view class="item-info">
+						<view class="tip-box">
+							每月折扣券
+						</view>
+						<view class="num-box">
+							-¥{{billData.refund}}
+						</view>
+					</view>
 				</view>
-				<view class="item-info">
-					<view class="tip-box">
-						每日鲜套餐A
+				<view class="charge-item">
+					<view class="title">
+						套餐外费用
 					</view>
-					<view class="num-box">
-						¥29
+					<view class="item-info">
+						<view class="tip-box">
+							套餐外用水量50升（{{billData.extra_price}}元/升）
+						</view>
+						<view class="num-box">
+							¥{{billData.extra_fee}}
+						</view>
 					</view>
 				</view>
-				<view class="item-info">
-					<view class="tip-box">
-						每月折扣券
+				<view class="total">
+					合计金额：<text class="total-data">¥{{billData.total}}</text>
+				</view>
+			</view>
+			<view class="water-consumption">
+				<view class="total">
+					<view>
+						合计用水：<text class="total-data">{{billData.amount}}L</text>
 					</view>
-					<view class="num-box">
-						-¥10
+					<view @tap="handleClickUnfoldBtn" class="unfold-btn">
+						{{unfold ? '收起': '展开'}}
+						<image :class="unfold?'':'reverse'" src="../../static/icon/46_del.png" style="width: 18px;height: 12px;"
+							mode="">
+						</image>
+					</view>
+				</view>
+				<view v-if="unfold" class="record-list">
+					<view v-for="waterDayItem in billData.waterings" class="record-item">
+						<view class="date-box">
+							{{waterDayItem.day}}
+						</view>
+						<view class="count">
+							{{waterDayItem.amount}}L
+						</view>
 					</view>
 				</view>
 			</view>
-			<view class="charge-item">
-				<view class="title">
-					套餐外费用
-				</view>
-				<view class="item-info">
-					<view class="tip-box">
-						套餐外用水量50升（0.5元/升）
-					</view>
-					<view class="num-box">
-						¥25
-					</view>
-				</view>
-			</view>
-			<view class="total">
-				合计金额：<text class="total-data">¥44</text>
-			</view>
-		</view>
-		<view class="water-consumption">
-			<view class="total">
-				<view>
-					合计用水：<text class="total-data">44L</text>
-				</view>
-				<view @tap="handleClickUnfoldBtn" class="unfold-btn">
-					{{unfold ? '收起': '展开'}}
-					<image :class="unfold?'':'reverse'" src="../../static/icon/46_del.png" style="width: 18px;height: 12px;"
-						mode="">
-					</image>
-				</view>
-			</view>
-			<view v-if="unfold" class="record-list">
-				<view class="record-item">
-					<view class="date-box">
-						03月31日
-					</view>
-					<view class="count">
-						5L
-					</view>
-				</view>
-			</view>
-		</view>
+		</template>
 	</view>
 </template>
 
@@ -86,7 +89,7 @@
 				curDate: '2023-06',
 				curDevIdx: 0,
 				unfold: false, // 是否展开
-				billData: {}, // 账单数据
+				billData: null, // 账单数据
 			}
 		},
 		computed: {
@@ -122,7 +125,9 @@
 					data
 				} = await this.$http(`/consumer/billing/${params.devId}/${params.billDate}`, "get")
 				if (statusCode === 200) {
-					console.log('data', data);
+					this.billData = data
+				} else {
+					this.billData = null
 				}
 			},
 		}
