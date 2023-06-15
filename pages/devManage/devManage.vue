@@ -77,10 +77,7 @@
 		<!-- dialog -->
 		<van-dialog v-if="isShowChangeDevNameModel" use-slot title="修改设备名称" :show="isShowChangeDevNameModel"
 			show-cancel-button @close="closeChangeDevName" @confirm="changeDevName">
-			<view class="">
-				<van-field :value="newDevName" placeholder="请输入新设备名" @change="onchangeNewDevName" clearable
-					auto-focus></van-field>
-			</view>
+			<input class="new-dev-name-input" :value="newDevName" placeholder="请输入新设备名" @input="onchangeNewDevName"></input>
 		</van-dialog>
 	</view>
 </template>
@@ -117,7 +114,8 @@
 				}
 			},
 			onchangeNewDevName(e) {
-				this.newDevName = e.detail
+				this.newDevName = e.detail.value
+
 			},
 			jumpToPlusPlan() {
 				uni.navigateTo({
@@ -154,7 +152,14 @@
 		background-color: #F2F4F7;
 		box-sizing: border-box;
 		padding: 50rpx 40rpx;
-
+		
+		.new-dev-name-input {
+			margin: 40rpx auto;
+			width: 70%;
+			font-size: 28rpx;
+			padding: 10rpx;
+			border-bottom: 1px solid #ccc;
+		}
 		.add-dev-box {
 			width: 666rpx;
 			display: flex;

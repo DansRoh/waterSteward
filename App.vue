@@ -2,8 +2,7 @@
 	export default {
 		onLaunch() {
 			console.log('onLaunch');
-			// const isLogin = uni.getStorageSync('isLogin');
-			const isLogin = true
+			const isLogin = uni.getStorageSync('isLogin');
 			if (!isLogin) {
 				uni.redirectTo({
 					url: '/pages/login/login'
