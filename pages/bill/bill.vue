@@ -107,9 +107,11 @@
 		methods: {
 			bindDateChange(e) {
 				this.curDate = e.detail.value
+				this.getBillData()
 			},
 			bindDevChange(e) {
 				this.curDevIdx = e.detail.value
+				this.getBillData()
 			},
 			handleClickUnfoldBtn() {
 				this.unfold = !this.unfold

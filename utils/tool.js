@@ -67,14 +67,17 @@ export function validateIdNumber(idCard) {
 }
 
 // 时间格式转换
-export function formatDateTime(dateTimeString) {
+export function formatDateTime(dateTimeString, type) {
 	const date = new Date(dateTimeString);
 	const year = date.getFullYear();
-	const month = date.getMonth() + 1;
-	const day = date.getDate();
+	const month = (date.getMonth() + 1).toString().padStart(2, '0'); // padStart方法用于补齐数字长度
+	const day = date.getDate().toString().padStart(2, '0');
 	const hours = date.getHours();
 	const minutes = date.getMinutes();
 
+	if (type === 1) {
+		return "" + year + month + day
+	}
 	return `${year}年${month}月${day}日 ${hours}:${minutes.toString().padStart(2, '0')}`;
 }
 
@@ -83,6 +86,23 @@ export function getDaysBetweenTimestamps(timestamp1, timestamp2) {
 	const oneDay = 24 * 60 * 60 * 1000; // 1 day in milliseconds
 	const timeDifference = Math.abs(timestamp1 - timestamp2); // difference in milliseconds
 	return Math.floor(timeDifference / oneDay);
+}
+
+// 计算出指定年月的最后一天
+export function getMonthLastDay(date) {
+	const currentDate = new Date(date);
+
+	// 获取当前月份的第一天
+	const firstDayOfMonth = new Date(currentDate.getFullYear(), currentDate.getMonth(), 1);
+
+	// 获取下一个月份的第一天
+	const firstDayOfNextMonth = new Date(currentDate.getFullYear(), currentDate.getMonth() + 1, 1);
+
+	// 获取当前月份的最后一天
+	const lastDayOfMonth = new Date(firstDayOfNextMonth - 1);
+
+	// 输出当前月份的最后一天
+	return lastDayOfMonth
 }
 
 // 对象数组根据时间字段进行排序 data--进行排序的对象，  key--表示时间的字段名,    type----排序类型，0:顺时针， 1:逆时针

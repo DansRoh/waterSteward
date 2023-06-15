@@ -38,6 +38,10 @@
 </template>
 
 <script>
+	import {
+		getMonthLastDay,
+		formatDateTime
+	} from "@/utils/tool.js"
 	export default {
 		data() {
 			return {
@@ -79,8 +83,8 @@
 			},
 			async getWaterUsageData() {
 				const params = {
-					start_date: 20230601,
-					end_date: 20230630
+					start_date: formatDateTime(this.curDate, 1),
+					end_date: formatDateTime(getMonthLastDay(this.curDate), 1)
 				}
 				const {
 					statusCode,

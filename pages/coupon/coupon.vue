@@ -139,6 +139,8 @@
 							...item
 						}
 					})
+					sortTime(newRecords, 'redeemed_at', 1)
+					console.log('new', newRecords);
 					this.allCouponList = newRecords
 				}
 				uni.stopPullDownRefresh()
