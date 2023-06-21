@@ -222,13 +222,13 @@
 							try {
 								const payRes = await requestPaymentFun(prepayId, nonceStr, timeStamp, signType, paySign)
 								uni.navigateTo({
-									url: `/pages/rechargeSuccess/rechargeSuccess?total=${data.total}&number=${data.number}`
+									url: `/pages/rechargeSuccess/rechargeSuccess?total=${data.total}&number=${data.number}&type=recharge`
 								})
 							} catch (e) {
 								//TODO handle the exception
 								console.log('e', e);
 								uni.showToast({
-									title: '充值失败',
+									title: '取消支付',
 									icon: "error"
 								})
 							}

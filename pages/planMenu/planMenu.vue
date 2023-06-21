@@ -19,7 +19,7 @@
 							/月
 						</view>
 					</view>
-					<view v-if="item.type === 4" class="item-right">
+					<view v-if="item.type === 4 || item.type === 1000" class="item-right">
 						<view class="plan-name">
 							{{item.title}}
 						</view>
@@ -321,9 +321,9 @@
 				justify-content: space-evenly;
 				background-color: #fff;
 				width: 100vw;
-				height: 814rpx;
 
 				.plan-item-box {
+					margin-top: 30rpx;
 					overflow: hidden;
 					position: relative;
 					display: flex;
@@ -385,7 +385,7 @@
 					.plan-item-activate-icon {
 						position: absolute;
 						right: -2rpx;
-						bottom: -12rpx;
+						bottom: -16rpx;
 					}
 				}
 			}

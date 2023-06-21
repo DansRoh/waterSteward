@@ -2,7 +2,7 @@
 	<view class="page-rechargeSuccess">
 		<van-image class="mt80" src="/static/icon/42_order.png" width="376rpx" height="376rpx"></van-image>
 		<view class="">
-			充值成功！
+			{{type==='recharge' ? '充值成功！': '办理成功！'}}
 		</view>
 		<view class="info-list">
 			<view class="info-item">
@@ -34,7 +34,8 @@
 		<view class="btn-box">
 			<van-button @tap="goBackHome" custom-class="mb30" type="primary" size="lang" color="#5A92FF" round
 				block>返回首页</van-button>
-			<van-button @tap="goBackReg" type="primary" size="lang" color="#979797" plain round block>继续充值</van-button>
+			<van-button v-if="type==='recharge'" @tap="goBackReg" type="primary" size="lang" color="#979797" plain round
+				block>继续充值</van-button>
 		</view>
 	</view>
 </template>
@@ -45,15 +46,18 @@
 			return {
 				total: 0, // 充值金额
 				number: '', // 充值单号
+				type: '', // 充值类型
 			};
 		},
 		onLoad(option) {
 			const {
 				total,
-				number
+				number,
+				type
 			} = option
 			this.total = total;
 			this.number = number
+			this.type = type
 		},
 		onShow() {
 			this.$store.dispatch("changeUserInfoSync")

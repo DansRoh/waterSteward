@@ -65,6 +65,13 @@
 					placeholder="无可暂时不填" placeholder-style="font-size: 24rpx; color: #CECFD0;" :value='userInfo.referCode'
 					:border="false" />
 			</view>
+			<view class="form-item accept-protocol">
+				<van-checkbox :value="isAccept" shape="square" @change="onChangeIsAccept">
+					我已阅读并同意
+				</van-checkbox>
+				<text class="c00B8DF" @tap="jumpToProtocol(1)">使用条款、</text><text class="c00B8DF"
+					@tap="jumpToProtocol(2)">隐私政策</text>
+			</view>
 			<view class="form-item">
 				<van-button @tap="handleClickTransact" class="transaction-btn" type="primary" block round>立即办理</van-button>
 			</view>
@@ -89,7 +96,8 @@
 					id: '',
 					referCode: '',
 				},
-				wechat_openid: ''
+				wechat_openid: '',
+				isAccept: false
 			}
 		},
 		onLoad() {
@@ -97,6 +105,25 @@
 			this.userInfo.phoneNum = uni.getStorageSync('phone')
 		},
 		methods: {
+			jumpToProtocol(type) {
+				switch (type) {
+					case 1:
+						uni.navigateTo({
+							url: "/pages/userServerProtocol/userServerProtocol"
+						})
+						break;
+					case 2:
+						uni.navigateTo({
+							url: "/pages/privacyProtocol/privacyProtocol"
+						})
+						break;
+					default:
+						break;
+				}
+			},
+			onChangeIsAccept(e) {
+				this.isAccept = e.detail
+			},
 			async handleClickTransact() {
 				// 校验数据
 				for (let key in this.userInfo) {
@@ -126,6 +153,15 @@
 					uni.showToast({
 						title: '身份证格式错误',
 						icon: 'error'
+					})
+					return
+				}
+
+				// 同意协议
+				if (!this.isAccept) {
+					uni.showToast({
+						title: "请阅读并同意协议",
+						icon: "none"
 					})
 					return
 				}
@@ -274,6 +310,12 @@
 						font-size: 32rpx;
 					}
 				}
+			}
+
+			.accept-protocol {
+				margin-top: 60rpx;
+				justify-content: center;
+				align-items: center;
 			}
 
 			.transaction-btn {

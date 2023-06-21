@@ -121,7 +121,6 @@
 				"disableScroll": true,
 				"enablePullDownRefresh": false
 			}
-
 		}, {
 			"path": "pages/devInstallProgress/devInstallProgress",
 			"style": {
@@ -167,6 +166,20 @@
 			"style": {
 				"navigationBarTitleText": "优惠券",
 				"enablePullDownRefresh": true
+			}
+
+		}, {
+			"path": "pages/userServerProtocol/userServerProtocol",
+			"style": {
+				"navigationBarTitleText": "用户服务条款",
+				"enablePullDownRefresh": false
+			}
+
+		}, {
+			"path": "pages/privacyProtocol/privacyProtocol",
+			"style": {
+				"navigationBarTitleText": "隐私协议",
+				"enablePullDownRefresh": false
 			}
 
 		}
