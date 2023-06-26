@@ -66,7 +66,7 @@
 				this.waterUsageData.forEach(item => {
 					amount += Number(item.amount)
 				})
-				return amount
+				return amount.toFixed(1)
 			}
 		},
 		onShow() {
@@ -92,7 +92,7 @@
 				} = await this.$http(`/consumer/devices/${this.devId}/waterings`, 'get', params)
 				if (statusCode === 200) {
 					this.waterUsageData = data.records.map(item => {
-						item.amount = (item.amount / 1000).toFixed(1)
+						item.amount = (item.amount).toFixed(1)
 						return item
 					})
 				}

@@ -67,7 +67,7 @@
 		<view class="user-water-info">
 			<view class="info-card">
 				<view class="fs96 c17DA9C">
-					{{curDevInfo.daily ? curDevInfo.daily : 0}}
+					{{curDevInfo.daily ? curDevInfo.daily.toFixed(2) : 0}}
 				</view>
 				<view class="c828698 fs28">
 					今日饮水量 (L)
