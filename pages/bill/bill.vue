@@ -83,10 +83,11 @@
 </template>
 
 <script>
+	import { formatCurDate } from '../../utils/tool.js'
 	export default {
 		data() {
 			return {
-				curDate: '2023-06',
+				curDate: formatCurDate(),
 				curDevIdx: 0,
 				unfold: false, // 是否展开
 				billData: null, // 账单数据

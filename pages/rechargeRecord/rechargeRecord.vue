@@ -40,7 +40,7 @@
 	export default {
 		data() {
 			return {
-				curDate: '2023',
+				curDate: new Date().getFullYear(),
 				curDevIdx: 0,
 				orderList: []
 			};

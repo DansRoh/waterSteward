@@ -81,6 +81,18 @@ export function formatDateTime(dateTimeString, type) {
 	return `${year}年${month}月${day}日 ${hours}:${minutes.toString().padStart(2, '0')}`;
 }
 
+// return当前时间以YYYY-MM格式
+export function formatCurDate() {
+	const currentDate = new Date();
+
+	// 获取年份和月份
+	const year = currentDate.getFullYear();
+	const month = String(currentDate.getMonth() + 1).padStart(2, '0');
+
+	// 构造'YYYY-MM'格式的字符串
+	return `${year}-${month}`;
+}
+
 // 根据时间戳计算相差天数
 export function getDaysBetweenTimestamps(timestamp1, timestamp2) {
 	const oneDay = 24 * 60 * 60 * 1000; // 1 day in milliseconds

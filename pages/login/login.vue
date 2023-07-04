@@ -2,10 +2,10 @@
 	<view class="page-login">
 		<van-image src="/static/icon/03_waterStewardLogo.png" width="400rpx" height="150rpx" class="logo-box">
 		</van-image>
-		<van-button :disabled="isBtnLoading" @tap="handleClickWxLogin" icon="/static/icon/01_wechartLogo.png"
-			class="login-btn" type="primary" block round>微信授权登录</van-button>
-		<van-button :disabled="isBtnLoading" open-type="getPhoneNumber" @getphonenumber="getPhoneNumber"
-			icon="/static/icon/02_phone.png" class="login-btn" color="#23D8FF" plain block hairline round>手机快捷登录</van-button>
+		<van-button :disabled="isBtnLoading" @tap="handleClickWxLogin" class="login-btn" type="primary" block
+			round>快速验证</van-button>
+		<van-button :disabled="isBtnLoading" open-type="getPhoneNumber" @getphonenumber="getPhoneNumber" class="login-btn"
+			color="#23D8FF" plain block hairline round>手机号安全登录</van-button>
 	</view>
 </template>
 
@@ -79,7 +79,8 @@
 								// 用户未注册
 								uni.setStorageSync("wechat_openid", data.wechat_openid)
 								uni.navigateTo({
-									url: '/pages/getVerificationCode/getVerificationCode?wechat_openid=' + data.wechat_openid,
+									url: '/pages/getVerificationCode/getVerificationCode?wechat_openid=' + data
+										.wechat_openid,
 								})
 							} else {
 								// 登录失败

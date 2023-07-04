@@ -69,10 +69,25 @@
 				return amount.toFixed(1)
 			}
 		},
+		onLoad() {
+			this.formatCurDate()
+		},
 		onShow() {
 			this.getWaterUsageData()
 		},
 		methods: {
+			// 初始化当前时间
+			formatCurDate() {
+				const currentDate = new Date();
+				
+				// 获取年份和月份
+				const year = currentDate.getFullYear();
+				const month = String(currentDate.getMonth() + 1).padStart(2, '0');
+				
+				// 构造'YYYY-MM'格式的字符串
+				const formattedDate = `${year}-${month}`;
+				this.curDate = formattedDate
+			},
 			bindDateChange(e) {
 				this.curDate = e.detail.value
 				this.getWaterUsageData()
