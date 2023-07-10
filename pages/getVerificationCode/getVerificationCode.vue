@@ -104,7 +104,7 @@
 				// 发送请求
 				const data = {
 					phone: this.phoneNum,
-					debug: false
+					debug: true
 				}
 				// 获取验证码
 				const {

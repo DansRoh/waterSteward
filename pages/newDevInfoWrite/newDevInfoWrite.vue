@@ -28,8 +28,8 @@
 				<view class="item-label">
 					推荐码
 				</view>
-				<van-field @click-icon="scanCode" input-class="custom-field" icon="/static/icon/05_scan.png"
-					placeholder="无可暂时不填" placeholder-style="font-size: 24rpx; color: #CECFD0;" :value='userInfo.referCode'
+				<van-field @click-icon="scanCode" @change="vanFieldChange('referCode', $event)" input-class="custom-field" icon="/static/icon/05_scan.png"
+					placeholder="请填写推荐码" placeholder-style="font-size: 24rpx; color: #CECFD0;" :value='userInfo.referCode'
 					:border="false" />
 			</view>
 			<view class="form-item">
@@ -59,7 +59,7 @@
 			async handleClickTransact() {
 				// 校验数据
 				for (let key in this.userInfo) {
-					if ((this.userInfo[key] === '') && (key !== 'referCode')) {
+					if ((this.userInfo[key] === '')) {
 						uni.showToast({
 							title: "请填写完整信息",
 							icon: "error"

@@ -10,7 +10,7 @@
 		</view>
 		<view class="form-user-info">
 			<view class="form-item">
-				<view class="item-label label-name">
+				<view class="item-label">
 					姓名
 				</view>
 				<van-field input-class="custom-field" :value="userInfo.userName" @change="vanFieldChange('userName', $event)"
@@ -18,7 +18,7 @@
 			</view>
 			<view class="form-item">
 				<view class="item-label">
-					身份证号
+					身份证号码
 				</view>
 				<van-field input-class="custom-field" placeholder-style="font-size: 24rpx; color: #CECFD0;" :value='userInfo.id'
 					@change="vanFieldChange('id', $event)" :border="false">
@@ -61,8 +61,8 @@
 				<view class="item-label">
 					推荐码
 				</view>
-				<van-field @click-icon="scanCode" input-class="custom-field" icon="/static/icon/05_scan.png"
-					placeholder="无可暂时不填" placeholder-style="font-size: 24rpx; color: #CECFD0;" :value='userInfo.referCode'
+				<van-field @click-icon="scanCode" @change="vanFieldChange('referCode', $event)" input-class="custom-field" icon="/static/icon/05_scan.png"
+					placeholder="推荐码必填" placeholder-style="font-size: 24rpx; color: #CECFD0;" :value='userInfo.referCode'
 					:border="false" />
 			</view>
 			<view class="form-item accept-protocol">
@@ -127,7 +127,7 @@
 			async handleClickTransact() {
 				// 校验数据
 				for (let key in this.userInfo) {
-					if ((this.userInfo[key] === '') && (key !== 'referCode')) {
+					if ((this.userInfo[key] === '')) {
 						uni.showToast({
 							title: "请填写完整信息",
 							icon: "error"
@@ -268,26 +268,20 @@
 		.form-user-info {
 			.form-item {
 				display: flex;
-
 				.scanId-btn::after {
 					display: none;
 					content: '';
 				}
 
 				.item-label {
-					min-width: 110rpx;
+					width: 134rpx;
 					line-height: 88rpx;
 					color: #828698;
 					font-size: 28rpx
 				}
 
-				.label-name {
-					text-align: justify;
-					text-align-last: justify;
-				}
-
 				.custom-field {
-					width: 462rpx;
+					flex: 1;
 					font-size: 36rpx;
 					color: #262626;
 				}
