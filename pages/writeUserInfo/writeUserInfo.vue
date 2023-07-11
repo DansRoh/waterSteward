@@ -18,7 +18,7 @@
 			</view>
 			<view class="form-item">
 				<view class="item-label">
-					身份证号码
+					身份证号
 				</view>
 				<van-field input-class="custom-field" placeholder-style="font-size: 24rpx; color: #CECFD0;" :value='userInfo.id'
 					@change="vanFieldChange('id', $event)" :border="false">
