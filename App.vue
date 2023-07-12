@@ -1,9 +1,8 @@
 <script>
 	export default {
 		onLaunch() {
-			console.log('onLaunch');
-			const isLogin = uni.getStorageSync('isLogin');
-			if (isLogin) {
+			const token = uni.getStorageSync('token');
+			if (token) {
 				uni.reLaunch({
 					url: '/pages/home/home'
 				})

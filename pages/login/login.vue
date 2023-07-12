@@ -20,13 +20,6 @@
 			};
 		},
 		onLoad() {
-			// 判断是否有登录
-			const isLogin = uni.getStorageSync("isLogin")
-			if (isLogin) {
-				uni.redirectTo({
-					url: '/pages/home/home'
-				})
-			}
 		},
 		methods: {
 			async getPhoneNumber(e) {
@@ -70,7 +63,6 @@
 							that.isBtnLoading = false
 							if (statusCode === 201) {
 								// 登录成功
-								uni.setStorageSync("isLogin", true)
 								uni.setStorageSync('token', data.token)
 								uni.redirectTo({
 									url: '/pages/home/home'

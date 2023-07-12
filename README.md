@@ -10,7 +10,6 @@
 
 #本地storage说明
  navHeight: 自定义导航栏高度，在App.vue文件中进行获取，存储本地方便使用
- isLogin: 登录状态, 登录成功后设为true
  userInfo: 登录之后获取到的用户信息以及用户token, 在修改用户数据时需要重新设置
  
 #项目目录说明

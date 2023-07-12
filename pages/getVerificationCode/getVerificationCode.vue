@@ -61,7 +61,6 @@
 						return
 					}
 					// 登录成功
-					uni.setStorageSync('isLogin', true)
 					uni.redirectTo({
 						url: '/pages/home/home'
 					})
