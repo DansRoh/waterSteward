@@ -114,7 +114,6 @@
 
 <style lang="less">
 	.page-devInstallProgress {
-		height: 100vh;
 		box-sizing: border-box;
 		display: flex;
 		flex-direction: column;

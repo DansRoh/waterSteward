@@ -15,66 +15,49 @@
 			return {
 				ec: {
 					option: {
+						title: {
+							text: '用水TDS值随时间变化',
+							left: 'center'
+						},
+						tooltip: {
+							trigger: 'axis',
+							axisPointer: {
+								animation: false
+							},
+							formatter: function(params) {
+								var date = new Date(params[0].value[0]);
+								return date.getHours() + ':' + date.getMinutes() + ':' + date.getSeconds() + ' - ' + params[0].value[
+								1];
+							}
+						},
 						xAxis: {
-							type: 'category',
-							boundaryGap: false
+							type: 'time',
+							splitLine: {
+								show: false
+							}
 						},
 						yAxis: {
 							type: 'value',
-							boundaryGap: [0, '30%']
-						},
-						visualMap: {
-							type: 'piecewise',
-							show: false,
-							dimension: 0,
-							seriesIndex: 0,
-							pieces: [{
-									gt: 1,
-									lt: 3,
-									color: 'rgba(0, 0, 180, 0.4)'
-								},
-								{
-									gt: 5,
-									lt: 7,
-									color: 'rgba(0, 0, 180, 0.4)'
-								}
-							]
+							boundaryGap: [0, '100%'],
+							splitLine: {
+								show: false
+							}
 						},
 						series: [{
+							name: 'TDS值',
 							type: 'line',
-							smooth: 0.6,
-							symbol: 'none',
-							lineStyle: {
-								color: '#5470C6',
-								width: 5
-							},
-							markLine: {
-								symbol: ['none', 'none'],
-								label: {
-									show: false
-								},
-								data: [{
-									xAxis: 1
-								}, {
-									xAxis: 3
-								}, {
-									xAxis: 5
-								}, {
-									xAxis: 7
-								}]
-							},
-							areaStyle: {},
+							showSymbol: false,
+							hoverAnimation: false,
 							data: [
-								['2019-10-10', 200],
-								['2019-10-11', 560],
-								['2019-10-12', 750],
-								['2019-10-13', 580],
-								['2019-10-14', 250],
-								['2019-10-15', 300],
-								['2019-10-16', 450],
-								['2019-10-17', 300],
-								['2019-10-18', 100]
-							]
+								[new Date('2022/01/01 00:00:00'), 20],
+								[new Date('2022/01/01 00:01:00'), 25],
+								[new Date('2022/01/01 00:02:00'), 30],
+								[new Date('2022/01/01 00:03:00'), 28],
+								[new Date('2022/01/01 00:04:00'), 35],
+								[new Date('2022/01/01 00:05:00'), 40],
+								[new Date('2022/01/01 00:06:00'), 45]
+							],
+							areaStyle: {}
 						}]
 					}
 				}
@@ -95,7 +78,7 @@
 <style lang="less">
 	.page-tdsDetail {
 		width: 100vw;
-		height: 50vh;
+		height: 500rpx;
 
 		.uni-ec-canvas {
 			width: 100%;

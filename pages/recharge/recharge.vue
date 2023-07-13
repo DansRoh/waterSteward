@@ -258,7 +258,6 @@
 		padding-top: 40rpx;
 		background-color: #F2F4F7;
 		min-height: 100vh;
-		box-sizing: border-box;
 
 		.accouont-card {
 			position: relative;
