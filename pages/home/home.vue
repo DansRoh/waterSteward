@@ -73,9 +73,9 @@
 					今日饮水量 (L)
 				</view>
 			</view>
-			<view class="info-card">
+			<view @tap="jumpToTdsDetail" class="info-card">
 				<view class="fs96 c17DA9C">
-					{{curDevInfo.tds ? curDevInfo.tds : 0}}
+					{{tdsnow}}
 				</view>
 				<view class="c828698 fs28">
 					TDS值 (mg/L)
@@ -112,10 +112,14 @@
 </template>
 
 <script>
+	import mqtt from '@/utils/mqtt.js'
 	import {
 		imgBaseURl
 	} from '@/config/index.js'
 	import navbar from '../../components/navbar/navbar.vue';
+
+	const host = 'wxs://iheshui.civilizationdata.com/mqtt';
+
 	export default {
 		components: {
 			navbar
@@ -124,6 +128,11 @@
 			return {
 				imgBaseURl,
 				isOffline: false,
+				tdsnow: 0,
+				timer: null,
+				client: null,
+				//记录重连的次数
+				reconnectCounts: 0,
 			};
 		},
 		computed: {
@@ -153,8 +162,22 @@
 					uni.reLaunch({
 						url: "/pages/planMenu/planMenu"
 					})
+				} else {
+					this.connect()
 				}
 			})
+		},
+		onShow() {
+			// 取消当前已订阅的所有主题
+			if (this.client) {
+				this.connect()
+			}
+		},
+		onHide() {
+			console.log('onhide');
+			if (this.client) {
+				this.client.end()
+			}
 		},
 		onPullDownRefresh() {
 			console.log('onpull')
@@ -162,6 +185,11 @@
 			uni.stopPullDownRefresh()
 		},
 		methods: {
+			jumpToTdsDetail() {
+				uni.navigateTo({
+					url: '/pages/tdsDetail/tdsDetail'
+				})
+			},
 			handleClickTab(type) {
 				if (type === 1) {
 					uni.navigateTo({
@@ -181,6 +209,89 @@
 			},
 			handleChangeCurDev(e) {
 				this.$store.commit("changeCurDevIdx", e.detail.value)
+				this.client.end()
+				this.connect()
+			},
+			connect() {
+				const options = {
+					clientId: this.userInfo.id,
+					protocolVersion: 4, //MQTT连接协议版本
+					clean: true,
+					reconnectPeriod: 1000, //1000毫秒，两次重新连接之间的间隔
+					connectTimeout: 60 * 1000, //连接超时时间
+					resubscribe: true //如果连接断开并重新连接，则会再次自动订阅已订阅的主题（默认true）
+				}
+				//开始连接
+				this.client = mqtt.connect(host, {});
+				this.client.on('connect', (connack) => {
+					console.log('mqtt连接成功');
+					this.sub_one()
+					this.pub_msg()
+					this.timer = setInterval(() => {
+						this.pub_msg()
+					}, 4.5 * 60 * 1000)
+				})
+
+				//服务器下发消息的回调
+				this.client.on("message", (topic, message) => {
+					console.log(" 收到 topic:" + topic + " , message :" + message)
+					const {
+						tdsnow
+					} = JSON.parse(message)
+					if ("water/tdsnow/861302050289774" === topic) {
+						this.tdsnow = tdsnow
+					}
+				})
+
+				//服务器连接异常的回调
+				this.client.on("error", function(error) {
+					console.log(" 服务器 error 的回调" + error)
+
+				})
+
+				//服务器重连连接异常的回调
+				this.client.on("reconnect", function() {
+					console.log(" 服务器 reconnect的回调")
+
+				})
+
+				//服务器连接异常的回调
+				this.client.on("offline", function(errr) {
+					console.log(" 服务器offline的回调")
+				})
+			},
+			sub_one() {
+				if (this.client && this.client.connected) {
+					//仅订阅单个主题
+					this.client.subscribe("water/tdsnow/861302050289774", function(err, granted) {
+						if (!err) {
+							console.log('mqtt主题订阅成功');
+						} else {
+							console.log('mqtt主题订阅失败');
+						}
+					})
+				} else {
+					wx.showToast({
+						title: '请先连接服务器',
+						icon: 'none',
+						duration: 2000
+					})
+				}
+			},
+			pub_msg() {
+				if (this.client && this.client.connected) {
+					const message = JSON.stringify({
+						tdscmd: 'on'
+					});
+					this.client.publish('water/tdscmd/861302050289774', message);
+					console.log('mqtt信息发送成功');
+				} else {
+					wx.showToast({
+						title: '请先连接服务器',
+						icon: 'none',
+						duration: 2000
+					})
+				}
 			}
 		}
 	}

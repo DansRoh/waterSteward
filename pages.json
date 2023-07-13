@@ -182,6 +182,16 @@
 				"enablePullDownRefresh": false
 			}
 
+		}, {
+			"path": "pages/tdsDetail/tdsDetail",
+			"style": {
+				"navigationBarTitleText": "tds详情",
+				"enablePullDownRefresh": false,
+				"usingComponents": {
+					"ec-canvas": "/wxcomponents/@echarts/ec-canvas/ec-canvas"
+				}
+			}
+
 		}
 	],
 	"globalStyle": {
