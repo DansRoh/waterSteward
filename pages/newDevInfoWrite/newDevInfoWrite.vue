@@ -78,7 +78,7 @@
 				} = await this.$http("/consumer/addresses", "post", params)
 				if (statusCode === 201) {
 					uni.navigateTo({
-						url: `/pages/planMenu/planMenu?address_id=${data.id}`
+						url: `/pages/planMenu/planMenu?address_id=${data.id}&refer_code=${this.userInfo.referCode}`
 					})
 				}
 			},

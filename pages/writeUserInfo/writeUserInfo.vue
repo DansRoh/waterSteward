@@ -193,7 +193,7 @@
 					// 注册成功
 					uni.setStorageSync('token', data.token)
 					uni.redirectTo({
-						url: '/pages/planMenu/planMenu'
+						url: `/pages/planMenu/planMenu?refer_code=${this.userInfo.referCode}`
 					})
 				} else {
 					// 注册失败
