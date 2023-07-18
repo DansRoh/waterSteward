@@ -170,8 +170,8 @@
 				"navigationBarTitleText": "隐私协议",
 				"enablePullDownRefresh": false
 			}
-
-		}, {
+		},
+		{
 			"path": "pages/tdsDetail/tdsDetail",
 			"style": {
 				"navigationBarTitleText": "tds详情",
@@ -180,7 +180,6 @@
 					"ec-canvas": "/wxcomponents/@echarts/ec-canvas/ec-canvas"
 				}
 			}
-
 		}
 	],
 	"globalStyle": {

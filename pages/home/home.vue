@@ -112,7 +112,7 @@
 </template>
 
 <script>
-	import mqtt from '@/utils/mqtt.js'
+	import mqtt from '../../utils/mqtt4.1.0.js'
 	import {
 		imgBaseURl
 	} from '@/config/index.js'
@@ -187,7 +187,7 @@
 		methods: {
 			jumpToTdsDetail() {
 				uni.navigateTo({
-					url: '/pages/tdsDetail/tdsDetail'
+					url: `/pages/tdsDetail/tdsDetail?devId=${this.curDevInfo.id}`
 				})
 			},
 			handleClickTab(type) {
@@ -222,15 +222,24 @@
 					resubscribe: true //如果连接断开并重新连接，则会再次自动订阅已订阅的主题（默认true）
 				}
 				//开始连接
-				this.client = mqtt.connect(host, {});
-				this.client.on('connect', (connack) => {
-					console.log('mqtt连接成功');
-					this.sub_one()
-					this.pub_msg()
-					this.timer = setInterval(() => {
+				this.client = mqtt.connect(host);
+				this.curDevInfo.package = {
+					imei: 861302050293792
+				}
+				console.log('imei', this.curDevInfo.package.imei);
+				try{
+					this.client.on('connect', () => {
+						console.log('mqtt连接成功');
+						this.sub_one()
 						this.pub_msg()
-					}, 4.5 * 60 * 1000)
-				})
+						this.timer = setInterval(() => {
+							this.pub_msg()
+						}, 4.5 * 60 * 1000)
+					})
+				}catch(e){
+					//TODO handle the exception
+					console.log('e', e);
+				}
 
 				//服务器下发消息的回调
 				this.client.on("message", (topic, message) => {
@@ -238,7 +247,7 @@
 					const {
 						tdsnow
 					} = JSON.parse(message)
-					if ("water/tdsnow/861302050289774" === topic) {
+					if (`water/tdsnow/${this.curDevInfo.package.imei}` === topic) {
 						this.tdsnow = tdsnow
 					}
 				})
@@ -263,7 +272,7 @@
 			sub_one() {
 				if (this.client && this.client.connected) {
 					//仅订阅单个主题
-					this.client.subscribe("water/tdsnow/861302050289774", function(err, granted) {
+					this.client.subscribe(`water/tdsnow/${this.curDevInfo.package.imei}`, function(err, granted) {
 						if (!err) {
 							console.log('mqtt主题订阅成功');
 						} else {
@@ -283,7 +292,7 @@
 					const message = JSON.stringify({
 						tdscmd: 'on'
 					});
-					this.client.publish('water/tdscmd/861302050289774', message);
+					this.client.publish(`water/tdscmd/${this.curDevInfo.package.imei}`, message);
 					console.log('mqtt信息发送成功');
 				} else {
 					wx.showToast({
