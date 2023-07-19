@@ -211,11 +211,6 @@
 				this.connect()
 			},
 			connect() {
-				if (!this.curDevInfo.package) {
-					console.log('未绑定设备，mqtt连接失败');
-					return
-				}
-				
 				const options = {
 					clientId: this.userInfo.id + Math.random(0, 1),
 					protocolVersion: 4, //MQTT连接协议版本
@@ -226,6 +221,10 @@
 				}
 				//开始连接
 				this.client = mqtt.connect('wxs://iheshui.civilizationdata.com/mqtt', options);
+				if (!this.curDevInfo.package) {
+					console.log('未绑定设备，mqtt连接失败');
+					return
+				}
 				this.client.on('connect', () => {
 					console.log('mqtt连接成功');
 					this.sub_one()
