@@ -5,14 +5,23 @@
 			"style": {
 				"navigationBarTitleText": "鲜水管家",
 				"enablePullDownRefresh": false,
-				"usingComponents": {}
+				"usingComponents": {
+					"van-button": "/wxcomponents/@vant/button/index",
+					"van-image": "/wxcomponents/@vant/image/index"
+				}
 			}
 		},
 		{
 			"path": "pages/home/home",
 			"style": {
 				"enablePullDownRefresh": true,
-				"navigationStyle": "custom"
+				"navigationStyle": "custom",
+				"usingComponents": {
+					"van-button": "/wxcomponents/@vant/button/index",
+					"van-overlay": "/wxcomponents/@vant/overlay/index",
+					"van-image": "/wxcomponents/@vant/image/index",
+					"van-icon": "/wxcomponents/@vant/icon/index"
+				}
 			}
 		},
 		{
@@ -20,7 +29,10 @@
 			"style": {
 				"navigationBarTitleText": "鲜水管家",
 				"enablePullDownRefresh": false,
-				"usingComponents": {}
+				"usingComponents": {
+					"van-button": "/wxcomponents/@vant/button/index",
+					"van-field": "/wxcomponents/@vant/field"
+				}
 			}
 		},
 		{
@@ -29,7 +41,11 @@
 				"navigationBarTitleText": "鲜水管家",
 				"enablePullDownRefresh": false,
 				"usingComponents": {
-					"ocr-navigator": "plugin://ocr-plugin/ocr-navigator"
+					"ocr-navigator": "plugin://ocr-plugin/ocr-navigator",
+					"van-button": "/wxcomponents/@vant/button/index",
+					"van-field": "/wxcomponents/@vant/field",
+					"van-checkbox": "/wxcomponents/@vant/checkbox",
+					"van-icon": "/wxcomponents/@vant/icon/index"
 				}
 			}
 		},
@@ -37,14 +53,27 @@
 			"path": "pages/planMenu/planMenu",
 			"style": {
 				"navigationBarTitleText": "套餐办理",
-				"enablePullDownRefresh": false
+				"enablePullDownRefresh": false,
+				"usingComponents": {
+					"van-button": "/wxcomponents/@vant/button/index",
+					"van-checkbox": "/wxcomponents/@vant/checkbox",
+					"van-overlay": "/wxcomponents/@vant/overlay/index",
+					"van-image": "/wxcomponents/@vant/image/index",
+					"van-icon": "/wxcomponents/@vant/icon/index"
+				}
 			}
 		},
 		{
 			"path": "pages/recharge/recharge",
 			"style": {
 				"navigationBarTitleText": "充值",
-				"enablePullDownRefresh": false
+				"enablePullDownRefresh": false,
+				"usingComponents": {
+					"van-button": "/wxcomponents/@vant/button/index",
+					"van-overlay": "/wxcomponents/@vant/overlay/index",
+					"van-image": "/wxcomponents/@vant/image/index",
+					"van-icon": "/wxcomponents/@vant/icon/index"
+				}
 			}
 		},
 		{
@@ -53,16 +82,23 @@
 				"enablePullDownRefresh": false,
 				"navigationBarTitleText": "我的",
 				"usingComponents": {
-					"my-cropper": "/wxcomponents/@dw/wx-cropper/src"
+					"my-cropper": "/wxcomponents/wx-cropper/index",
+					"van-image": "/wxcomponents/@vant/image/index",
+					"van-icon": "/wxcomponents/@vant/icon/index"
 				}
 			}
-
 		},
 		{
 			"path": "pages/service/service",
 			"style": {
 				"enablePullDownRefresh": false,
-				"navigationBarTitleText": "客服与反馈"
+				"navigationBarTitleText": "客服与反馈",
+				"usingComponents": {
+					"van-button": "/wxcomponents/@vant/button/index",
+					"van-grid": "/wxcomponents/@vant/grid/index",
+					"van-grid-item": "/wxcomponents/@vant/grid-item/index",
+					"van-icon": "/wxcomponents/@vant/icon/index"
+				}
 			}
 
 		},
@@ -70,34 +106,63 @@
 			"path": "pages/rechargeRecord/rechargeRecord",
 			"style": {
 				"navigationBarTitleText": "充值记录",
-				"enablePullDownRefresh": false
+				"enablePullDownRefresh": false,
+				"usingComponents": {
+					"van-icon": "/wxcomponents/@vant/icon/index",
+					"van-empty": "/wxcomponents/@vant/empty/index"
+				}
 			}
 		},
 		{
 			"path": "pages/devManage/devManage",
 			"style": {
 				"navigationBarTitleText": "净水器管理",
-				"enablePullDownRefresh": false
+				"enablePullDownRefresh": false,
+				"usingComponents": {
+					"van-button": "/wxcomponents/@vant/button/index",
+					"van-divider": "/wxcomponents/@vant/divider",
+					"van-image": "/wxcomponents/@vant/image/index",
+					"van-icon": "/wxcomponents/@vant/icon/index",
+					"van-dialog": "/wxcomponents/@vant/dialog/index"
+				}
 			}
 		},
 		{
 			"path": "pages/accountSafe/accountSafe",
 			"style": {
 				"navigationBarTitleText": "账号与安全",
-				"enablePullDownRefresh": false
+				"enablePullDownRefresh": false,
+				"usingComponents": {
+					"van-button": "/wxcomponents/@vant/button/index",
+					"van-field": "/wxcomponents/@vant/field",
+					"van-cell": "/wxcomponents/@vant/cell/index",
+					"van-dialog": "/wxcomponents/@vant/dialog/index"
+				}
 			}
 		}, {
 			"path": "pages/upPlan/upPlan",
 			"style": {
 				"navigationBarTitleText": "套餐升级",
-				"enablePullDownRefresh": false
+				"enablePullDownRefresh": false,
+				"usingComponents": {
+					"van-button": "/wxcomponents/@vant/button/index",
+					"van-checkbox": "/wxcomponents/@vant/checkbox",
+					"van-overlay": "/wxcomponents/@vant/overlay/index",
+					"van-image": "/wxcomponents/@vant/image/index",
+					"van-icon": "/wxcomponents/@vant/icon/index",
+					"van-empty": "/wxcomponents/@vant/empty/index"
+				}
 			}
 
 		}, {
 			"path": "pages/changePhone/changePhone",
 			"style": {
 				"navigationBarTitleText": "验证新手机号",
-				"enablePullDownRefresh": false
+				"enablePullDownRefresh": false,
+				"usingComponents": {
+					"van-button": "/wxcomponents/@vant/button/index",
+					"van-field": "/wxcomponents/@vant/field"
+				}
 			}
 		}, {
 			"path": "pages/protocol/protocol",
@@ -110,13 +175,21 @@
 			"path": "pages/rechargeSuccess/rechargeSuccess",
 			"style": {
 				"navigationBarTitleText": "充值成功",
-				"enablePullDownRefresh": false
+				"enablePullDownRefresh": false,
+				"usingComponents": {
+					"van-button": "/wxcomponents/@vant/button/index",
+					"van-image": "/wxcomponents/@vant/image/index"
+				}
 			}
 		}, {
 			"path": "pages/devInstallProgress/devInstallProgress",
 			"style": {
 				"navigationBarTitleText": "安装进度",
-				"enablePullDownRefresh": false
+				"enablePullDownRefresh": false,
+				"usingComponents": {
+					"van-button": "/wxcomponents/@vant/button/index",
+					"van-icon": "/wxcomponents/@vant/icon/index"
+				}
 			}
 
 		}, {
@@ -133,28 +206,45 @@
 			"path": "pages/bill/bill",
 			"style": {
 				"navigationBarTitleText": "账单明细",
-				"enablePullDownRefresh": false
+				"enablePullDownRefresh": false,
+				"usingComponents": {
+					"van-button": "/wxcomponents/@vant/button/index",
+					"van-icon": "/wxcomponents/@vant/icon/index",
+					"van-empty": "/wxcomponents/@vant/empty/index"
+				}
 			}
 
 		}, {
 			"path": "pages/waterUsageRecord/waterUsageRecord",
 			"style": {
 				"navigationBarTitleText": "用水记录",
-				"enablePullDownRefresh": false
+				"enablePullDownRefresh": false,
+				"usingComponents": {
+					"van-icon": "/wxcomponents/@vant/icon/index",
+					"van-empty": "/wxcomponents/@vant/empty/index"
+				}
 			}
 
 		}, {
 			"path": "pages/newDevInfoWrite/newDevInfoWrite",
 			"style": {
 				"navigationBarTitleText": "套餐办理",
-				"enablePullDownRefresh": false
+				"enablePullDownRefresh": false,
+				"usingComponents": {
+					"van-button": "/wxcomponents/@vant/button/index",
+					"van-field": "/wxcomponents/@vant/field"
+				}
 			}
 
 		}, {
 			"path": "pages/coupon/coupon",
 			"style": {
 				"navigationBarTitleText": "优惠券",
-				"enablePullDownRefresh": true
+				"enablePullDownRefresh": true,
+				"usingComponents": {
+					"van-button": "/wxcomponents/@vant/button/index",
+					"van-empty": "/wxcomponents/@vant/empty/index"
+				}
 			}
 
 		}, {
@@ -177,7 +267,8 @@
 				"navigationBarTitleText": "tds详情",
 				"enablePullDownRefresh": false,
 				"usingComponents": {
-					"ec-canvas": "/wxcomponents/@echarts/ec-canvas/ec-canvas"
+					"van-icon": "/wxcomponents/@vant/icon/index",
+					"van-empty": "/wxcomponents/@vant/empty/index"
 				}
 			}
 		}
@@ -186,26 +277,7 @@
 		"navigationBarTextStyle": "black",
 		"navigationBarTitleText": "鲜水管家",
 		"navigationBarBackgroundColor": "#F8F8F8",
-		"backgroundColor": "#F8F8F8",
-		"usingComponents": {
-			"van-button": "/wxcomponents/@vant/button/index",
-			"van-field": "/wxcomponents/@vant/field",
-			"van-checkbox": "/wxcomponents/@vant/checkbox",
-			"van-divider": "/wxcomponents/@vant/divider",
-			"van-cell": "/wxcomponents/@vant/cell/index",
-			"van-cell-group": "/wxcomponents/@vant/cell-group/index",
-			"van-grid": "/wxcomponents/@vant/grid/index",
-			"van-grid-item": "/wxcomponents/@vant/grid-item/index",
-			"van-overlay": "/wxcomponents/@vant/overlay/index",
-			"van-area": "/wxcomponents/@vant/area/index",
-			"van-popup": "/wxcomponents/@vant/popup/index",
-			"van-image": "/wxcomponents/@vant/image/index",
-			"van-icon": "/wxcomponents/@vant/icon/index",
-			"van-dialog": "/wxcomponents/@vant/dialog/index",
-			"van-picker": "/wxcomponents/@vant/picker/index",
-			"van-loading": "/wxcomponents/@vant/loading/index",
-			"van-empty": "/wxcomponents/@vant/empty/index"
-		}
+		"backgroundColor": "#F8F8F8"
 	},
 	"uniIdRouter": {},
 	"requiredPrivateInfos": {

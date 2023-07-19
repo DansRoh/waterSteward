@@ -81,7 +81,7 @@
 						yAxis: [{
 							name: 'tds',
 							type: 'value',
-							max: 30
+							scale: true
 						}],
 						series: [{
 							name: 'tds',
@@ -120,6 +120,7 @@
 				} = await this.$http(`/consumer/devices/${this.devId}/tds`, 'get', {
 					month: this.curDate.replace('-', '')
 				})
+				console.log('data', data);
 				if (statusCode === 200) {
 					this.tdsData = data.map(item => {
 						item.at = new Date(item.at).toISOString().replace('T', ' ').replace(/\.\d+Z$/, '')
@@ -131,8 +132,9 @@
 					const valueData = this.tdsData.map(item => {
 						return item.tds
 					})
-					this.ec.option.xAxis.data = timeData
-					this.ec.option.series.data = valueData
+					this.ec.option.xAxis[0].data = timeData
+					this.ec.option.series[0].data = valueData
+					console.log('ec', this.ec);
 				}
 			},
 			bindDateChange(e) {
