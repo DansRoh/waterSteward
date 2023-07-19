@@ -112,13 +112,11 @@
 </template>
 
 <script>
-	import mqtt from '../../utils/mqtt4.1.0.js'
+	import mqtt from '../../utils/mqtt.js'
 	import {
 		imgBaseURl
 	} from '@/config/index.js'
 	import navbar from '../../components/navbar/navbar.vue';
-
-	const host = 'wxs://iheshui.civilizationdata.com/mqtt';
 
 	export default {
 		components: {
@@ -213,8 +211,13 @@
 				this.connect()
 			},
 			connect() {
+				if (!this.curDevInfo.package) {
+					console.log('未绑定设备，mqtt连接失败');
+					return
+				}
+				
 				const options = {
-					clientId: this.userInfo.id,
+					clientId: this.userInfo.id + Math.random(0, 1),
 					protocolVersion: 4, //MQTT连接协议版本
 					clean: true,
 					reconnectPeriod: 1000, //1000毫秒，两次重新连接之间的间隔
@@ -222,24 +225,16 @@
 					resubscribe: true //如果连接断开并重新连接，则会再次自动订阅已订阅的主题（默认true）
 				}
 				//开始连接
-				this.client = mqtt.connect(host);
-				this.curDevInfo.package = {
-					imei: 861302050293792
-				}
-				console.log('imei', this.curDevInfo.package.imei);
-				try{
-					this.client.on('connect', () => {
-						console.log('mqtt连接成功');
-						this.sub_one()
+				this.client = mqtt.connect('wxs://iheshui.civilizationdata.com/mqtt', options);
+				this.client.on('connect', () => {
+					console.log('mqtt连接成功');
+					this.sub_one()
+					this.pub_msg()
+					this.timer = setInterval(() => {
 						this.pub_msg()
-						this.timer = setInterval(() => {
-							this.pub_msg()
-						}, 4.5 * 60 * 1000)
-					})
-				}catch(e){
-					//TODO handle the exception
-					console.log('e', e);
-				}
+					}, 4.5 * 60 * 1000)
+				})
+
 
 				//服务器下发消息的回调
 				this.client.on("message", (topic, message) => {
@@ -280,11 +275,7 @@
 						}
 					})
 				} else {
-					wx.showToast({
-						title: '请先连接服务器',
-						icon: 'none',
-						duration: 2000
-					})
+					console.log('请先连接服务器');
 				}
 			},
 			pub_msg() {
@@ -295,11 +286,7 @@
 					this.client.publish(`water/tdscmd/${this.curDevInfo.package.imei}`, message);
 					console.log('mqtt信息发送成功');
 				} else {
-					wx.showToast({
-						title: '请先连接服务器',
-						icon: 'none',
-						duration: 2000
-					})
+					console.log('请先连接服务器');
 				}
 			}
 		}

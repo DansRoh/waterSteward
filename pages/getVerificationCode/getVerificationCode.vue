@@ -103,7 +103,7 @@
 				// 发送请求
 				const data = {
 					phone: this.phoneNum,
-					debug: true
+					debug: false
 				}
 				// 获取验证码
 				const {
