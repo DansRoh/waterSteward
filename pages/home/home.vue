@@ -67,7 +67,7 @@
 		<view class="user-water-info">
 			<view class="info-card">
 				<view class="fs96 c17DA9C">
-					{{curDevInfo.daily ? curDevInfo.daily.toFixed(2) : 0}}
+					{{daily || (curDevInfo.daily ? curDevInfo.daily.toFixed(2) : 0)}}
 				</view>
 				<view class="c828698 fs28">
 					今日饮水量 (L)
@@ -75,7 +75,7 @@
 			</view>
 			<view @tap="jumpToTdsDetail" class="info-card">
 				<view class="fs96 c17DA9C">
-					{{tdsnow}}
+					{{tdsnow || (curDevInfo.tds || 0)}}
 				</view>
 				<view class="c828698 fs28">
 					TDS值 (mg/L)
@@ -126,11 +126,12 @@
 			return {
 				imgBaseURl,
 				isOffline: false,
-				tdsnow: 0,
+				tdsnow: 0, // 动态tds值
 				timer: null,
 				client: null,
 				//记录重连的次数
 				reconnectCounts: 0,
+				daily: 0,
 			};
 		},
 		computed: {
@@ -227,22 +228,21 @@
 				}
 				this.client.on('connect', () => {
 					console.log('mqtt连接成功');
-					this.sub_one()
-					this.pub_msg()
-					this.timer = setInterval(() => {
-						this.pub_msg()
-					}, 4.5 * 60 * 1000)
+					// this.sub_one()
+					this.sub_many()
 				})
 
 
 				//服务器下发消息的回调
 				this.client.on("message", (topic, message) => {
 					console.log(" 收到 topic:" + topic + " , message :" + message)
-					const {
-						tdsnow
-					} = JSON.parse(message)
+					const res = JSON.parse(message)
 					if (`water/tdsnow/${this.curDevInfo.package.imei}` === topic) {
-						this.tdsnow = tdsnow
+						this.tdsnow = res.tdsnow
+					} else if (`water/daily/${this.curDevInfo.package.imei}` === topic) {
+						this.daily = res.daily
+					} else {
+
 					}
 				})
 
@@ -287,7 +287,30 @@
 				} else {
 					console.log('请先连接服务器');
 				}
-			}
+			},
+			sub_many() {
+				if (this.client && this.client.connected) {
+					//仅订阅多个主题
+					const topic01 = `water/tdsnow/${this.curDevInfo.package.imei}`
+					const topic02 = `water/daily/${this.curDevInfo.package.imei}`
+					this.client.subscribe(topic01, function(err, granted) {
+						if (!err) {
+							console.log('mqtt主题订阅成功 topic:' + topic01);
+						} else {
+							console.log('mqtt主题订阅失败');
+						}
+					})
+					this.client.subscribe(topic02, function(err, granted) {
+						if (!err) {
+							console.log('mqtt主题订阅成功 topic:' + topic02);
+						} else {
+							console.log('mqtt主题订阅失败');
+						}
+					})
+				} else {
+					console.log('请先连接服务器');
+				}
+			},
 		}
 	}
 </script>

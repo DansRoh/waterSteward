@@ -9,7 +9,7 @@
 
 <script>
   import WxCanvas from "./wx-canvas";
-  import * as echarts from "./echarts.min.js";
+  import * as echarts from "./echarts.js";
 
   let ctx;
 

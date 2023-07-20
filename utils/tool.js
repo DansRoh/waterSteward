@@ -116,6 +116,22 @@ export function getMonthLastDay(date) {
 	// 输出当前月份的最后一天
 	return lastDayOfMonth
 }
+// 时间格式MM-dd hh:mm:ss
+export function formatDateTime01(date) {
+	const now = new Date(date)
+	const month = now.getMonth() + 1;
+	const day = now.getDate();
+	const hour = now.getHours();
+	const minute = now.getMinutes();
+	const second = now.getSeconds();
+	const monthStr = (month < 10 ? "0" : "") + month;
+	const dayStr = (day < 10 ? "0" : "") + day;
+	const hourStr = (hour < 10 ? "0" : "") + hour;
+	const minuteStr = (minute < 10 ? "0" : "") + minute;
+	const secondStr = (second < 10 ? "0" : "") + second;
+	const timeStr = monthStr + "-" + dayStr + " " + hourStr + ":" + minuteStr + ":" + secondStr;
+	return timeStr
+}
 
 // 对象数组根据时间字段进行排序 data--进行排序的对象，  key--表示时间的字段名,    type----排序类型，0:顺时针， 1:逆时针
 export function sortTime(data, key, type) {

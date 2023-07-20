@@ -19,7 +19,7 @@
 <script>
 	// 此处将路径替换为你放置该组件的路径  
 	import uniEcCanvas from '../../components/uni-ec-canvas/uni-ec-canvas.vue'
-
+	import { formatDateTime01 } from '../../utils/tool.js'
 	export default {
 		components: {
 			uniEcCanvas
@@ -120,21 +120,19 @@
 				} = await this.$http(`/consumer/devices/${this.devId}/tds`, 'get', {
 					month: this.curDate.replace('-', '')
 				})
-				console.log('data', data);
 				if (statusCode === 200) {
 					this.tdsData = data.map(item => {
-						item.at = new Date(item.at).toISOString().replace('T', ' ').replace(/\.\d+Z$/, '')
+						item.at = formatDateTime01(item.at)
 						return item
 					})
 					const timeData = this.tdsData.map((item) => {
-						return item.at.replace('2023-', '');
+						return item.at
 					})
 					const valueData = this.tdsData.map(item => {
 						return item.tds
 					})
 					this.ec.option.xAxis[0].data = timeData
 					this.ec.option.series[0].data = valueData
-					console.log('ec', this.ec);
 				}
 			},
 			bindDateChange(e) {
