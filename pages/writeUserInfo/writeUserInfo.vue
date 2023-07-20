@@ -29,7 +29,6 @@
 								type="primary"><van-icon name="/static/icon/05_scan.png" size="32rpx"></van-icon></button>
 						</ocr-navigator>
 					</view>
-
 				</van-field>
 			</view>
 			<view class="form-item">
@@ -56,14 +55,6 @@
 				</view>
 				<van-field @change="vanFieldChange('localDetail', $event)" input-class="custom-field" placeholder="请输入详细地址"
 					:value="userInfo.localDetail" :border="false" />
-			</view>
-			<view class="form-item">
-				<view class="item-label">
-					推荐码
-				</view>
-				<van-field @click-icon="scanCode" @change="vanFieldChange('referCode', $event)" input-class="custom-field" icon="/static/icon/05_scan.png"
-					placeholder="推荐码必填" placeholder-style="font-size: 24rpx; color: #CECFD0;" :value='userInfo.referCode'
-					:border="false" />
 			</view>
 			<view class="form-item accept-protocol">
 				<van-checkbox :value="isAccept" shape="square" @change="onChangeIsAccept">
@@ -94,7 +85,6 @@
 					region: ['重庆市', '重庆市', '渝中区'],
 					localDetail: "",
 					id: '',
-					referCode: '',
 				},
 				wechat_openid: '',
 				isAccept: false
@@ -170,14 +160,12 @@
 				const {
 					phoneNum,
 					userName,
-					referCode,
 					localDetail,
 					region
 				} = this.userInfo
 				const params = {
 					phone: phoneNum,
 					name: userName,
-					refer_code: referCode,
 					address_attributes: {
 						region: region,
 						detail: localDetail,
@@ -193,7 +181,7 @@
 					// 注册成功
 					uni.setStorageSync('token', data.token)
 					uni.redirectTo({
-						url: `/pages/planMenu/planMenu?refer_code=${this.userInfo.referCode}`
+						url: `/pages/planMenu/planMenu`
 					})
 				} else {
 					// 注册失败
@@ -202,16 +190,6 @@
 						icon: 'error'
 					})
 				}
-			},
-			scanCode() {
-				uni.scanCode({
-					success(res) {
-						console.log(res.result);
-					},
-					fail(err) {
-						console.log(err);
-					}
-				})
 			},
 			scanId(e) {
 				this.userInfo.id = e.detail.id.text

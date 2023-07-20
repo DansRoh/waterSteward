@@ -43,7 +43,7 @@
 						<view class="plan-tips">
 							<view class="stress-box">
 								{{ item.type === 4 ? "无限量使用/立省108元" : "69元封顶，无限量使用"}}
-								
+
 							</view>
 						</view>
 					</view>
@@ -85,6 +85,11 @@
 						</view>
 					</view>
 				</template>
+				<view class="refer-code">
+					<van-field label="推荐码" @click-icon="scanCode" @change="vanFieldChange" icon="/static/icon/05_scan.png"
+						placeholder="推荐码必填" placeholder-style="font-size: 24rpx; color: #CECFD0;" :value='refer_code'
+						:border="false" />
+				</view>
 				<view id="target-deal" class="agreement">
 					<van-checkbox :value="isCheckAgreement" @change="onChangeAgreement">
 						我同意鲜水管家*****
@@ -185,9 +190,24 @@
 		onLoad(option) {
 			this.getPlanMenuData();
 			this.address_id = option.address_id
-			this.refer_code = option.refer_code
 		},
 		methods: {
+			vanFieldChange({
+				detail
+			}) {
+				this.refer_code = detail
+			},
+			scanCode() {
+				uni.scanCode({
+					success(res) {
+						console.log(res.result);
+						this.refer_code = res.result
+					},
+					fail(err) {
+						console.log(err);
+					}
+				})
+			},
 			onChangeAgreement(e) {
 				this.isCheckAgreement = e.detail
 			},
@@ -217,6 +237,13 @@
 			},
 			async handleClickTransact() {
 				const that = this
+				if (!this.refer_code) {
+					uni.showToast({
+						title: '请填写推荐码',
+						icon: 'error'
+					})
+					return
+				}
 				if (!this.isCheckAgreement) {
 					uni.showToast({
 						title: '请勾选用户协议',
@@ -337,12 +364,14 @@
 					background: #FFFFFF;
 					border-radius: 28rpx;
 					box-shadow: 4rpx 8rpx 48rpx 0rpx rgba(0, 0, 0, 0.17);
+
 					&.activate-plan {
 						border: 4rpx solid rgba(0, 216, 147, 1);
 					}
 
 					.item-left {
 						margin-right: 50rpx;
+
 						>view {
 							display: inline-block;
 							color: #17DA9C;
@@ -429,6 +458,7 @@
 
 					.item-left {
 						margin-right: 50rpx;
+
 						>view {
 							display: inline-block;
 							color: #262626;
@@ -467,14 +497,21 @@
 					}
 				}
 
+				.refer-code {
+					margin: 0 auto;
+					width: 666rpx;
+					margin-top: 40rpx;
+					box-shadow: 4rpx 8rpx 48rpx 0rpx rgba(0, 0, 0, 0.17);
+					border-radius: 28rpx;
+					overflow: hidden;
+				}
+
 				.agreement {
 					margin-top: 56rpx;
 					display: flex;
 					justify-content: center;
 				}
 			}
-
-
 		}
 
 		.bottom-pay-box {

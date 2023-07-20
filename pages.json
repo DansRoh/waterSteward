@@ -59,7 +59,8 @@
 					"van-checkbox": "/wxcomponents/@vant/checkbox",
 					"van-overlay": "/wxcomponents/@vant/overlay/index",
 					"van-image": "/wxcomponents/@vant/image/index",
-					"van-icon": "/wxcomponents/@vant/icon/index"
+					"van-icon": "/wxcomponents/@vant/icon/index",
+					"van-field": "/wxcomponents/@vant/field"
 				}
 			}
 		},

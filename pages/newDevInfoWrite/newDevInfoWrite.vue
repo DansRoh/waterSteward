@@ -8,6 +8,18 @@
 		<view class="form-user-info">
 			<view class="form-item">
 				<view class="item-label">
+					姓名
+				</view>
+				<van-field input-class="custom-field" readonly :value="userInitInfo.name" :border="false" />
+			</view>
+			<view class="form-item">
+				<view class="item-label">
+					手机号码
+				</view>
+				<van-field type="number" readonly input-class="custom-field custom-phone" :value="userInitInfo.phone" :border="false" />
+			</view>
+			<view class="form-item">
+				<view class="item-label">
 					安装地址
 				</view>
 				<picker mode="region" @change="bindRegionChange" :value="userInfo.region">
@@ -23,14 +35,6 @@
 				</view>
 				<van-field @change="vanFieldChange('localDetail', $event)" input-class="custom-field" placeholder="请输入详细地址"
 					:value="userInfo.localDetail" :border="false" />
-			</view>
-			<view class="form-item">
-				<view class="item-label">
-					推荐码
-				</view>
-				<van-field @click-icon="scanCode" @change="vanFieldChange('referCode', $event)" input-class="custom-field" icon="/static/icon/05_scan.png"
-					placeholder="请填写推荐码" placeholder-style="font-size: 24rpx; color: #CECFD0;" :value='userInfo.referCode'
-					:border="false" />
 			</view>
 			<view class="form-item">
 				<van-button @tap="handleClickTransact" class="transaction-btn" type="primary" block round>立即办理</van-button>
@@ -51,8 +55,12 @@
 				userInfo: {
 					region: ['重庆市', '重庆市', '渝中区'],
 					localDetail: "",
-					referCode: '',
 				},
+			}
+		},
+		computed: {
+			userInitInfo() {
+				return this.$store.state.userInfo
 			}
 		},
 		methods: {
@@ -78,19 +86,9 @@
 				} = await this.$http("/consumer/addresses", "post", params)
 				if (statusCode === 201) {
 					uni.navigateTo({
-						url: `/pages/planMenu/planMenu?address_id=${data.id}&refer_code=${this.userInfo.referCode}`
+						url: `/pages/planMenu/planMenu?address_id=${data.id}`
 					})
 				}
-			},
-			scanCode() {
-				uni.scanCode({
-					success(res) {
-						console.log(res.result);
-					},
-					fail(err) {
-						console.log(err);
-					}
-				})
 			},
 			scanId(e) {
 				this.userInfo.id = e.detail.id.text
