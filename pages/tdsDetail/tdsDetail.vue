@@ -1,7 +1,7 @@
 <template>
 	<view class="page-tdsDetail">
 		<view class="filter-box df">
-			<picker mode="date" :value="curDate" fields="month" @change="bindDateChange">
+			<picker mode="date" :start="pickStartDate" :value="curDate" fields="day" @change="bindDateChange">
 				<view class="current-date fs28 c262626 pl40 pr60">
 					选择时间：{{getCurDateFormat}}
 					<van-icon class="ml10" name="/static/icon/04_del.png" size="28rpx"></van-icon>
@@ -92,14 +92,18 @@
 					}
 				},
 				devId: null,
-				curDate: '2023-06',
+				curDate: '2023-06-01',
 			}
 		},
 		computed: {
 			getCurDateFormat() {
 				const arr = this.curDate.split('-')
-				return arr[0] + '年' + arr[1] + '月'
+				return arr[0] + '年' + arr[1] + '月' + arr[2] + '日'
 			},
+			pickStartDate() {
+				const date = new Date(this.$store.state.userInfo.devices[this.$store.state.curDevIdx].created_at)
+				return `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${date.getDate()}`
+			}
 		},
 		onShow() {},
 		onLoad(option) {
@@ -118,7 +122,7 @@
 					data,
 					statusCode
 				} = await this.$http(`/consumer/devices/${this.devId}/tds`, 'get', {
-					month: this.curDate.replace('-', '')
+					date: this.curDate.replace(/-/g, '')
 				})
 				if (statusCode === 200) {
 					this.tdsData = data.map(item => {
@@ -146,9 +150,9 @@
 				// 获取年份和月份
 				const year = currentDate.getFullYear();
 				const month = String(currentDate.getMonth() + 1).padStart(2, '0');
-
+				const date = currentDate.getDate()
 				// 构造'YYYY-MM'格式的字符串
-				const formattedDate = `${year}-${month}`;
+				const formattedDate = `${year}-${month}-${date}`;
 				this.curDate = formattedDate
 			},
 		}

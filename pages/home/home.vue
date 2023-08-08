@@ -208,7 +208,6 @@
 			},
 			handleChangeCurDev(e) {
 				this.$store.commit("changeCurDevIdx", e.detail.value)
-				this.client.end()
 				this.connect()
 			},
 			connect() {
