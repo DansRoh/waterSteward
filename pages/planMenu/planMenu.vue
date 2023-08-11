@@ -5,55 +5,36 @@
 				套餐选择
 				<van-icon class="title-del-icon" name="/static/icon/36_del.png" size="20rpx"></van-icon>
 			</view>
-			<view class="plan-menu">
-				<view @tap="handleClickPlanItem(idx)" class="plan-item-box" :class="curPlanIdx===idx ? 'activate-plan' : ''"
-					v-for="(item,idx) in planMenuData" :key="item.id">
-					<view class="item-left">
-						<view class="icon">
-							¥
-						</view>
-						<view class="price">
-							{{item.price}}
-						</view>
-						<view class="unit">
-							/月
-						</view>
-					</view>
-					<view v-if="item.type === 4 || item.type === 1000" class="item-right">
-						<view class="plan-name">
-							{{item.title}}
-						</view>
-						<view class="plan-tips">
-							<view class="stress-box">
-								水不限量供应
+			<view class="plan-section-spacing">
+				<scroll-view :scroll-left="curItemScroll" :scroll-with-animation="true" class="plan-list" :scroll-x="true">
+					<view :id="'item'+idx" v-for="(item,idx) in planMenuData" :key="item.id" class="plan-item" :class="curPlanIdx===idx ? 'activate-plan' : ''"
+						@tap="handleClickPlanItem(idx)">
+						<view class="plan-item-wrapper">
+							<view class="plan-name">
+								{{item.title}}
+							</view>
+							<view class="plan-detail">
+								{{ planDetails.find(val => val.type === item.type).detail }}
+								<br>
+								{{ planDetails.find(val => val.type === item.type).tip }}
+							</view>
+							<view class="price-box">
+								¥
+								<text class="price">
+									{{item.price}}
+								</text>
+								/月
+							</view>
+							<view v-show="curPlanIdx === idx" class="plan-item-activate-icon">
+								<van-image src="/static/icon/37_activate.png" width="116rpx" height="98rpx"></van-image>
 							</view>
 						</view>
 					</view>
-					<view v-else class="item-right">
-						<view class="plan-name">
-							{{item.title}}
-						</view>
-						<view class="plan-tips">
-							共<view class="stress-box">
-								{{item.amount}}升
-							</view>水，套餐外<view class="stress-box">
-								0.6元/升
-							</view>
-						</view>
-						<view class="plan-tips">
-							<view class="stress-box">
-								{{ item.type === 4 ? "无限量使用/立省108元" : "69元封顶，无限量使用"}}
-
-							</view>
-						</view>
-					</view>
-					<view v-show="curPlanIdx === idx" class="plan-item-activate-icon">
-						<van-image src="/static/icon/37_activate.png" width="116rpx" height="98rpx"></van-image>
-					</view>
-				</view>
+				</scroll-view>
 			</view>
+
 			<view class="plan-required-box">
-				<template v-if="isHaveFirst">
+				<template v-if="isHaveServicePrice">
 					<view class="first-recharge-tips">
 						首充金额
 					</view>
@@ -103,7 +84,7 @@
 				<view class="price">
 					实付
 					<view class="price-num">
-						¥ {{(isHaveFirst ? 350 : 0) + Number(planMenuData[curPlanIdx] && planMenuData[curPlanIdx].price)}}
+						¥ {{(isHaveServicePrice ? 350 : 0) + Number(planMenuData[curPlanIdx] && planMenuData[curPlanIdx].price)}}
 					</view>
 				</view>
 				<view @tap="handleShowPriceDetail" class="price-detail df aic">
@@ -121,7 +102,7 @@
 					支付明细
 				</view>
 				<view class="bill-list">
-					<view v-if="isHaveFirst" class="bill-item">
+					<view v-if="isHaveServicePrice" class="bill-item">
 						<view class="bill-left-desc">
 							<view class="bill-type">商品</view>
 							<view class="bill-name">首充金额</view>
@@ -135,7 +116,7 @@
 						</view>
 						<view class="bill-right-num">¥{{ planMenuData[curPlanIdx].price }}</view>
 					</view>
-					<view v-if="isHaveFirst" class="bill-item">
+					<view v-if="isHaveServicePrice" class="bill-item">
 						<view class="bill-left-desc">
 							<view class="bill-type">优惠</view>
 							<view class="bill-name">首充每月返</view>
@@ -154,38 +135,44 @@
 <script>
 	import {
 		requestPaymentFun,
-		rollTarget
+		rollTarget,
+		rollTargetX
 	} from "@/utils/tool.js"
 	export default {
 		data() {
 			return {
 				planMenuData: [],
-				priceDetailData: [{
-						id: 1,
-						billType: 1,
-						billName: "首充金额",
-						priceNum: 360,
-					},
-					{
-						id: 2,
-						billType: 1,
-						billName: "首充金额",
-						priceNum: 29,
-					},
-					{
-						id: 3,
-						billType: 2,
-						billName: "首充每月返",
-						priceNum: 10,
-					}
-				], // 账单支付明细
 				isCheckAgreement: false, // 用户是否同意开通鲜水管家协议
 				isPriceDetailShow: false, // 价格明细弹窗是否显示
 				curPlanIdx: 0, // 当前选择的套餐
 				isHaveFirst: true, // 是否有首充
 				address_id: '',
 				refer_code: '', //推荐码
+				touchx: '',
+				curItemScroll: 0,
+				planDetails: [{
+					type: 1,
+					detail: '共60升水，套餐外0.6元/升',
+					tip: '69元封顶，无限量使用'
+				}, {
+					type: 2,
+					detail: '共60升水，套餐外0.4元/升',
+					tip: '69元封顶，无限量使用'
+				}, {
+					type: 3,
+					detail: '包月套餐，无限量使用',
+					tip: ''
+				}, {
+					type: 4,
+					detail: '试用套餐，试用期内不限量使用',
+					tip: ''
+				}]
 			};
+		},
+		computed: {
+			isHaveServicePrice() {
+				return (this.curPlanIdx !== 3)
+			}
 		},
 		onLoad(option) {
 			this.getPlanMenuData();
@@ -213,6 +200,14 @@
 			},
 			handleClickPlanItem(index) {
 				this.curPlanIdx = index
+
+				const query = uni.createSelectorQuery().in(this)
+				query.select("#item" + index).boundingClientRect((rect) => {
+					if (!rect) return
+					// const targetLeft = rect[0].left + rect[1].scrollLeft
+					console.log(rect);
+				}).exec()
+				this.curItemScroll = 344 * index
 			},
 			// 获取套餐数据
 			getPlanMenuData() {
@@ -301,7 +296,7 @@
 				uni.navigateTo({
 					url: '/pages/protocol/protocol'
 				})
-			}
+			},
 		},
 	}
 </script>
@@ -327,7 +322,7 @@
 
 			>.title {
 				position: relative;
-				width: 672rpx;
+				width: 100vw;
 				line-height: 80rpx;
 				border-top-right-radius: 26rpx;
 				border-top-left-radius: 26rpx;
@@ -343,80 +338,73 @@
 				}
 			}
 
-			>.plan-menu {
-				display: flex;
-				flex-direction: column;
-				align-items: center;
-				justify-content: space-evenly;
-				background-color: #fff;
+			.plan-section-spacing {
 				width: 100vw;
 
-				.plan-item-box {
-					margin-top: 30rpx;
-					overflow: hidden;
-					position: relative;
-					display: flex;
-					align-items: center;
-					padding: 26rpx;
-					box-sizing: border-box;
-					width: 666rpx;
-					height: 180rpx;
-					background: #FFFFFF;
-					border-radius: 28rpx;
-					box-shadow: 4rpx 8rpx 48rpx 0rpx rgba(0, 0, 0, 0.17);
+				.plan-list {
+					white-space: nowrap;
+					background-color: #fff;
 
-					&.activate-plan {
-						border: 4rpx solid rgba(0, 216, 147, 1);
-					}
+					.plan-item {
+						width: 656rpx;
+						height: 404rpx;
+						margin: 36rpx 0;
+						margin-left: 30rpx;
+						border-radius: 28rpx;
+						box-shadow: 4rpx 8rpx 30rpx 0rpx rgba(0, 0, 0, 0.17);
+						display: inline-block;
 
-					.item-left {
-						margin-right: 50rpx;
-
-						>view {
-							display: inline-block;
-							color: #17DA9C;
+						&:last-child {
+							margin-right: 30rpx;
 						}
 
-						.icon {
-							font-size: 28rpx;
-						}
+						.plan-item-wrapper {
+							width: 100%;
+							height: 100%;
+							display: flex;
+							flex-direction: column;
+							align-items: center;
+							position: relative;
 
-						.price {
-							font-size: 72rpx;
-						}
+							.plan-name {
+								background-color: #1677FF;
+								width: 450rpx;
+								line-height: 86rpx;
+								text-align: center;
+								color: #FEFFFF;
+								font-size: 40rpx;
+								margin-top: 44rpx;
+								border-radius: 43rpx;
+							}
 
-						.unit {
-							font-size: 28rpx;
-						}
-					}
+							.plan-detail {
+								width: 390rpx;
+								color: #828698;
+								font-size: 28rpx;
+								margin-top: 22rpx;
+								text-align: center;
+							}
 
-					.item-right {
+							.price-box {
+								margin-top: 34rpx;
+								color: #17DA9C;
+								font-size: 28rpx;
 
-						.plan-name {
-							font-size: 36rpx;
-							color: #000000;
+								.price {
+									font-size: 72rpx;
 
-							.plan-type {
-								display: inline;
-								color: #00D893;
+								}
+							}
+							
+							.plan-item-activate-icon {
+								position: absolute;
+								right: -2rpx;
+								bottom: -12rpx;
 							}
 						}
-
-						.plan-tips {
-							font-size: 24rpx;
-							color: #828698;
-
-							.stress-box {
-								display: inline;
-								color: #262626;
-							}
-						}
 					}
-
-					.plan-item-activate-icon {
-						position: absolute;
-						right: -2rpx;
-						bottom: -16rpx;
+					.activate-plan {
+						border: 4rpx solid #00D893;
 					}
 				}
 			}
