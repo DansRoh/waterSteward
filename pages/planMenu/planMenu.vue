@@ -6,10 +6,9 @@
 				<van-icon class="title-del-icon" name="/static/icon/36_del.png" size="20rpx"></van-icon>
 			</view>
 			<view class="plan-section-spacing">
-				<scroll-view :scroll-left="curItemScroll" :scroll-with-animation="true" class="plan-list" :scroll-x="true">
-					<view :id="'item'+idx" v-for="(item,idx) in planMenuData" :key="item.id" class="plan-item" :class="curPlanIdx===idx ? 'activate-plan' : ''"
-						@tap="handleClickPlanItem(idx)">
-						<view class="plan-item-wrapper">
+				<swiper :indicator-dots="true" @change="handleChangePlan" class="plan-list">
+					<swiper-item :id="'item'+idx" v-for="(item,idx) in planMenuData" :key="item.id" class="plan-item">
+						<view class="plan-item-wrapper" :class="curPlanIdx===idx ? 'activate-plan' : ''">
 							<view class="plan-name">
 								{{item.title}}
 							</view>
@@ -29,8 +28,8 @@
 								<van-image src="/static/icon/37_activate.png" width="116rpx" height="98rpx"></van-image>
 							</view>
 						</view>
-					</view>
-				</scroll-view>
+					</swiper-item>
+				</swiper>
 			</view>
 
 			<view class="plan-required-box">
@@ -179,6 +178,9 @@
 			this.address_id = option.address_id
 		},
 		methods: {
+			handleChangePlan(e) {
+				this.curPlanIdx = e.detail.current
+			},
 			vanFieldChange({
 				detail
 			}) {
@@ -200,14 +202,6 @@
 			},
 			handleClickPlanItem(index) {
 				this.curPlanIdx = index
-
-				const query = uni.createSelectorQuery().in(this)
-				query.select("#item" + index).boundingClientRect((rect) => {
-					if (!rect) return
-					// const targetLeft = rect[0].left + rect[1].scrollLeft
-					console.log(rect);
-				}).exec()
-				this.curItemScroll = 344 * index
 			},
 			// 获取套餐数据
 			getPlanMenuData() {
@@ -342,29 +336,23 @@
 				width: 100vw;
 
 				.plan-list {
-					white-space: nowrap;
 					background-color: #fff;
+					height: 518rpx;
 
 					.plan-item {
-						width: 656rpx;
-						height: 404rpx;
-						margin: 36rpx 0;
-						margin-left: 30rpx;
-						border-radius: 28rpx;
-						box-shadow: 4rpx 8rpx 30rpx 0rpx rgba(0, 0, 0, 0.17);
-						display: inline-block;
-
-						&:last-child {
-							margin-right: 30rpx;
-						}
+						display: flex;
+						justify-content: center;
+						align-items: center;
 
 						.plan-item-wrapper {
-							width: 100%;
-							height: 100%;
+							width: 656rpx;
+							height: 404rpx;
 							display: flex;
 							flex-direction: column;
 							align-items: center;
 							position: relative;
+							border-radius: 28rpx;
+							box-shadow: 4rpx 8rpx 30rpx 0rpx rgba(0, 0, 0, 0.17);
 
 							.plan-name {
 								background-color: #1677FF;
@@ -395,7 +383,7 @@
 
 								}
 							}
-							
+
 							.plan-item-activate-icon {
 								position: absolute;
 								right: -2rpx;
@@ -403,6 +391,7 @@
 							}
 						}
 					}
+
 					.activate-plan {
 						border: 4rpx solid #00D893;
 					}
